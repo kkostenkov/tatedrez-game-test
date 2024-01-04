@@ -1,10 +1,9 @@
 using System.Threading.Tasks;
 using Tatedrez.Models;
-using Tatedrez.Views;
 
 namespace Tatedrez
 {
-    internal class GameSessionController
+    public class GameSessionController
     {
         private readonly GameSession session;
         private readonly IBoardView boardView;

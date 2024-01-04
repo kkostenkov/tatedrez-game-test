@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Tatedrez.Models;
-using Tatedrez.Views;
 
 namespace Tatedrez
 {
