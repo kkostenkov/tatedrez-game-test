@@ -123,4 +123,24 @@ public class BoardValidatorTest
         
         Assert.AreEqual(false, result);
     }
+
+    [Test]
+    public void Should_ProhibitMovingPiece_When_TargetCoordsAreOccupied()
+    {
+        var board = Helpers.CreateEmptyBoard();
+        var occupiedCoords = new BoardCoords(0, 1);
+        board.PlacePiece(new Piece(0), occupiedCoords);
+        var movingPiece = new Piece(0);
+        var moveStartCoords = new BoardCoords(0, 0);
+        board.PlacePiece(movingPiece, moveStartCoords);
+        var move = new MovementMove() {
+            PieceGuid = movingPiece.Guid,
+            From = moveStartCoords,
+            To = occupiedCoords,
+        };
+        var validator = new BoardValidator();
+
+        var result = validator.IsValidMove(board, move);
+        Assert.AreEqual(false, result);
+    }
 }

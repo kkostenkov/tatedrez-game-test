@@ -83,5 +83,10 @@ namespace Tatedrez
             var occupyingPiece = board.PeekPiece(toCoords);
             return occupyingPiece == null;
         }
+
+        public bool IsValidMove(Board board, MovementMove move)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
