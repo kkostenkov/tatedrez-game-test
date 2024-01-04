@@ -11,7 +11,7 @@ namespace Tatedrez.Models
         public Piece(Guid guid = default)
         {
             if (guid == default) {
-                guid = new Guid();
+                guid = Guid.NewGuid();
             }
             this.Guid = guid;
         }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
@@ -71,6 +72,24 @@ public class GameplaySessionControllerTest
     [Test]
     public async Task Should_RemovePieceFromPlayer_When_PlayerMakesPlaceMove()
     {
+        var sessionData = CreateStandardSessionStart();
+        var placingPlayer = sessionData.Players[0]; 
+        var pieceToPlace = placingPlayer.UnusedPieces.First.Value;
+        var placedPieceGuid = pieceToPlace.Guid; 
+        var view = Substitute.For<IBoardView>();
+        var input = Substitute.For<IInputManger>();
+        var placementCoords = new BoardCoords { X = 1, Y = 1 };
+        input.GetMovePiecePlacement(0).Returns(new PlacementMove() {
+            PieceGuid = pieceToPlace.Guid,
+            PlayerIndex = 0,
+            To = placementCoords,
+        });
+        var controller = new GameSessionController(sessionData, view, input);
+        
+        await controller.Turn();
+
+        var droppedPiece = placingPlayer.UnusedPieces.FirstOrDefault(p => p.Guid == placedPieceGuid);
+        Assert.IsNull(droppedPiece);
     }
 
     public GameSessionData CreateStandardSessionStart()
