@@ -40,17 +40,34 @@ namespace Tatedrez
         private async Task PlacePieceByPlayer(int playerIndex)
         {
             await boardView.ShowTurn(playerIndex);
-            var move = await input.GetMovePiecePlacement(playerIndex); // via input manager?
-            // validate move via validator
+            var move = await input.GetMovePiecePlacement(playerIndex);
             
-            // check and apply state change
+            if (await TryProcessInvalidPacementMove(move)) {
+                return;
+            }
+            
+            ApplyStateChange(move);
+            
+            await boardView.VisualizeMove(move);
+        }
+
+        private void ApplyStateChange(PlacementMove move)
+        {
+            var playerIndex = move.PlayerIndex;
             var player = this.sessionData.Players[playerIndex];
             var piece = player.DropPiece(move.PieceGuid);
             this.sessionData.Board.PlacePiece(piece, move.To);
             this.sessionData.CurrentPlayerTurnIndex++;
             TryUpdateGameStage();
-            // update pieces view via board view (relay the move?)
-            await boardView.VisualizeMove(move);
+        }
+
+        private async Task<bool> TryProcessInvalidPacementMove(PlacementMove move)
+        {
+            if (this.boardValidator.IsValidMove(this.sessionData.Board, move)) {
+                return false;
+            }
+            await this.boardView.VisualizeInvalidMove(move);
+            return true;
         }
 
         private async Task MovePieceByPlayer(int playerIndex)  

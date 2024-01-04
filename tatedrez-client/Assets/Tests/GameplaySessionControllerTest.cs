@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -46,6 +45,27 @@ public class GameplaySessionControllerTest
 
         await controller.Turn();
         return await Task.FromResult(sessionData.CurrentPlayerTurnIndex);
+    }
+    
+    [Test]
+    public async Task Should_KeepTurnNumber_When_PlayerMakesInvalidPlacementMove()
+    {
+        var sessionData = Helpers.CreateStandardSessionStart();
+        var occupiedCoords = new BoardCoords(1, 2);
+        sessionData.Board.PlacePiece(new Piece(0), occupiedCoords);
+        var view = Substitute.For<IBoardView>();
+        var input = Substitute.For<IInputManger>();
+        var pieceGuidToPlace = sessionData.Players[0].UnusedPieces.First.Value.Guid;
+        input.GetMovePiecePlacement(0).Returns(new PlacementMove() { 
+            PieceGuid = pieceGuidToPlace,
+            PlayerIndex = 0,
+            To = occupiedCoords 
+        });
+        var controller = new GameSessionController(sessionData, view, input);
+
+        await controller.Turn();
+        
+        Assert.AreEqual(0, sessionData.CurrentPlayerTurnIndex);
     }
 
     [Test]
@@ -99,7 +119,7 @@ public class GameplaySessionControllerTest
         var view = Substitute.For<IBoardView>();
         var input = Substitute.For<IInputManger>();
         var sessionData = new GameSessionData() {
-            Board = Helpers.CreateDefaultBoard(),
+            Board = Helpers.CreateEmptyBoard(),
             State = new GameState() { Stage = Stage.Placement },
         };
         // 0

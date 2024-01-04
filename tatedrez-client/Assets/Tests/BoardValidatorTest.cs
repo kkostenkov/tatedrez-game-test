@@ -23,7 +23,7 @@ public class BoardValidatorTest
     [TestCaseSource(nameof(HorizontalTicTacToes))]
     public void Should_DetectTicTacToe_When_HorizontalLineOccupiedByPiecesOfTheSameOwner(List<BoardCoords> coordsList)
     {
-        var board = Helpers.CreateDefaultBoard();
+        var board = Helpers.CreateEmptyBoard();
         foreach (var coords in coordsList) {
             board.PlacePiece(new Piece(0), coords);
         }
@@ -51,7 +51,7 @@ public class BoardValidatorTest
     [TestCaseSource(nameof(VerticalTicTacToes))]
     public void Should_DetectTicTacToe_When_VerticalLineOccupiedByPiecesOfTheSameOwner(List<BoardCoords> coordsList)
     {
-        var board = Helpers.CreateDefaultBoard();
+        var board = Helpers.CreateEmptyBoard();
         foreach (var coords in coordsList) {
             board.PlacePiece(new Piece(0), coords);
         }
@@ -76,7 +76,7 @@ public class BoardValidatorTest
     [TestCaseSource(nameof(DiagonalTicTacToes))]
     public void Should_DetectTicTacToe_When_DiagonalLineOccupiedByPiecesOfTheSameOwner(List<BoardCoords> coordsList)
     {
-        var board = Helpers.CreateDefaultBoard();
+        var board = Helpers.CreateEmptyBoard();
         foreach (var coords in coordsList) {
             board.PlacePiece(new Piece(0), coords);
         }
@@ -90,10 +90,36 @@ public class BoardValidatorTest
     [Test]
     public void Should_NotDetectTicTacToe_When_BoardIsEmpty()
     {
-        var board = Helpers.CreateDefaultBoard();
+        var board = Helpers.CreateEmptyBoard();
         var boardValidator = new BoardValidator();
 
         var result = boardValidator.HasTickTackToe(board);
+        
+        Assert.AreEqual(false, result);
+    }
+
+    [Test]
+    public void Should_AllowPlacingPiece_When_TargetCoordsAreEmpty()
+    {
+        var board = Helpers.CreateEmptyBoard();
+        var move = new PlacementMove() { To = new BoardCoords(0, 2) };
+        var validator = new BoardValidator();
+
+        var result = validator.IsValidMove(board, move);
+        
+        Assert.AreEqual(true, result);
+    }
+    
+    [Test]
+    public void Should_ProhibitPlacingPiece_When_TargetCoordsAreOccupied()
+    {
+        var board = Helpers.CreateEmptyBoard();
+        var occupiedCoords = new BoardCoords(1, 1); 
+        board.PlacePiece(new Piece(0), occupiedCoords);
+        var move = new PlacementMove() { To = occupiedCoords };
+        var validator = new BoardValidator();
+
+        var result = validator.IsValidMove(board, move);
         
         Assert.AreEqual(false, result);
     }

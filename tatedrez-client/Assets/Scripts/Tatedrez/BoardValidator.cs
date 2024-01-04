@@ -76,5 +76,12 @@ namespace Tatedrez
                        board.PeekPiece(coord) != null
                        && (board.PeekPiece(coord)?.Owner == board.PeekPiece(this.diagonalTwo[0])?.Owner));
         }
+
+        public bool IsValidMove(Board board, PlacementMove move)
+        {
+            var toCoords = move.To;
+            var occupyingPiece = board.PeekPiece(toCoords);
+            return occupyingPiece == null;
+        }
     }
 }

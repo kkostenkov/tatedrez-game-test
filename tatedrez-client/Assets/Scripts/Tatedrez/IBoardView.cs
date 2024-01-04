@@ -10,5 +10,6 @@ namespace Tatedrez
         Task VisualizeMove(PlacementMove move);
         Task VisualizeMove(MovementMove move);
         Task ShowTurn(int playerIndex);
+        Task VisualizeInvalidMove(PlacementMove move);
     }
 }

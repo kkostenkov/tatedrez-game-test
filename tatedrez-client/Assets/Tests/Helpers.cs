@@ -5,7 +5,7 @@ namespace Tatedrez.Tests.Helpers
 {
     public static class Helpers
     {
-        public static Board CreateDefaultBoard()
+        public static Board CreateEmptyBoard()
         {
             return new Board() {
                 BoardSize = new BoardCoords() {
@@ -19,7 +19,7 @@ namespace Tatedrez.Tests.Helpers
         public static GameSessionData CreateStandardSessionStart()
         {
             return new GameSessionData() {
-                Board = CreateDefaultBoard(),
+                Board = CreateEmptyBoard(),
                 CurrentPlayerTurnIndex = 0,
                 Players = new List<Player>() {
                     new Player() {
