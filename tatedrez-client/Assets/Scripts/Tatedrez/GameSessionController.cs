@@ -9,12 +9,14 @@ namespace Tatedrez
         private readonly GameSessionData sessionData;
         private readonly IBoardView boardView;
         private readonly IInputManger input;
+        private readonly BoardValidator boardValidator;
 
         public GameSessionController(GameSessionData sessionData, IBoardView boardView, IInputManger input)
         {
             this.sessionData = sessionData;
             this.boardView = boardView;
             this.input = input;
+            this.boardValidator = new BoardValidator();
         }
 
         public Task Turn()
@@ -72,6 +74,9 @@ namespace Tatedrez
 
         private void TryUpdateGameStage()
         {
+            if (this.boardValidator.HasTickTackToe(this.sessionData.Board)) {
+                this.sessionData.State.Stage = Stage.End;
+            }
             if (this.sessionData.State.Stage == Stage.Placement) {
                 foreach (var player in this.sessionData.Players) {
                     if (player.UnusedPieces.First != null) {

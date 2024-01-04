@@ -10,5 +10,10 @@ namespace Tatedrez.Models
             this.X = x;
             this.Y = y;
         }
+
+        public override string ToString()
+        {
+            return $"{X}:{Y}";
+        }
     }
 }

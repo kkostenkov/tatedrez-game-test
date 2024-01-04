@@ -6,6 +6,7 @@ using NSubstitute;
 using NUnit.Framework;
 using Tatedrez;
 using Tatedrez.Models;
+using Tatedrez.Tests.Helpers;
 
 public class GameplaySessionControllerTest
 {
@@ -52,7 +53,7 @@ public class GameplaySessionControllerTest
     {
         var view = Substitute.For<IBoardView>();
         var input = Substitute.For<IInputManger>();
-        var sessionData = CreateStandardSessionStart();
+        var sessionData = Helpers.CreateStandardSessionStart();
         var pieceToPlace = sessionData.Players[0].UnusedPieces.First.Value;
         var placementCoords = new BoardCoords { X = 1, Y = 1 };
         input.GetMovePiecePlacement(0).Returns(new PlacementMove() {
@@ -72,7 +73,7 @@ public class GameplaySessionControllerTest
     [Test]
     public async Task Should_RemovePieceFromPlayer_When_PlayerMakesPlaceMove()
     {
-        var sessionData = CreateStandardSessionStart();
+        var sessionData = Helpers.CreateStandardSessionStart();
         var placingPlayer = sessionData.Players[0]; 
         var pieceToPlace = placingPlayer.UnusedPieces.First.Value;
         var placedPieceGuid = pieceToPlace.Guid; 
@@ -98,11 +99,11 @@ public class GameplaySessionControllerTest
         var view = Substitute.For<IBoardView>();
         var input = Substitute.For<IInputManger>();
         var sessionData = new GameSessionData() {
-            Board = CreateDefaultBoard(),
+            Board = Helpers.CreateDefaultBoard(),
             State = new GameState() { Stage = Stage.Placement },
         };
         // 0
-        var placingPlayer = CreatePlayerWithOnePiece(0); 
+        var placingPlayer = Helpers.CreatePlayerWithOnePiece(0); 
         sessionData.Players.Add(placingPlayer);
         var pieceToPlaceGuid = placingPlayer.UnusedPieces.First.Value.Guid;
         var placementCoords = new BoardCoords { X = 1, Y = 1 };
@@ -112,7 +113,7 @@ public class GameplaySessionControllerTest
             To = placementCoords,
         });
         // 1
-        placingPlayer = CreatePlayerWithOnePiece(1); 
+        placingPlayer = Helpers.CreatePlayerWithOnePiece(1); 
         sessionData.Players.Add(placingPlayer);
         pieceToPlaceGuid = placingPlayer.UnusedPieces.First.Value.Guid;
         placementCoords = new BoardCoords { X = 2, Y = 2 };
@@ -134,7 +135,7 @@ public class GameplaySessionControllerTest
     public async Task Should_EndGame_When_PlayerPlacedTicTacToe()
     {
         var view = Substitute.For<IBoardView>();
-        var sessionData = CreateStandardSessionStart();
+        var sessionData = Helpers.CreateStandardSessionStart();
         var board = sessionData.Board;
         var pieceOwnerId = 0;
         board.PlacePiece(new Piece(pieceOwnerId), new BoardCoords(0, 0));
@@ -151,57 +152,5 @@ public class GameplaySessionControllerTest
         await controller.Turn();
         
         Assert.AreEqual(Stage.End, sessionData.State.Stage);
-    }
-    
-    private GameSessionData CreateStandardSessionStart()
-    {
-        return new GameSessionData() {
-            Board = CreateDefaultBoard(),
-            CurrentPlayerTurnIndex = 0,
-            Players = new List<Player>() {
-                new Player() {
-                    UnusedPieces = CreateStartPiecesForPlayer(0),
-                },
-                new Player() {
-                    UnusedPieces = CreateStartPiecesForPlayer(1),
-                }
-            },
-            State = new GameState() {
-                Stage = Stage.Placement
-            }
-        };
-    }
-
-    private Board CreateDefaultBoard()
-    {
-        return new Board() {
-            BoardSize = new BoardCoords() {
-                X = 3,
-                Y = 3,
-            },
-            PiecesByCoordinates = new(),
-        };
-    }
-
-    private Player CreatePlayerWithOnePiece(int playerIndex)
-    {
-        var player = new Player();
-        player.UnusedPieces.AddFirst(new Piece(playerIndex));
-        return player;
-    }
-
-    public LinkedList<Piece> CreateStartPiecesForPlayer(int owner)
-    {
-        var list = new LinkedList<Piece>();
-        list.AddLast(new Piece(owner) {
-            PieceType = "Knight",
-        });
-        list.AddLast(new Piece(owner) {
-            PieceType = "Rook",
-        });
-        list.AddLast(new Piece(owner) {
-            PieceType = "Bishop",
-        });
-        return list;
     }
 }
