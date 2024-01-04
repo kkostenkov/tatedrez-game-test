@@ -7,13 +7,12 @@ namespace Tatedrez.Models
     {
         public string PieceType;
         public readonly Guid Guid;
+        public int Owner;
 
-        public Piece(Guid guid = default)
+        public Piece(int owner)
         {
-            if (guid == default) {
-                guid = Guid.NewGuid();
-            }
-            this.Guid = guid;
+            this.Guid = Guid.NewGuid();
+            this.Owner = owner;
         }
 
         public override int GetHashCode()

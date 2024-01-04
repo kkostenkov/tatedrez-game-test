@@ -72,13 +72,16 @@ namespace Tatedrez
 
         private void TryUpdateGameStage()
         {
-            foreach (var player in this.sessionData.Players) {
-                if (player.UnusedPieces.First != null) {
-                    return;
+            if (this.sessionData.State.Stage == Stage.Placement) {
+                foreach (var player in this.sessionData.Players) {
+                    if (player.UnusedPieces.First != null) {
+                        return;
+                    }
                 }
-            }
 
-            this.sessionData.State.Stage = Stage.Movement;
+                this.sessionData.State.Stage = Stage.Movement;
+                return;
+            }
         }
     }
 }
