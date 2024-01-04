@@ -8,13 +8,6 @@ using Tatedrez.Models;
 
 public class GameplaySessionControllerTest
 {
-    // A Test behaves as an ordinary method
-    [Test]
-    public void GameplaySessionControllerTestSimplePasses()
-    {
-        // Use the Assert class to test conditions
-    }
-
     [TestCase(0, 0, ExpectedResult = 1)]
     [TestCase(10, 0, ExpectedResult = 11)]
     [TestCase(0, 1, ExpectedResult = 1)]
@@ -57,7 +50,7 @@ public class GameplaySessionControllerTest
     public async Task Should_PlacePieceOnBoard_When_PlayerMakesPlaceMove()
     {
         var sessionData = CreateStandardSessionStart();
-        var pieceToPlace = sessionData.Players[0].UnusedPieces[0];
+        var pieceToPlace = sessionData.Players[0].UnusedPieces.First.Value;
         var view = Substitute.For<IBoardView>();
         var input = Substitute.For<IInputManger>();
         var placementCoords = new BoardCoords { X = 1, Y = 1 };
@@ -70,9 +63,14 @@ public class GameplaySessionControllerTest
         
         await controller.Turn();
 
-        var placedPiece = sessionData.Board.GetPiece(placementCoords);
+        var placedPiece = sessionData.Board.PeekPiece(placementCoords);
         Assert.IsNotNull(placedPiece);
         Assert.AreEqual(pieceToPlace.Guid, placedPiece.Guid);
+    }
+
+    [Test]
+    public async Task Should_RemovePieceFromPlayer_When_PlayerMakesPlaceMove()
+    {
     }
 
     public GameSessionData CreateStandardSessionStart()
@@ -100,21 +98,18 @@ public class GameplaySessionControllerTest
         };
     }
 
-    public List<Piece> CreateStartPieces()
+    public LinkedList<Piece> CreateStartPieces()
     {
-        return new List<Piece>() {
-            new Piece() {
-                Guid = new Guid(),
-                PieceType = "Knight",
-            },
-            new Piece() {
-                Guid = new Guid(),
-                PieceType = "Rook",
-            },
-            new Piece() {
-                Guid = new Guid(),
-                PieceType = "Bishop",
-            },
-        };
+        var list = new LinkedList<Piece>();
+        list.AddLast(new Piece() {
+            PieceType = "Knight",
+        });
+        list.AddLast(new Piece() {
+            PieceType = "Rook",
+        });
+        list.AddLast(new Piece() {
+            PieceType = "Bishop",
+        });
+        return list;
     }
 }

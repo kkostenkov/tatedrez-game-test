@@ -42,6 +42,9 @@ namespace Tatedrez
             // validate move via validator
             
             // check and apply state change
+            var player = this.sessionData.Players[playerIndex];
+            var piece = player.DropPiece(move.PieceGuid);
+            this.sessionData.Board.PlacePiece(piece, move.To);
             this.sessionData.CurrentPlayerTurnIndex++;
             // update pieces view via board view (relay the move?)
             await boardView.VisualizeMove(move);
