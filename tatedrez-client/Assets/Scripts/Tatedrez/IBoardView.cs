@@ -5,7 +5,7 @@ namespace Tatedrez
 {
     public interface IBoardView
     {
-        Task Build(GameSession session);
+        Task Build(GameSessionData sessionData);
         Task ShowGameOverScreen();
         Task VisualizeMove(PlacementMove move);
         Task VisualizeMove(MovementMove move);
