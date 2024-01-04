@@ -91,17 +91,49 @@ public class GameplaySessionControllerTest
         var droppedPiece = placingPlayer.UnusedPieces.FirstOrDefault(p => p.Guid == placedPieceGuid);
         Assert.IsNull(droppedPiece);
     }
+    
+    [Test]
+    public async Task Should_ChangeStageFromPlacementToMovement_When_PlayersHaveNoPieces()
+    {
+        var view = Substitute.For<IBoardView>();
+        var input = Substitute.For<IInputManger>();
+        var sessionData = new GameSessionData() {
+            Board = CreateDefaultBoard(),
+            State = new GameState() { Stage = Stage.Placement },
+        };
+        // 0
+        var placingPlayer = CreatePlayerWithOnePiece(); 
+        sessionData.Players.Add(placingPlayer);
+        var pieceToPlaceGuid = placingPlayer.UnusedPieces.First.Value.Guid;
+        var placementCoords = new BoardCoords { X = 1, Y = 1 };
+        input.GetMovePiecePlacement(0).Returns(new PlacementMove() {
+            PieceGuid = pieceToPlaceGuid,
+            PlayerIndex = 0,
+            To = placementCoords,
+        });
+        // 1
+        placingPlayer = CreatePlayerWithOnePiece(); 
+        sessionData.Players.Add(placingPlayer);
+        pieceToPlaceGuid = placingPlayer.UnusedPieces.First.Value.Guid;
+        placementCoords = new BoardCoords { X = 2, Y = 2 };
+        input.GetMovePiecePlacement(1).Returns(new PlacementMove() {
+            PieceGuid = pieceToPlaceGuid,
+            PlayerIndex = 1,
+            To = placementCoords,
+        });
+        var controller = new GameSessionController(sessionData, view, input);
+        
+        await controller.Turn();
+        await controller.Turn();
 
-    public GameSessionData CreateStandardSessionStart()
+        var currentStage = sessionData.State.Stage;
+        Assert.AreEqual(Stage.Movement, currentStage);
+    }
+
+    private GameSessionData CreateStandardSessionStart()
     {
         return new GameSessionData() {
-            Board = new Board() {
-                BoardSize = new BoardCoords() {
-                    X = 3,
-                    Y = 3,
-                },
-                PiecesByCoordinates = new(),
-            },
+            Board = CreateDefaultBoard(),
             CurrentPlayerTurnIndex = 0,
             Players = new List<Player>() {
                 new Player() {
@@ -115,6 +147,24 @@ public class GameplaySessionControllerTest
                 Stage = Stage.Placement
             }
         };
+    }
+
+    private Board CreateDefaultBoard()
+    {
+        return new Board() {
+            BoardSize = new BoardCoords() {
+                X = 3,
+                Y = 3,
+            },
+            PiecesByCoordinates = new(),
+        };
+    }
+
+    private Player CreatePlayerWithOnePiece()
+    {
+        var player = new Player();
+        player.UnusedPieces.AddFirst(new Piece());
+        return player;
     }
 
     public LinkedList<Piece> CreateStartPieces()

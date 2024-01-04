@@ -46,6 +46,7 @@ namespace Tatedrez
             var piece = player.DropPiece(move.PieceGuid);
             this.sessionData.Board.PlacePiece(piece, move.To);
             this.sessionData.CurrentPlayerTurnIndex++;
+            TryUpdateGameStage();
             // update pieces view via board view (relay the move?)
             await boardView.VisualizeMove(move);
         }
@@ -67,6 +68,17 @@ namespace Tatedrez
         public Task EndGame()
         {
             return boardView.ShowGameOverScreen();
+        }
+
+        private void TryUpdateGameStage()
+        {
+            foreach (var player in this.sessionData.Players) {
+                if (player.UnusedPieces.First != null) {
+                    return;
+                }
+            }
+
+            this.sessionData.State.Stage = Stage.Movement;
         }
     }
 }
