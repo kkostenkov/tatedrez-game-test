@@ -1,4 +1,6 @@
+using NSubstitute;
 using NUnit.Framework;
+using Tatedrez;
 
 public class GameplaySessionControllerTest
 {
@@ -13,5 +15,6 @@ public class GameplaySessionControllerTest
     public void ShouldIncrementTurnNumberWhenPlayerMoves()
     {
         //
+        var view = Substitute.For<IBoardView>();
     }
 }
