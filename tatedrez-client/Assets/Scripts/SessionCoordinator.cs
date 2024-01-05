@@ -10,7 +10,7 @@ namespace Tatedrez
       [SerializeField]
       private LocalInputManager localInputManager;
 
-      private GameSessionRepository sessionRepo;
+      private GameSessionRepository sessionRepo = new GameSessionRepository();
 
       private async void Awake()
       {
