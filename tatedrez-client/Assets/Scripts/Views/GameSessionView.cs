@@ -1,11 +1,12 @@
 using System.Threading.Tasks;
 using Tatedrez;
 using Tatedrez.Models;
+using Tatedrez.ModelServices;
 using UnityEngine;
 
-public class BoardView : MonoBehaviour, IBoardView
+public class GameSessionView : MonoBehaviour, IGameSessionView
 {
-    public async Task Build(GameSessionData sessionData)
+    public async Task Build(GameSessionDataService sessionData)
     {
         var board = sessionData;
         // board size

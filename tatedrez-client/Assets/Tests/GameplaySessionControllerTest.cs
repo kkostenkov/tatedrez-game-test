@@ -21,7 +21,7 @@ public class GameplaySessionControllerTest
             Players = new List<Player>() { new Player(), new Player() },
             State = new GameState() {Stage = Stage.Placement },
         };
-        var view = Substitute.For<IBoardView>();
+        var view = Substitute.For<IGameSessionView>();
         var input = Substitute.For<IInputManger>();
         var controller = new GameSessionController(sessionData, view, input);
 
@@ -40,7 +40,7 @@ public class GameplaySessionControllerTest
             Players = new List<Player>() { new Player(), new Player() },
             State = new GameState() { Stage = Stage.Placement },
         };
-        var view = Substitute.For<IBoardView>();
+        var view = Substitute.For<IGameSessionView>();
         var input = Substitute.For<IInputManger>();
         var controller = new GameSessionController(sessionData, view, input);
 
@@ -55,7 +55,7 @@ public class GameplaySessionControllerTest
         var occupiedCoords = new BoardCoords(1, 2);
         var boardService = new BoardService(sessionData.Board);
         boardService.PlacePiece(new Piece(0), occupiedCoords);
-        var view = Substitute.For<IBoardView>();
+        var view = Substitute.For<IGameSessionView>();
         var input = Substitute.For<IInputManger>();
         var pieceGuidToPlace = sessionData.Players[0].UnusedPieces.First.Value.Guid;
         input.GetMovePiecePlacement(0).Returns(new PlacementMove() { 
@@ -73,7 +73,7 @@ public class GameplaySessionControllerTest
     [Test]
     public async Task Should_PlacePieceOnBoard_When_PlayerMakesPlaceMove()
     {
-        var view = Substitute.For<IBoardView>();
+        var view = Substitute.For<IGameSessionView>();
         var input = Substitute.For<IInputManger>();
         var sessionData = Helpers.CreateStandardSessionStart();
         var pieceToPlace = sessionData.Players[0].UnusedPieces.First.Value;
@@ -99,7 +99,7 @@ public class GameplaySessionControllerTest
         var placingPlayer = sessionData.Players[0]; 
         var pieceToPlace = placingPlayer.UnusedPieces.First.Value;
         var placedPieceGuid = pieceToPlace.Guid; 
-        var view = Substitute.For<IBoardView>();
+        var view = Substitute.For<IGameSessionView>();
         var input = Substitute.For<IInputManger>();
         var placementCoords = new BoardCoords { X = 1, Y = 1 };
         input.GetMovePiecePlacement(0).Returns(new PlacementMove() {
@@ -118,7 +118,7 @@ public class GameplaySessionControllerTest
     [Test]
     public async Task Should_ChangeStageFromPlacementToMovement_When_PlayersHaveNoPieces()
     {
-        var view = Substitute.For<IBoardView>();
+        var view = Substitute.For<IGameSessionView>();
         var input = Substitute.For<IInputManger>();
         var sessionData = new GameSessionData() {
             Board = Helpers.CreateEmptyBoard(),
@@ -156,7 +156,7 @@ public class GameplaySessionControllerTest
     [Test]
     public async Task Should_EndGame_When_PlayerPlacedTicTacToe()
     {
-        var view = Substitute.For<IBoardView>();
+        var view = Substitute.For<IGameSessionView>();
         var sessionData = Helpers.CreateStandardSessionStart();
         var board = new BoardService(sessionData.Board);
         var pieceOwnerId = 0;

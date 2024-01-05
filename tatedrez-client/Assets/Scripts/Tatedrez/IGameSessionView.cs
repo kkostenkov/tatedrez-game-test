@@ -1,11 +1,12 @@
 using System.Threading.Tasks;
 using Tatedrez.Models;
+using Tatedrez.ModelServices;
 
 namespace Tatedrez
 {
-    public interface IBoardView
+    public interface IGameSessionView
     {
-        Task Build(GameSessionData sessionData);
+        Task Build(GameSessionDataService sessionData);
         Task ShowGameOverScreen();
         Task VisualizeMove(PlacementMove move);
         Task VisualizeMove(MovementMove move);
