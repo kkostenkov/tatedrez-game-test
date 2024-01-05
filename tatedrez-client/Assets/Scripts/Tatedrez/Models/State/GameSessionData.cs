@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Tatedrez.Models
 {
-    public class GameSession
+    public class GameSessionData
     {
         public Board Board = new();
         public GameState State = new();

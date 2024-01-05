@@ -1,14 +1,15 @@
 using System.Threading.Tasks;
 using Tatedrez.Models;
 
-namespace Tatedrez.Views
+namespace Tatedrez
 {
     public interface IBoardView
     {
-        Task Build(GameSession session);
+        Task Build(GameSessionData sessionData);
         Task ShowGameOverScreen();
         Task VisualizeMove(PlacementMove move);
         Task VisualizeMove(MovementMove move);
         Task ShowTurn(int playerIndex);
+        Task VisualizeInvalidMove(PlacementMove move);
     }
 }
