@@ -6,7 +6,7 @@ namespace Tatedrez
 {
     public interface IGameSessionView
     {
-        Task Build(GameSessionDataService sessionData);
+        Task Build(GameSessionDataService sessionDataService);
         Task ShowGameOverScreen();
         Task VisualizeMove(PlacementMove move);
         Task VisualizeMove(MovementMove move);

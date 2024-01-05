@@ -1,46 +1,50 @@
 using System.Threading.Tasks;
-using Tatedrez;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 using UnityEngine;
 
-public class GameSessionView : MonoBehaviour, IGameSessionView
+namespace Tatedrez.Views
 {
-    public async Task Build(GameSessionDataService sessionData)
+    internal class GameSessionView : MonoBehaviour, IGameSessionView
     {
-        var board = sessionData;
-        // board size
-        // pieces
+        [SerializeField]
+        private BoardView boardView; 
+        
+        public async Task Build(GameSessionDataService sessionDataService)
+        {
+            var board = sessionDataService.BoardService;
+            await this.boardView.BuildBoardAsync(board);
 
-        // for each player
-        // not placed pieces
+            // for each player
+            // not placed pieces
 
-        // game stage
-        return;
-    }
+            // game stage
+            return;
+        }
 
-    public Task ShowGameOverScreen()
-    {
-        throw new System.NotImplementedException();
-    }
+        public Task ShowGameOverScreen()
+        {
+            throw new System.NotImplementedException();
+        }
 
-    public Task VisualizeMove(PlacementMove move)
-    {
-        throw new System.NotImplementedException();
-    }
+        public Task VisualizeMove(PlacementMove move)
+        {
+            throw new System.NotImplementedException();
+        }
 
-    public Task VisualizeMove(MovementMove move)
-    {
-        throw new System.NotImplementedException();
-    }
+        public Task VisualizeMove(MovementMove move)
+        {
+            throw new System.NotImplementedException();
+        }
 
-    public Task ShowTurn(int playerIndex)
-    {
-        throw new System.NotImplementedException();
-    }
+        public Task ShowTurn(int playerIndex)
+        {
+            throw new System.NotImplementedException();
+        }
 
-    public Task VisualizeInvalidMove(PlacementMove move)
-    {
-        throw new System.NotImplementedException();
+        public Task VisualizeInvalidMove(PlacementMove move)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
