@@ -26,5 +26,11 @@ namespace Tatedrez.Views
             this.turnNumberLabel.text = $"Turn: {currentTurnNumber}";
             return Task.CompletedTask;
         }
+
+        public Task DisplayGameOver()
+        {
+            playerToMoveLabel.text = "Game over";
+            return Task.CompletedTask;
+        }
     }
 }

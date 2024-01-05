@@ -36,7 +36,7 @@ namespace Tatedrez.Views
 
         public Task ShowGameOverScreen()
         {
-            throw new System.NotImplementedException();
+            return sessionInfoView.DisplayGameOver();
         }
 
         public async Task VisualizeMove(PlacementMove move)
