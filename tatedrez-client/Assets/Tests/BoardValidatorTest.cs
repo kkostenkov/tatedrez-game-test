@@ -98,6 +98,37 @@ public class BoardValidatorTest
         
         Assert.AreEqual(false, result);
     }
+    
+    private static IEnumerable<TestCaseData> NotTicTacToes {
+        get {
+            yield return new TestCaseData(new List<BoardCoords>()
+                    { new BoardCoords(0, 2)})
+                .SetName("One piece");
+            yield return new TestCaseData(new List<BoardCoords>()
+                    { new BoardCoords(0, 1), new BoardCoords(0, 2) })
+                .SetName("Two pieces");
+            yield return new TestCaseData(new List<BoardCoords>()
+                    { new BoardCoords(1, 1), new BoardCoords(1, 2) })
+                .SetName("Two pieces at the end");
+            yield return new TestCaseData(new List<BoardCoords>()
+                    { new BoardCoords(0, 1), new BoardCoords(1, 2), new BoardCoords(2, 0) })
+                .SetName("Scattered");
+        }
+    }
+
+    [TestCaseSource(nameof(NotTicTacToes))]
+    public void Should_NotDetectTicTacToe_When_BoardDoesNotContainIt(List<BoardCoords> coordsList)
+    {
+        var board = new BoardService(Helpers.CreateEmptyBoard());
+        foreach (var coords in coordsList) {
+            board.PlacePiece(new Piece(0), coords);
+        }
+
+        var boardValidator = new BoardValidator();
+
+        var result = boardValidator.HasTickTackToe(board);
+        Assert.AreEqual(false, result);
+    }
 
     [Test]
     public void Should_AllowPlacingPiece_When_TargetCoordsAreEmpty()

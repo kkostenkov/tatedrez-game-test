@@ -22,6 +22,7 @@ namespace Tatedrez
 
         private bool HasVerticalTicTacToe(IBoardInfoService board)
         {
+            bool hasThreeInARow = false;
             var size = board.GetSize();
             for (int x = 0; x < size.X; x++) {
                 var firstPiece = board.PeekPiece(new BoardCoords(x, 0));
@@ -35,16 +36,16 @@ namespace Tatedrez
                     if (piece == null || firstPieceOwner != piece.Owner) {
                         break;
                     }
-
-                    return true;
+                    hasThreeInARow = true;
                 }
             }
 
-            return false;
+            return hasThreeInARow;
         }
 
         private bool HasHorizontalTicTacToe(IBoardInfoService board)
         {
+            bool hasThreeInARow = false;
             var size = board.GetSize();
             for (int y = 0; y <= size.Y; y++) {
                 var firstPiece = board.PeekPiece(new BoardCoords(0, y));
@@ -59,11 +60,11 @@ namespace Tatedrez
                         break;
                     }
 
-                    return true;
+                    hasThreeInARow = true;
                 }
             }
 
-            return false;
+            return hasThreeInARow;
         }
 
         private bool HasDiagonalTicTacToe(IBoardInfoService board)
