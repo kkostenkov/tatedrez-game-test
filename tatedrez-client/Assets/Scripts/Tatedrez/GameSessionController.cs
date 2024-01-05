@@ -16,6 +16,8 @@ namespace Tatedrez
         private readonly GameSessionDataService sessionDataService;
         private readonly BoardService boardService;
 
+        public bool IsSessionRunning => sessionDataService.GameStateService.IsGameActive;
+
         public GameSessionController(GameSessionData sessionData, IGameSessionView gameSessionView, IMoveFetcher input, IActivePlayerIndexListener playerIndexListener)
         {
             this.sessionData = sessionData;

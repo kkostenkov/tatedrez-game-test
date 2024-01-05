@@ -6,6 +6,7 @@ namespace Tatedrez
     public class GameSessionFlow
     {
         private GameSessionController gameSessionController;
+        public bool IsRunning => this.gameSessionController != null && this.gameSessionController.IsSessionRunning;
 
         public async Task Prepare(GameSessionData sessionDataData, IGameSessionView gameSessionView, IMoveFetcher input, IActivePlayerIndexListener playerIndexListener)
         {

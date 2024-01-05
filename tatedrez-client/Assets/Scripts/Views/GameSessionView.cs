@@ -8,10 +8,15 @@ namespace Tatedrez.Views
     public class GameSessionView : MonoBehaviour, IGameSessionView
     {
         [SerializeField]
-        private BoardView boardView; 
-        
+        private BoardView boardView;
+        [SerializeField]
+        private SessionInfoView sessionInfoView;
+
+        private GameSessionDataService sessionDataService;
+
         public async Task Build(GameSessionDataService sessionDataService)
         {
+            this.sessionDataService = sessionDataService;
             var board = sessionDataService.BoardService;
             await this.boardView.BuildBoardAsync(board);
 
@@ -37,9 +42,10 @@ namespace Tatedrez.Views
             throw new System.NotImplementedException();
         }
 
-        public Task ShowTurn(int playerIndex)
+        public async Task ShowTurn(int playerIndex)
         {
-            throw new System.NotImplementedException();
+            await sessionInfoView.DisplayTurnNumber(sessionDataService.CurrentTurnNumber);
+            await sessionInfoView.ShowPlayerToMakeMove(playerIndex);
         }
 
         public Task VisualizeInvalidMove(PlacementMove move)
