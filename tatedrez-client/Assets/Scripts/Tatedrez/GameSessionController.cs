@@ -9,25 +9,27 @@ namespace Tatedrez
     {
         private readonly GameSessionData sessionData;
         private readonly IGameSessionView gameSessionView;
-        private readonly IInputManger input;
+        private readonly IMoveFetcher input;
+        private readonly IActivePlayerIndexListener playerIndexListener;
         private readonly BoardValidator boardValidator;
         
         private readonly GameSessionDataService sessionDataService;
         private readonly BoardService boardService;
 
-        public GameSessionController(GameSessionData sessionData, IGameSessionView gameSessionView, IInputManger input)
+        public GameSessionController(GameSessionData sessionData, IGameSessionView gameSessionView, IMoveFetcher input, IActivePlayerIndexListener playerIndexListener)
         {
             this.sessionData = sessionData;
             this.sessionDataService = new GameSessionDataService(sessionData);
             this.boardService = this.sessionDataService.BoardService;
             this.gameSessionView = gameSessionView;
             this.input = input;
+            this.playerIndexListener = playerIndexListener;
             this.boardValidator = new BoardValidator();
         }
 
         public Task Turn()
         {
-            var playerTurnIndex = this.sessionData.CurrentPlayerTurnIndex % this.sessionData.Players.Count;
+            var playerTurnIndex = this.sessionDataService.GetCurrentActivePlayerIndex();
             var state = this.sessionData.State;
             return state.Stage switch {
                 Stage.Unknown => Task.CompletedTask,
@@ -46,9 +48,11 @@ namespace Tatedrez
         private async Task PlacePieceByPlayer(int playerIndex)
         {
             await this.gameSessionView.ShowTurn(playerIndex);
-            var move = await input.GetMovePiecePlacement(playerIndex);
+            playerIndexListener.SetActivePlayer(playerIndex);
+            var move = await input.GetMovePiecePlacement();
             
-            if (await TryProcessInvalidPacementMove(move)) {
+            if (IsInvalidMove(move)) {
+                await this.gameSessionView.VisualizeInvalidMove(move);
                 return;
             }
             
@@ -63,17 +67,21 @@ namespace Tatedrez
             var player = this.sessionData.Players[playerIndex];
             var piece = player.DropPiece(move.PieceGuid);
             this.boardService.PlacePiece(piece, move.To);
-            this.sessionData.CurrentPlayerTurnIndex++;
+            this.sessionData.CurrentTurn++;
             TryUpdateGameStage();
         }
 
-        private async Task<bool> TryProcessInvalidPacementMove(PlacementMove move)
+        private bool IsInvalidMove(PlacementMove move)
         {
-            if (this.boardValidator.IsValidMove(this.boardService, move)) {
-                return false;
+            if (this.sessionDataService.GetCurrentActivePlayerIndex() != move.PlayerIndex) {
+                return true;
             }
-            await this.gameSessionView.VisualizeInvalidMove(move);
-            return true;
+            
+            if (!this.boardValidator.IsValidMove(this.boardService, move)) {
+                return true;
+            }
+            
+            return false;
         }
 
         private async Task MovePieceByPlayer(int playerIndex)  
@@ -81,11 +89,12 @@ namespace Tatedrez
             await this.gameSessionView.ShowTurn(playerIndex);
             // validate if there are available moves
             
-            var move = await input.GetMovePieceMovement(playerIndex); // via input manager?
+            playerIndexListener.SetActivePlayer(playerIndex);
+            var move = await input.GetMovePieceMovement();
             // validate move via validator
             
             // check and apply state change
-            this.sessionData.CurrentPlayerTurnIndex++;
+            this.sessionData.CurrentTurn++;
             // update pieces view via board view
             await this.gameSessionView.VisualizeMove(move);
         }

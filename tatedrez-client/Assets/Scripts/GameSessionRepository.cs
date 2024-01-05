@@ -1,25 +1,25 @@
 using System.Collections.Generic;
 using Tatedrez.Models;
 
-namespace Tatedrez.Tests.Helpers
+namespace Tatedrez
 {
-    public static class Helpers
+    internal class GameSessionRepository
     {
-        public static Board CreateEmptyBoard()
+        public GameSessionData Load()
         {
-            return new Board() {
-                BoardSize = new BoardCoords() {
-                    X = 3,
-                    Y = 3,
-                },
-                PiecesByCoordinates = new(),
-            };
+            return CreateStandardSessionStart();
         }
-
-        public static GameSessionData CreateStandardSessionStart()
+   
+        private static GameSessionData CreateStandardSessionStart()
         {
             return new GameSessionData() {
-                Board = CreateEmptyBoard(),
+                Board = new Board() {
+                    BoardSize = new BoardCoords() {
+                        X = 3,
+                        Y = 3,
+                    },
+                    PiecesByCoordinates = new(),
+                },
                 CurrentTurn = 0,
                 Players = new List<Player>() {
                     new Player() {
@@ -34,15 +34,8 @@ namespace Tatedrez.Tests.Helpers
                 }
             };
         }
-
-        public static Player CreatePlayerWithOnePiece(int playerIndex)
-        {
-            var player = new Player();
-            player.UnusedPieces.AddFirst(new Piece(playerIndex));
-            return player;
-        }
-
-        public static LinkedList<Piece> CreateStartPiecesForPlayer(int owner)
+   
+        private static LinkedList<Piece> CreateStartPiecesForPlayer(int owner)
         {
             var list = new LinkedList<Piece>();
             list.AddLast(new Piece(owner) {

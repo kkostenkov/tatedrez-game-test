@@ -7,9 +7,9 @@ namespace Tatedrez
     {
         private GameSessionController gameSessionController;
 
-        public async Task Prepare(GameSessionData sessionDataData, IGameSessionView gameSessionView, IInputManger input) // TODO: resolve view by DI
+        public async Task Prepare(GameSessionData sessionDataData, IGameSessionView gameSessionView, IMoveFetcher input, IActivePlayerIndexListener playerIndexListener)
         {
-            this.gameSessionController = new GameSessionController(sessionDataData, gameSessionView, input);
+            this.gameSessionController = new GameSessionController(sessionDataData, gameSessionView, input, playerIndexListener);
             await this.gameSessionController.BuildBoardAsync();
         }
 

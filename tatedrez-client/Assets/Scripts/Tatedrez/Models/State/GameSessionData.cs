@@ -7,6 +7,6 @@ namespace Tatedrez.Models
         public Board Board = new();
         public GameState State = new();
         public List<Player> Players = new(); // color is index % 2
-        public int CurrentPlayerTurnIndex;
+        public int CurrentTurn;
     }
 }

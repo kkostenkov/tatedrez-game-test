@@ -12,5 +12,10 @@ namespace Tatedrez.ModelServices
             this.data = data;
             this.BoardService = new BoardService(data.Board);
         }
+
+        public int GetCurrentActivePlayerIndex()
+        {
+            return this.data.CurrentTurn % data.Players.Count;
+        }
     }
 }
