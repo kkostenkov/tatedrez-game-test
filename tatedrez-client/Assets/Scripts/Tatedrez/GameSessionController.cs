@@ -34,13 +34,18 @@ namespace Tatedrez
         {
             var playerTurnIndex = this.sessionDataService.GetCurrentActivePlayerIndex();
             var state = this.sessionData.State;
-            return state.Stage switch {
-                Stage.Unknown => Task.CompletedTask,
-                Stage.Placement => PlacePieceByPlayer(playerTurnIndex),
-                Stage.Movement => MovePieceByPlayer(playerTurnIndex),
-                Stage.End => EndGame(),
-                _ => throw new ArgumentOutOfRangeException()
-            };
+            switch (state.Stage) {
+                case Stage.Unknown:
+                    return Task.CompletedTask;
+                case Stage.Placement:
+                    return PlacePieceByPlayer(playerTurnIndex);
+                case Stage.Movement:
+                    return MovePieceByPlayer(playerTurnIndex);
+                case Stage.End:
+                    return EndGame();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public Task BuildBoardAsync()

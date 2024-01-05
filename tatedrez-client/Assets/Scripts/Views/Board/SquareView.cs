@@ -13,6 +13,9 @@ namespace Tatedrez.Views
 
         [SerializeField]
         private Image highlight;
+        
+        [SerializeField]
+        private Image piecePicure;
 
         [SerializeField]
         private EmptyClickDetector clickDetector;
@@ -35,16 +38,16 @@ namespace Tatedrez.Views
         public void AssignCoords(BoardCoords coords)
         {
             this.Coords = coords;
-            UpdateHelperText();
+            UpdateGraphics();
         }
 
         public void AssignPiece(Piece piece)
         {
             Piece = piece;
-            UpdateHelperText();
+            UpdateGraphics();
         }
 
-        private void UpdateHelperText()
+        private void UpdateGraphics()
         {
             if (Piece != null) {
                 this.label.text = $"{Piece.Owner} {Piece.PieceType}";    
@@ -62,6 +65,11 @@ namespace Tatedrez.Views
         public void SetHighlightActive(bool isActive)
         {
             highlight.enabled = isActive;
+        }
+
+        public Transform GetPieceGraphicsTransform()
+        {
+            return this.piecePicure.transform;
         }
     }
 }

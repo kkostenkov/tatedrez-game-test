@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
@@ -69,6 +71,23 @@ namespace Tatedrez.Views
             if (selectedSquare.Piece != null) {
                 selectedSquare.SetHighlightActive(true);
             }
+        }
+
+        public Transform GetPieceGraphicsTransform(Guid movePieceGuid)
+        {
+            var squareWithPiece = squares.FirstOrDefault(s => s.Piece?.Guid == movePieceGuid);
+            return squareWithPiece?.GetPieceGraphicsTransform();
+        }
+
+        public Task<Piece> TakePiece(Guid movePieceGuid)
+        {
+            Piece result = null;
+            var squareWithPiece = squares.FirstOrDefault(s => s.Piece?.Guid == movePieceGuid);
+            if (squareWithPiece) {
+                result = squareWithPiece.Piece;
+                squareWithPiece.AssignPiece(null);    
+            }
+            return Task.FromResult(result);
         }
     }
 }

@@ -141,6 +141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   label: {fileID: 670292405857497917}
   highlight: {fileID: 5222848804380168696}
+  piecePicure: {fileID: 2019651501076616487}
   clickDetector: {fileID: 4992897629701175940}
 --- !u!114 &4992897629701175940
 MonoBehaviour:

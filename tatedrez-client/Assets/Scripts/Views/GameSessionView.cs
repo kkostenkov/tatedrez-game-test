@@ -39,7 +39,17 @@ namespace Tatedrez.Views
             throw new System.NotImplementedException();
         }
 
-        public Task VisualizeMove(PlacementMove move)
+        public async Task VisualizeMove(PlacementMove move)
+        {
+            var playerIndex = move.PlayerIndex;
+            var pieceGraphicsTransform = playerViews[playerIndex].GetPieceGraphicsTransform(move.PieceGuid);
+            Vector3 destination = boardView.GetWorldCoords(move.To);
+            await AnimatePieceMovement(pieceGraphicsTransform, destination);
+            var piece = await playerViews[playerIndex].TakePiece(move.PieceGuid);
+            await boardView.PutPiece(piece, move.To);
+        }
+
+        private Task AnimatePieceMovement(Transform what, Vector3 destination)
         {
             return Task.CompletedTask;
         }

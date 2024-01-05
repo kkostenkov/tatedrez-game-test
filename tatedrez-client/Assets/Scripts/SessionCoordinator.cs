@@ -27,6 +27,7 @@ namespace Tatedrez
          while (flow.IsRunning) {
             await this.flow.ProcessTurn();
          }
+         await this.flow.ProcessTurn();
       }
    }
 }

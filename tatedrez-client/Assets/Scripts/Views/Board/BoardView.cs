@@ -10,6 +10,8 @@ namespace Tatedrez.Views
         [SerializeField]
         private SquareView[] squares;
 
+        private BoardCoords size = BoardCoords.Invalid;
+
         private void Awake()
         {
             foreach (var square in this.squares) {
@@ -27,15 +29,22 @@ namespace Tatedrez.Views
         public Task BuildBoardAsync(BoardService boardService)
         {
             // board size
-            var size = boardService.GetSize();
+            size = boardService.GetSize();
             for (int x = 0; x < size.X; x++) {
                 for (int y = 0; y < size.Y; y++) {
-                    var index = x + y * size.X;
-                    this.squares[index].AssignCoords(new BoardCoords(x, y));
+                    var coords = new BoardCoords(x, y);
+                    var index = ToIndex(coords);
+                    this.squares[index].AssignCoords(coords);
                 }
             }
             // pieces
             return Task.CompletedTask;
+        }
+
+        private int ToIndex(BoardCoords coords)
+        {
+            var index = coords.X + coords.Y * size.X;
+            return index;
         }
 
         public Task<BoardCoords> GetSelectedSquareAsync()
@@ -55,6 +64,21 @@ namespace Tatedrez.Views
             var selectionSource = this.squareSelectionTaskSource; 
             this.squareSelectionTaskSource = null;
             selectionSource.SetResult(coords);
+        }
+
+        public Vector3 GetWorldCoords(BoardCoords coords)
+        {
+            var index = ToIndex(coords);
+            var square = squares[index];
+            return square.transform.position;
+        }
+
+        public Task PutPiece(Piece piece, BoardCoords destination)
+        {
+            var index = ToIndex(destination);
+            var square = squares[index];
+            square.AssignPiece(piece);
+            return Task.CompletedTask;
         }
     }
 }
