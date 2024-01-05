@@ -17,60 +17,90 @@ namespace Tatedrez
 
         public bool HasTickTackToe(IBoardInfoService board)
         {
-            return HasHorizontalTicTacToe(board) || HasVerticalTicTacToe(board) || HasDiagonalTicTacToe(board);
+            var v = HasVerticalTicTacToe(board);
+            if (v != null) {
+                return true;
+            }
+
+            var h = HasHorizontalTicTacToe(board);
+            if (h != null) {
+                return true;
+            }
+            var d = HasDiagonalTicTacToe(board);
+            return d;
         }
 
-        private bool HasVerticalTicTacToe(IBoardInfoService board)
+        private EndGameDetails HasVerticalTicTacToe(IBoardInfoService board)
         {
-            bool hasThreeInARow = false;
+            var details = new EndGameDetails();
             var size = board.GetSize();
             for (int x = 0; x < size.X; x++) {
-                var firstPiece = board.PeekPiece(new BoardCoords(x, 0));
+                var coords = new BoardCoords(x, 0);
+                var firstPiece = board.PeekPiece(coords);
                 if (firstPiece == null) {
+                    details.Clear();
                     continue;
                 }
-
-                var firstPieceOwner = board.PeekPiece(new BoardCoords(x, 0)).Owner;
+                var firstPieceOwner = board.PeekPiece(coords).Owner;
+                
+                details.WinnerCords[0] = coords;
+                details.WinnerId = firstPieceOwner;
+                
                 for (int y = 1; y < size.Y; y++) {
-                    var piece = board.PeekPiece(new BoardCoords(x, y));
+                    coords = new BoardCoords(x, y);
+                    var piece = board.PeekPiece(coords);
                     if (piece == null || firstPieceOwner != piece.Owner) {
+                        details.Clear();
                         break;
                     }
-                    hasThreeInARow = true;
+                    details.WinnerCords[y] = coords;
+                }
+                if (details.HasWinner) {
+                    break;
                 }
             }
 
-            return hasThreeInARow;
+            return details.HasWinner ? details : null;
         }
 
-        private bool HasHorizontalTicTacToe(IBoardInfoService board)
+        private EndGameDetails HasHorizontalTicTacToe(IBoardInfoService board)
         {
-            bool hasThreeInARow = false;
+            var details = new EndGameDetails();
             var size = board.GetSize();
-            for (int y = 0; y <= size.Y; y++) {
-                var firstPiece = board.PeekPiece(new BoardCoords(0, y));
+            for (int y = 0; y < size.Y; y++) {
+                var coords = new BoardCoords(0, y);
+                var firstPiece = board.PeekPiece(coords);
                 if (firstPiece == null) {
+                    details.Clear();
                     continue;
                 }
-
                 var firstPieceOwner = firstPiece.Owner;
-                for (int x = 1; x <= size.X; x++) {
-                    var piece = board.PeekPiece(new BoardCoords(x, y));
+                
+                details.WinnerCords[0] = coords;
+                details.WinnerId = firstPieceOwner;
+                
+                for (int x = 1; x < size.X; x++) {
+                    coords = new BoardCoords(x, y);
+                    var piece = board.PeekPiece(coords);
                     if (piece == null || firstPieceOwner != piece.Owner) {
+                        details.Clear();
                         break;
                     }
+                    details.WinnerCords[x] = coords;
+                }
 
-                    hasThreeInARow = true;
+                if (details.HasWinner) {
+                    break;
                 }
             }
 
-            return hasThreeInARow;
+            return details.HasWinner ? details : null;
         }
 
         private bool HasDiagonalTicTacToe(IBoardInfoService board)
         {
             return this.diagonalOne.All(coord =>
-                       board.PeekPiece(coord) != null 
+                       board.PeekPiece(coord) != null
                        && (board.PeekPiece(coord).Owner == board.PeekPiece(this.diagonalOne[0]).Owner))
                    || this.diagonalTwo.All(coord =>
                        board.PeekPiece(coord) != null
@@ -92,6 +122,7 @@ namespace Tatedrez
             if (movingPiece == null || movingPiece.Owner != move.PlayerIndex) {
                 return false;
             }
+
             return true;
         }
     }
