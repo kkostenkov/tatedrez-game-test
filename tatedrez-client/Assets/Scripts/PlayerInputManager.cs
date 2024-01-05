@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tatedrez.Models;
+using Tatedrez.Views;
 
 namespace Tatedrez
 {
-    internal class PlayerInputManager : IMoveFetcher, IActivePlayerIndexListener
+    internal class PlayerInputManager : IMoveFetcher, IActivePlayerIndexListener, IInputSourceCollector
     {
         private int playerIndexToListenForMoves;
         private Dictionary<int, IMoveFetcher> playerInputs = new();
@@ -33,6 +34,5 @@ namespace Tatedrez
         {
             return this.playerInputs[this.playerIndexToListenForMoves];
         }
-   
     }
 }

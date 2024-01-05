@@ -7,8 +7,6 @@ namespace Tatedrez
    {
       [SerializeField]
       private GameSessionView sessionView;
-      [SerializeField]
-      private LocalInputManager localInputManager;
 
       private GameSessionRepository sessionRepo = new GameSessionRepository();
       private GameSessionFlow flow;
@@ -18,8 +16,8 @@ namespace Tatedrez
          flow = new GameSessionFlow();
          var data = this.sessionRepo.Load();
          var inputManager = new PlayerInputManager();
-         inputManager.AddInputSource(this.localInputManager, 0);
-         inputManager.AddInputSource(this.localInputManager, 1);
+         this.sessionView.BindLocalInputForPlayer(0, inputManager);
+         this.sessionView.BindLocalInputForPlayer(1, inputManager);
          
          await flow.Prepare(data, this.sessionView, inputManager, inputManager);
       }

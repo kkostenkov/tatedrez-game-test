@@ -13,6 +13,8 @@ namespace Tatedrez.Views
         private SessionInfoView sessionInfoView;
         [SerializeField]
         private PlayerView[] playerViews;
+        [SerializeField]
+        private LocalInputManager[] localInputManagers;
 
         private GameSessionDataService sessionDataService;
 
@@ -23,7 +25,9 @@ namespace Tatedrez.Views
             await this.boardView.BuildBoardAsync(board);
             
             for (int i = 0; i < sessionDataService.GetPlayersCount; i++) {
-                await playerViews[i].Initialize(sessionDataService.GetPlayer(i));
+                var player = sessionDataService.GetPlayer(i);
+                await playerViews[i].Initialize(player);
+                localInputManagers[i].Bind(player, playerViews[i], this.boardView);
             }
 
             // game stage
@@ -54,6 +58,11 @@ namespace Tatedrez.Views
         public Task VisualizeInvalidMove(PlacementMove move)
         {
             throw new System.NotImplementedException();
+        }
+
+        public void BindLocalInputForPlayer(int playerIndex, IInputSourceCollector inputCollector)
+        {
+            inputCollector.AddInputSource(this.localInputManagers[playerIndex], playerIndex);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Tatedrez.Views
     {
         [SerializeField]
         private SquareView[] squares;
-        public async Task BuildBoardAsync(BoardService boardService)
+        public Task BuildBoardAsync(BoardService boardService)
         {
             // board size
             var size = boardService.GetSize();
@@ -19,6 +19,7 @@ namespace Tatedrez.Views
                 }
             }
             // pieces
+            return Task.CompletedTask;
         }
     }
 }

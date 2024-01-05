@@ -8,6 +8,8 @@ namespace Tatedrez.ModelServices
         private readonly Player playerData;
         private readonly int playerIndex;
 
+        public int Index => this.playerIndex;
+
         public PlayerService(Player playerData, int playerIndex)
         {
             this.playerData = playerData;
