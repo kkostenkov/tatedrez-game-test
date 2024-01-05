@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
@@ -14,7 +13,7 @@ namespace Tatedrez.Views
         [SerializeField]
         private TMP_Text playerName;
 
-        public Piece SelectedPiece { get; private set; }
+        public Piece SelectedPiece => selectedSquare?.Piece;
         private SquareView selectedSquare;
         private bool IsSelectingSquare;
 

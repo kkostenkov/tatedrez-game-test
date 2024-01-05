@@ -23,20 +23,19 @@ namespace Tatedrez.Views
             playerView.EnablePieceSelection();
             BoardCoords toCoords = BoardCoords.Invalid;
             while (this.playerView.SelectedPiece == null) {
-                //toCoords = await boardView.GetSelectedSquareAsync();
-                await Task.Yield();
+                toCoords = await boardView.GetSelectedSquareAsync();
             }
 
-            UnityEngine.Debug.Log($"Placement move done: {this.playerView.SelectedPiece.PieceType}");
+            var selectedPiece = this.playerView.SelectedPiece;
+            Debug.Log($"Placement move done: {this.playerView.SelectedPiece.PieceType} to {toCoords.ToString()}");
             playerView.DisablePieceSelection();
 
             PlacementMove move = new PlacementMove() {
-                PieceGuid = this.playerView.SelectedPiece.Guid,
+                PieceGuid = selectedPiece.Guid,
                 PlayerIndex = player.Index,
                 To = toCoords
             };
             return move;
-
         }
 
         public Task<MovementMove> GetMovePieceMovement()

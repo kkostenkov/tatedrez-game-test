@@ -20,6 +20,7 @@ namespace Tatedrez.Views
         public event Action<SquareView> SquareClicked;
 
         public Piece Piece { get; private set; }
+        public BoardCoords Coords { get; private set; } = BoardCoords.Invalid;
 
         private void Awake()
         {
@@ -31,15 +32,26 @@ namespace Tatedrez.Views
             clickDetector.Clicked -= OnSquareClicked;
         }
 
-        public void SetCoordsText(string text)
+        public void AssignCoords(BoardCoords coords)
         {
-            this.label.text = text;
+            this.Coords = coords;
+            UpdateHelperText();
         }
 
         public void AssignPiece(Piece piece)
         {
             Piece = piece;
-            SetCoordsText($"{piece.Owner} {piece.PieceType}");
+            UpdateHelperText();
+        }
+
+        private void UpdateHelperText()
+        {
+            if (Piece != null) {
+                this.label.text = $"{Piece.Owner} {Piece.PieceType}";    
+            }
+            else {
+                this.label.text = Coords.ToString();
+            }
         }
 
         protected void OnSquareClicked()

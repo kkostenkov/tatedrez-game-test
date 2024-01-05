@@ -41,7 +41,7 @@ namespace Tatedrez.Views
 
         public Task VisualizeMove(PlacementMove move)
         {
-            throw new System.NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task VisualizeMove(MovementMove move)
