@@ -3,7 +3,7 @@ using Tatedrez.Models;
 
 namespace Tatedrez
 {
-    public interface IPlayerInputReceiver
+    public interface IMoveFetcher
     {
         Task<PlacementMove> GetMovePiecePlacement();
         Task<MovementMove> GetMovePieceMovement();

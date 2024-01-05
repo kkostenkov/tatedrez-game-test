@@ -20,7 +20,7 @@ namespace Tatedrez.Tests.Helpers
         {
             return new GameSessionData() {
                 Board = CreateEmptyBoard(),
-                CurrentPlayerTurnIndex = 0,
+                CurrentTurn = 0,
                 Players = new List<Player>() {
                     new Player() {
                         UnusedPieces = CreateStartPiecesForPlayer(0),

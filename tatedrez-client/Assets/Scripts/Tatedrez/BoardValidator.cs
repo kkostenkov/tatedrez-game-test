@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Tatedrez.Models;
+using Tatedrez.ModelServices;
 
 namespace Tatedrez
 {
@@ -14,60 +15,59 @@ namespace Tatedrez
             new BoardCoords(0, 2), new BoardCoords(1, 1), new BoardCoords(2, 0)
         };
 
-        public BoardValidator()
-        {
-        }
-
-        public bool HasTickTackToe(Board board)
+        public bool HasTickTackToe(IBoardInfoService board)
         {
             return HasHorizontalTicTacToe(board) || HasVerticalTicTacToe(board) || HasDiagonalTicTacToe(board);
         }
 
-        private bool HasVerticalTicTacToe(Board board)
+        private bool HasVerticalTicTacToe(IBoardInfoService board)
         {
-            for (int x = 0; x < board.BoardSize.X; x++) {
+            bool hasThreeInARow = false;
+            var size = board.GetSize();
+            for (int x = 0; x < size.X; x++) {
                 var firstPiece = board.PeekPiece(new BoardCoords(x, 0));
                 if (firstPiece == null) {
                     continue;
                 }
 
                 var firstPieceOwner = board.PeekPiece(new BoardCoords(x, 0)).Owner;
-                for (int y = 1; y < board.BoardSize.Y; y++) {
+                for (int y = 1; y < size.Y; y++) {
                     var piece = board.PeekPiece(new BoardCoords(x, y));
                     if (piece == null || firstPieceOwner != piece.Owner) {
                         break;
                     }
-
-                    return true;
+                    hasThreeInARow = true;
                 }
             }
 
-            return false;
+            return hasThreeInARow;
         }
 
-        private bool HasHorizontalTicTacToe(Board board)
+        private bool HasHorizontalTicTacToe(IBoardInfoService board)
         {
-            for (int y = 0; y <= board.BoardSize.Y; y++) {
+            bool hasThreeInARow = false;
+            var size = board.GetSize();
+            for (int y = 0; y <= size.Y; y++) {
                 var firstPiece = board.PeekPiece(new BoardCoords(0, y));
                 if (firstPiece == null) {
                     continue;
                 }
 
                 var firstPieceOwner = firstPiece.Owner;
-                for (int x = 1; x <= board.BoardSize.X; x++) {
+                for (int x = 1; x <= size.X; x++) {
                     var piece = board.PeekPiece(new BoardCoords(x, y));
                     if (piece == null || firstPieceOwner != piece.Owner) {
                         break;
                     }
 
-                    return true;
+                    hasThreeInARow = true;
                 }
             }
 
-            return false;
+            return hasThreeInARow;
         }
 
-        private bool HasDiagonalTicTacToe(Board board)
+        private bool HasDiagonalTicTacToe(IBoardInfoService board)
         {
             return this.diagonalOne.All(coord =>
                        board.PeekPiece(coord) != null 
@@ -77,12 +77,12 @@ namespace Tatedrez
                        && (board.PeekPiece(coord)?.Owner == board.PeekPiece(this.diagonalTwo[0])?.Owner));
         }
 
-        public bool IsValidMove(Board board, PlacementMove move)
+        public bool IsValidMove(IBoardInfoService board, PlacementMove move)
         {
             return !board.IsOccupied(move.To);
         }
 
-        public bool IsValidMove(Board board, MovementMove move)
+        public bool IsValidMove(IBoardInfoService board, MovementMove move)
         {
             if (board.IsOccupied(move.To)) {
                 return false;

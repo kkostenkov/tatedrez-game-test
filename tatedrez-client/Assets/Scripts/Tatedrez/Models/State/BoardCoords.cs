@@ -2,6 +2,8 @@ namespace Tatedrez.Models
 {
     public struct BoardCoords
     {
+        public static BoardCoords Invalid = new BoardCoords(-1, -1);
+        
         public int X;
         public int Y;
 

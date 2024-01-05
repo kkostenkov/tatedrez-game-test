@@ -1,54 +1,75 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tatedrez.Models;
+using Tatedrez.ModelServices;
 
 namespace Tatedrez
 {
     public class GameSessionController
     {
         private readonly GameSessionData sessionData;
-        private readonly IBoardView boardView;
-        private readonly IInputManger input;
+        private readonly IGameSessionView gameSessionView;
+        private readonly IMoveFetcher input;
+        private readonly IActivePlayerIndexListener playerIndexListener;
         private readonly BoardValidator boardValidator;
+        
+        private readonly GameSessionDataService sessionDataService;
+        private readonly BoardService boardService;
 
-        public GameSessionController(GameSessionData sessionData, IBoardView boardView, IInputManger input)
+        public bool IsSessionRunning => sessionDataService.GameStateService.IsGameActive;
+
+        public GameSessionController(GameSessionData sessionData, IGameSessionView gameSessionView, IMoveFetcher input, IActivePlayerIndexListener playerIndexListener)
         {
             this.sessionData = sessionData;
-            this.boardView = boardView;
+            this.sessionDataService = new GameSessionDataService(sessionData);
+            this.boardService = this.sessionDataService.BoardService;
+            this.gameSessionView = gameSessionView;
             this.input = input;
+            this.playerIndexListener = playerIndexListener;
             this.boardValidator = new BoardValidator();
         }
 
         public Task Turn()
         {
-            var playerTurnIndex = this.sessionData.CurrentPlayerTurnIndex % this.sessionData.Players.Count;
+            var playerTurnIndex = this.sessionDataService.GetCurrentActivePlayerIndex();
             var state = this.sessionData.State;
-            return state.Stage switch {
-                Stage.Unknown => Task.CompletedTask,
-                Stage.Placement => PlacePieceByPlayer(playerTurnIndex),
-                Stage.Movement => MovePieceByPlayer(playerTurnIndex),
-                Stage.End => EndGame(),
-                _ => throw new ArgumentOutOfRangeException()
-            };
+            switch (state.Stage) {
+                case Stage.Unknown:
+                    return Task.CompletedTask;
+                case Stage.Placement:
+                    return PlacePieceByPlayer(playerTurnIndex);
+                case Stage.Movement:
+                    return MovePieceByPlayer(playerTurnIndex);
+                case Stage.End:
+                    return EndGame();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public Task BuildBoardAsync()
         {
-            return boardView.Build(this.sessionData);
+            var tasks = new List<Task>();
+            tasks.Add(this.gameSessionView.Build(this.sessionDataService));
+            tasks.Add(this.gameSessionView.ShowTurn(this.sessionDataService.GetCurrentActivePlayerIndex()));
+            return Task.WhenAll(tasks);
         }
 
         private async Task PlacePieceByPlayer(int playerIndex)
         {
-            await boardView.ShowTurn(playerIndex);
-            var move = await input.GetMovePiecePlacement(playerIndex);
+            await this.gameSessionView.ShowTurn(playerIndex);
+            playerIndexListener.SetActivePlayer(playerIndex);
+            var move = await input.GetMovePiecePlacement();
             
-            if (await TryProcessInvalidPacementMove(move)) {
+            if (IsInvalidMove(move)) {
+                await this.gameSessionView.VisualizeInvalidMove(move);
                 return;
             }
             
             ApplyStateChange(move);
             
-            await boardView.VisualizeMove(move);
+            await this.gameSessionView.VisualizeMove(move);
         }
 
         private void ApplyStateChange(PlacementMove move)
@@ -56,42 +77,47 @@ namespace Tatedrez
             var playerIndex = move.PlayerIndex;
             var player = this.sessionData.Players[playerIndex];
             var piece = player.DropPiece(move.PieceGuid);
-            this.sessionData.Board.PlacePiece(piece, move.To);
-            this.sessionData.CurrentPlayerTurnIndex++;
+            this.boardService.PlacePiece(piece, move.To);
+            this.sessionData.CurrentTurn++;
             TryUpdateGameStage();
         }
 
-        private async Task<bool> TryProcessInvalidPacementMove(PlacementMove move)
+        private bool IsInvalidMove(PlacementMove move)
         {
-            if (this.boardValidator.IsValidMove(this.sessionData.Board, move)) {
-                return false;
+            if (this.sessionDataService.GetCurrentActivePlayerIndex() != move.PlayerIndex) {
+                return true;
             }
-            await this.boardView.VisualizeInvalidMove(move);
-            return true;
+            
+            if (!this.boardValidator.IsValidMove(this.boardService, move)) {
+                return true;
+            }
+            
+            return false;
         }
 
         private async Task MovePieceByPlayer(int playerIndex)  
         {
-            await boardView.ShowTurn(playerIndex);
+            await this.gameSessionView.ShowTurn(playerIndex);
             // validate if there are available moves
             
-            var move = await input.GetMovePieceMovement(playerIndex); // via input manager?
+            playerIndexListener.SetActivePlayer(playerIndex);
+            var move = await input.GetMovePieceMovement();
             // validate move via validator
             
             // check and apply state change
-            this.sessionData.CurrentPlayerTurnIndex++;
+            this.sessionData.CurrentTurn++;
             // update pieces view via board view
-            await boardView.VisualizeMove(move);
+            await this.gameSessionView.VisualizeMove(move);
         }
 
         public Task EndGame()
         {
-            return boardView.ShowGameOverScreen();
+            return this.gameSessionView.ShowGameOverScreen();
         }
 
         private void TryUpdateGameStage()
         {
-            if (this.boardValidator.HasTickTackToe(this.sessionData.Board)) {
+            if (this.boardValidator.HasTickTackToe(boardService)) {
                 this.sessionData.State.Stage = Stage.End;
             }
             if (this.sessionData.State.Stage == Stage.Placement) {

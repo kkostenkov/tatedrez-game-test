@@ -1,0 +1,17 @@
+{
+    "name": "Tatedrez.Game",
+    "rootNamespace": "",
+    "references": [
+        "TatedrezCore",
+        "Tatedrez.Views"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
