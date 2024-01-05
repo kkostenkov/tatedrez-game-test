@@ -27,10 +27,10 @@ namespace Tatedrez.Views
             }
 
             var selectedPiece = this.playerView.SelectedPiece;
-            Debug.Log($"Placement move done: {this.playerView.SelectedPiece.PieceType} to {toCoords.ToString()}");
+            Debug.Log($"Placement move done: {this.playerView.SelectedPiece.PieceType} to {toCoords}");
             playerView.DisablePieceSelection();
 
-            PlacementMove move = new PlacementMove() {
+            var move = new PlacementMove() {
                 PieceGuid = selectedPiece.Guid,
                 PlayerIndex = player.Index,
                 To = toCoords
@@ -38,9 +38,12 @@ namespace Tatedrez.Views
             return move;
         }
 
-        public Task<MovementMove> GetMovePieceMovement()
+        public async Task<MovementMove> GetMovePieceMovement()
         {
-            throw new System.NotImplementedException();
+            var move = await boardView.GetMove(player.Index);
+            Debug.Log($"Movemoent move done: {move.PieceGuid}" +
+                      $"from {move.From} to {move.To}");
+            return move;
         }
     }
 }

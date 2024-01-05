@@ -49,14 +49,15 @@ namespace Tatedrez.Views
             await boardView.PutPiece(piece, move.To);
         }
 
+        public async Task VisualizeMove(MovementMove move)
+        {
+            var piece = await boardView.TakePiece(move.From);
+            await boardView.PutPiece(piece, move.To);
+        }
+
         private Task AnimatePieceMovement(Transform what, Vector3 destination)
         {
             return Task.CompletedTask;
-        }
-
-        public Task VisualizeMove(MovementMove move)
-        {
-            throw new System.NotImplementedException();
         }
 
         public async Task ShowTurn(int playerIndex)

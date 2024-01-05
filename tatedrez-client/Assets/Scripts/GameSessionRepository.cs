@@ -9,7 +9,7 @@ namespace Tatedrez
         {
             return CreateStandardSessionStart();
         }
-   
+
         private static GameSessionData CreateStandardSessionStart()
         {
             return new GameSessionData() {
@@ -34,7 +34,7 @@ namespace Tatedrez
                 }
             };
         }
-   
+
         private static LinkedList<Piece> CreateStartPiecesForPlayer(int owner)
         {
             var list = new LinkedList<Piece>();
@@ -48,6 +48,53 @@ namespace Tatedrez
                 PieceType = "Bishop",
             });
             return list;
+        }
+
+        private static GameSessionData CreatePreplacedHorseysStart()
+        {
+            return new GameSessionData() {
+                Board = new Board() {
+                    BoardSize = new BoardCoords() {
+                        X = 3,
+                        Y = 3,
+                    },
+                    PiecesByCoordinates = new() {
+                        {
+                            0, new Piece(0) {
+                                PieceType = "Knight",
+                            }
+                        }, {
+                            1, new Piece(1) {
+                                PieceType = "Knight",
+                            }
+                        }, {
+                            2, new Piece(1) {
+                                PieceType = "Knight",
+                            }
+                        }, {
+                            3, new Piece(0) {
+                                PieceType = "Knight",
+                            }
+                        }, {
+                            4, new Piece(1) {
+                                PieceType = "Knight",
+                            }
+                        }, {
+                            5, new Piece(0) {
+                                PieceType = "Knight",
+                            }
+                        },
+                    },
+                },
+                CurrentTurn = 0,
+                Players = new List<Player>() {
+                    new Player(),
+                    new Player()
+                },
+                State = new GameState() {
+                    Stage = Stage.Movement
+                }
+            };
         }
     }
 }
