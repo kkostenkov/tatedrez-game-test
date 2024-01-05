@@ -2,7 +2,8 @@
     "name": "Tatedrez.Views",
     "rootNamespace": "",
     "references": [
-        "TatedrezCore"
+        "TatedrezCore",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

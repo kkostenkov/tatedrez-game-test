@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tatedrez.Views
 {
-    internal class GameSessionView : MonoBehaviour, IGameSessionView
+    public class GameSessionView : MonoBehaviour, IGameSessionView
     {
         [SerializeField]
         private BoardView boardView; 

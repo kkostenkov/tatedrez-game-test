@@ -1,11 +1,17 @@
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+
 
 namespace Tatedrez.Views
 {
     internal class SquareView : MonoBehaviour
     {
         [SerializeField]
-        private Text label;
+        private TMP_Text label;
+
+        public void SetCoordsText(string text)
+        {
+            this.label.text = text;
+        }
     }
 }
