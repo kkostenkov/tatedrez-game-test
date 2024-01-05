@@ -6,7 +6,14 @@ namespace Tatedrez.Models
     {
         public BoardCoords BoardSize;
         public Dictionary<int, Piece> PiecesByCoordinates = new();
-
+        
+        public bool IsOccupied(BoardCoords coords)
+        {
+            var key = ToKey(coords);
+            this.PiecesByCoordinates.TryGetValue(key, out var piece);
+            return piece != null;
+        }
+        
         public Piece PeekPiece(BoardCoords coords)
         {
             var key = ToKey(coords);

@@ -79,14 +79,20 @@ namespace Tatedrez
 
         public bool IsValidMove(Board board, PlacementMove move)
         {
-            var toCoords = move.To;
-            var occupyingPiece = board.PeekPiece(toCoords);
-            return occupyingPiece == null;
+            return !board.IsOccupied(move.To);
         }
 
         public bool IsValidMove(Board board, MovementMove move)
         {
-            throw new System.NotImplementedException();
+            if (board.IsOccupied(move.To)) {
+                return false;
+            }
+
+            var movingPiece = board.PeekPiece(move.From);
+            if (movingPiece == null || movingPiece.Owner != move.PlayerIndex) {
+                return false;
+            }
+            return true;
         }
     }
 }

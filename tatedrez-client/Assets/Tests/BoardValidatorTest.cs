@@ -143,4 +143,38 @@ public class BoardValidatorTest
         var result = validator.IsValidMove(board, move);
         Assert.AreEqual(false, result);
     }
+
+    [Test]
+    public void Should_ProhibitMove_When_MovingFromEmptySquare()
+    {
+        var board = Helpers.CreateEmptyBoard();
+        var move = new MovementMove() {
+            PieceGuid = System.Guid.NewGuid(),
+            From = new BoardCoords(1, 2),
+            To = new BoardCoords(2, 2),
+        };
+        var validator = new BoardValidator();
+
+        var result = validator.IsValidMove(board, move);
+        Assert.AreEqual(false, result);
+    }
+    
+    [Test]
+    public void Should_ProhibitMove_When_MovingOpponentPiece()
+    {
+        var board = Helpers.CreateEmptyBoard();
+        var pieceCoords = new BoardCoords(0, 1);
+        var movingPiece = new Piece(1);
+        board.PlacePiece(movingPiece, pieceCoords);
+        var move = new MovementMove() {
+            PlayerIndex = 0,
+            PieceGuid = movingPiece.Guid,
+            From = pieceCoords,
+            To = new BoardCoords(2, 2),
+        };
+        var validator = new BoardValidator();
+
+        var result = validator.IsValidMove(board, move);
+        Assert.AreEqual(false, result);
+    }
 }
