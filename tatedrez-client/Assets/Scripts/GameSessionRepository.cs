@@ -39,13 +39,13 @@ namespace Tatedrez
         {
             var list = new LinkedList<Piece>();
             list.AddLast(new Piece(owner) {
-                PieceType = "Knight",
+                PieceType = Constants.Knight,
             });
             list.AddLast(new Piece(owner) {
-                PieceType = "Rook",
+                PieceType = Constants.Rook,
             });
             list.AddLast(new Piece(owner) {
-                PieceType = "Bishop",
+                PieceType = Constants.Bishop,
             });
             return list;
         }
@@ -61,27 +61,27 @@ namespace Tatedrez
                     PiecesByCoordinates = new() {
                         {
                             0, new Piece(0) {
-                                PieceType = "Knight",
+                                PieceType = Constants.Knight,
                             }
                         }, {
                             1, new Piece(1) {
-                                PieceType = "Knight",
+                                PieceType = Constants.Knight,
                             }
                         }, {
                             2, new Piece(1) {
-                                PieceType = "Knight",
+                                PieceType = Constants.Knight,
                             }
                         }, {
                             3, new Piece(0) {
-                                PieceType = "Knight",
+                                PieceType = Constants.Knight,
                             }
                         }, {
                             4, new Piece(1) {
-                                PieceType = "Knight",
+                                PieceType = Constants.Knight,
                             }
                         }, {
                             5, new Piece(0) {
-                                PieceType = "Knight",
+                                PieceType = Constants.Knight,
                             }
                         },
                     },

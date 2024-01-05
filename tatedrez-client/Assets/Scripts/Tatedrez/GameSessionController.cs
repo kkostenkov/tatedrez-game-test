@@ -13,13 +13,15 @@ namespace Tatedrez
         private readonly IMoveFetcher input;
         private readonly IActivePlayerIndexListener playerIndexListener;
         private readonly BoardValidator boardValidator;
+        private readonly MovementValidator movementValidator;
         
         private readonly GameSessionDataService sessionDataService;
         private readonly BoardService boardService;
 
         public bool IsSessionRunning => sessionDataService.GameStateService.IsGameActive;
 
-        public GameSessionController(GameSessionData sessionData, IGameSessionView gameSessionView, IMoveFetcher input, IActivePlayerIndexListener playerIndexListener)
+        public GameSessionController(GameSessionData sessionData, IGameSessionView gameSessionView, IMoveFetcher input,
+            IActivePlayerIndexListener playerIndexListener)
         {
             this.sessionData = sessionData;
             this.sessionDataService = new GameSessionDataService(sessionData);
@@ -28,6 +30,7 @@ namespace Tatedrez
             this.input = input;
             this.playerIndexListener = playerIndexListener;
             this.boardValidator = new BoardValidator();
+            this.movementValidator = new MovementValidator();
         }
 
         public Task Turn()
@@ -44,7 +47,7 @@ namespace Tatedrez
                 case Stage.End:
                     return EndGame();
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentException(state.Stage.ToString());
             }
         }
 
@@ -85,7 +88,7 @@ namespace Tatedrez
 
         private bool IsInvalidMove(PlacementMove move)
         {
-            if (this.sessionDataService.GetCurrentActivePlayerIndex() != move.PlayerIndex) {
+            if (!IsMoveOfCurrentPlayer(move)) {
                 return true;
             }
             
@@ -121,7 +124,20 @@ namespace Tatedrez
 
         private bool IsInvalidMove(MovementMove move)
         {
+            if (!IsMoveOfCurrentPlayer(move)) {
+                return true;
+            }
+            
+            if (!this.movementValidator.IsValidMove(this.boardService, move)) {
+                return true;
+            }
+            
             return false;
+        }
+
+        private bool IsMoveOfCurrentPlayer(Move move)
+        {
+            return this.sessionDataService.GetCurrentActivePlayerIndex() == move.PlayerIndex;
         }
 
         public Task EndGame()

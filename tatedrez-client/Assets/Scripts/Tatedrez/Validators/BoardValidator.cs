@@ -111,19 +111,5 @@ namespace Tatedrez
         {
             return !board.IsOccupied(move.To);
         }
-
-        public bool IsValidMove(IBoardInfoService board, MovementMove move)
-        {
-            if (board.IsOccupied(move.To)) {
-                return false;
-            }
-
-            var movingPiece = board.PeekPiece(move.From);
-            if (movingPiece == null || movingPiece.Owner != move.PlayerIndex) {
-                return false;
-            }
-
-            return true;
-        }
     }
 }

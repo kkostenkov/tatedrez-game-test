@@ -1,3 +1,4 @@
+using Tatedrez;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "PiecesSkin", menuName = "ScriptableObjects/SpawnPiecesSkinScriptableObject", order = 1)]
@@ -22,11 +23,11 @@ public class PiecesSkinScriptableObject : ScriptableObject
     public Sprite GetSprite(string pieceName, int side)
     {
         switch (pieceName) {
-            case "Bishop":
+            case Constants.Bishop:
                 return side == 1 ? this.BlackBishop : this.WhiteBishop;
-            case "Knight":
+            case Constants.Knight:
                 return side == 1 ? this.BlackKnight : this.WhiteKnight;
-            case "Rook":
+            case Constants.Rook:
                 return side == 1 ? this.BlackRook : this.WhiteRook;
             default:
                 return null;
