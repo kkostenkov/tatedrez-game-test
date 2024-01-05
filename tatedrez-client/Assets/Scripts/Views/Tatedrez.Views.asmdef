@@ -1,0 +1,16 @@
+{
+    "name": "Tatedrez.Views",
+    "rootNamespace": "",
+    "references": [
+        "TatedrezCore"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

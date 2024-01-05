@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Tatedrez.Models;
+using Tatedrez.ModelServices;
 
 namespace Tatedrez
 {
@@ -10,10 +11,15 @@ namespace Tatedrez
         private readonly IBoardView boardView;
         private readonly IInputManger input;
         private readonly BoardValidator boardValidator;
+        
+        private readonly GameSessionDataService sessionDataService;
+        private readonly BoardService boardService;
 
         public GameSessionController(GameSessionData sessionData, IBoardView boardView, IInputManger input)
         {
             this.sessionData = sessionData;
+            this.sessionDataService = new GameSessionDataService(sessionData);
+            this.boardService = this.sessionDataService.BoardService;
             this.boardView = boardView;
             this.input = input;
             this.boardValidator = new BoardValidator();
@@ -56,14 +62,14 @@ namespace Tatedrez
             var playerIndex = move.PlayerIndex;
             var player = this.sessionData.Players[playerIndex];
             var piece = player.DropPiece(move.PieceGuid);
-            this.sessionData.Board.PlacePiece(piece, move.To);
+            this.boardService.PlacePiece(piece, move.To);
             this.sessionData.CurrentPlayerTurnIndex++;
             TryUpdateGameStage();
         }
 
         private async Task<bool> TryProcessInvalidPacementMove(PlacementMove move)
         {
-            if (this.boardValidator.IsValidMove(this.sessionData.Board, move)) {
+            if (this.boardValidator.IsValidMove(this.boardService, move)) {
                 return false;
             }
             await this.boardView.VisualizeInvalidMove(move);
@@ -91,7 +97,7 @@ namespace Tatedrez
 
         private void TryUpdateGameStage()
         {
-            if (this.boardValidator.HasTickTackToe(this.sessionData.Board)) {
+            if (this.boardValidator.HasTickTackToe(boardService)) {
                 this.sessionData.State.Stage = Stage.End;
             }
             if (this.sessionData.State.Stage == Stage.Placement) {

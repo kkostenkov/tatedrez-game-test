@@ -5,6 +5,7 @@ using NSubstitute;
 using NUnit.Framework;
 using Tatedrez;
 using Tatedrez.Models;
+using Tatedrez.ModelServices;
 using Tatedrez.Tests.Helpers;
 
 public class GameplaySessionControllerTest
@@ -52,7 +53,8 @@ public class GameplaySessionControllerTest
     {
         var sessionData = Helpers.CreateStandardSessionStart();
         var occupiedCoords = new BoardCoords(1, 2);
-        sessionData.Board.PlacePiece(new Piece(0), occupiedCoords);
+        var boardService = new BoardService(sessionData.Board);
+        boardService.PlacePiece(new Piece(0), occupiedCoords);
         var view = Substitute.For<IBoardView>();
         var input = Substitute.For<IInputManger>();
         var pieceGuidToPlace = sessionData.Players[0].UnusedPieces.First.Value.Guid;
@@ -85,7 +87,7 @@ public class GameplaySessionControllerTest
         
         await controller.Turn();
 
-        var placedPiece = sessionData.Board.PeekPiece(placementCoords);
+        var placedPiece = new BoardService(sessionData.Board).PeekPiece(placementCoords);
         Assert.IsNotNull(placedPiece);
         Assert.AreEqual(pieceToPlace.Guid, placedPiece.Guid);
     }
@@ -156,7 +158,7 @@ public class GameplaySessionControllerTest
     {
         var view = Substitute.For<IBoardView>();
         var sessionData = Helpers.CreateStandardSessionStart();
-        var board = sessionData.Board;
+        var board = new BoardService(sessionData.Board);
         var pieceOwnerId = 0;
         board.PlacePiece(new Piece(pieceOwnerId), new BoardCoords(0, 0));
         board.PlacePiece(new Piece(pieceOwnerId), new BoardCoords(1, 0));
