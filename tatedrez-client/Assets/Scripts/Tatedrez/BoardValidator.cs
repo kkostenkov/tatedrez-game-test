@@ -7,11 +7,11 @@ namespace Tatedrez
 {
     public class BoardValidator
     {
-        private List<BoardCoords> diagonalOne = new() {
+        private readonly List<BoardCoords> diagonalOne = new() {
             new BoardCoords(0, 0), new BoardCoords(1, 1), new BoardCoords(2, 2)
         };
 
-        private List<BoardCoords> diagonalTwo = new() {
+        private readonly List<BoardCoords> diagonalTwo = new() {
             new BoardCoords(0, 2), new BoardCoords(1, 1), new BoardCoords(2, 0)
         };
 

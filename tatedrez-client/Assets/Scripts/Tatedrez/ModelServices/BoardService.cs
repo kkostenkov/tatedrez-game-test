@@ -42,6 +42,14 @@ namespace Tatedrez.ModelServices
         {
             this.boardData.PiecesByCoordinates.Add(ToKey(coords), piece);
         }
+        
+        public Piece DropPiece(BoardCoords coords)
+        {
+            var key = ToKey(coords);
+            this.boardData.PiecesByCoordinates.TryGetValue(key, out var piece);
+            this.boardData.PiecesByCoordinates.Remove(key);
+            return piece;
+        }
 
         private int ToKey(BoardCoords coords)
         {
