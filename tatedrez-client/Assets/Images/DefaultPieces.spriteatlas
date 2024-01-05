@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: DefaultPieces
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 582b228808f2a48e185c589249054544, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 26caaea09fef0442c8bac3951310e9f7, type: 3}
+  - {fileID: 21300000, guid: 1d2b0222906aa484099e52439901c1fb, type: 3}
+  - {fileID: 21300000, guid: d20b85c275bad41bcbb44c400750331b, type: 3}
+  - {fileID: 21300000, guid: 1ba303639d7d24317bbaae04929ac7e7, type: 3}
+  - {fileID: 21300000, guid: 7f054ba309867470b86629b18453b118, type: 3}
+  - {fileID: 21300000, guid: 061087c58449443a691cab8ce8099ee3, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Chess_nlt45
+  - Chess_blt45
+  - Chess_rlt45
+  - Chess_bdt45
+  - Chess_rdt45
+  - Chess_ndt45
+  m_RenderDataMap: {}
+  m_Tag: DefaultPieces
+  m_IsVariant: 0

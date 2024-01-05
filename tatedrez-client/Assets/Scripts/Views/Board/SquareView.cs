@@ -18,6 +18,9 @@ namespace Tatedrez.Views
         private Image piecePicure;
 
         [SerializeField]
+        private PiecesSkinScriptableObject defaultSkin;
+
+        [SerializeField]
         private EmptyClickDetector clickDetector;
 
         public event Action<SquareView> SquareClicked;
@@ -50,10 +53,14 @@ namespace Tatedrez.Views
         private void UpdateGraphics()
         {
             if (Piece != null) {
-                this.label.text = $"{Piece.Owner} {Piece.PieceType}";    
+                this.label.text = $"{Piece.Owner} {Piece.PieceType}";
+                this.piecePicure.sprite = this.defaultSkin.GetSprite(Piece.PieceType, Piece.Owner);
+                this.piecePicure.enabled = true;
             }
             else {
                 this.label.text = Coords.ToString();
+                this.piecePicure.sprite = null;
+                this.piecePicure.enabled = false;
             }
         }
 
