@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
@@ -44,7 +45,10 @@ namespace Tatedrez
 
         public Task BuildBoardAsync()
         {
-            return this.gameSessionView.Build(this.sessionDataService);
+            var tasks = new List<Task>();
+            tasks.Add(this.gameSessionView.Build(this.sessionDataService));
+            tasks.Add(this.gameSessionView.ShowTurn(this.sessionDataService.GetCurrentActivePlayerIndex()));
+            return Task.WhenAll(tasks);
         }
 
         private async Task PlacePieceByPlayer(int playerIndex)

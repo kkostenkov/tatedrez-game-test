@@ -1,3 +1,4 @@
+using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -12,7 +13,11 @@ namespace Tatedrez.Views
         private TMP_Text turnNumberLabel;
         public async Task ShowPlayerToMakeMove(int playerIndex)
         {
-            this.playerToMoveLabel.text = $"Player {playerIndex}";
+            var sb = new StringBuilder();
+            sb.Append(playerIndex == 0 ? "<-- " : string.Empty);
+            sb.Append($"Player {playerIndex}");
+            sb.Append(playerIndex == 1 ? " -->" : string.Empty);
+            this.playerToMoveLabel.text = sb.ToString();
         }
 
         public async Task DisplayTurnNumber(int currentTurnNumber)

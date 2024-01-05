@@ -1,3 +1,4 @@
+using Tatedrez.Models;
 using TMPro;
 using UnityEngine;
 
@@ -12,6 +13,11 @@ namespace Tatedrez.Views
         public void SetCoordsText(string text)
         {
             this.label.text = text;
+        }
+
+        public void AssignPiece(Piece piece)
+        {
+            SetCoordsText($"{piece.Owner} {piece.PieceType}");
         }
     }
 }

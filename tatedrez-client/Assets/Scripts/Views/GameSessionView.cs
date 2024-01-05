@@ -11,6 +11,8 @@ namespace Tatedrez.Views
         private BoardView boardView;
         [SerializeField]
         private SessionInfoView sessionInfoView;
+        [SerializeField]
+        private PlayerView[] playerViews;
 
         private GameSessionDataService sessionDataService;
 
@@ -19,9 +21,10 @@ namespace Tatedrez.Views
             this.sessionDataService = sessionDataService;
             var board = sessionDataService.BoardService;
             await this.boardView.BuildBoardAsync(board);
-
-            // for each player
-            // not placed pieces
+            
+            for (int i = 0; i < sessionDataService.GetPlayersCount; i++) {
+                await playerViews[i].Initialize(sessionDataService.GetPlayer(i));
+            }
 
             // game stage
             return;

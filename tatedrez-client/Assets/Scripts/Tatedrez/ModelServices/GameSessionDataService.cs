@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Tatedrez.Models;
 
 namespace Tatedrez.ModelServices
@@ -6,13 +7,20 @@ namespace Tatedrez.ModelServices
     {
         public readonly BoardService BoardService;
         public readonly GameStateService GameStateService;
+        private readonly List<PlayerService> PlayerServices = new();
         private readonly GameSessionData data;
+
+        public int CurrentTurnNumber => this.data.CurrentTurn;
 
         public GameSessionDataService(GameSessionData data)
         {
             this.data = data;
             this.BoardService = new BoardService(data.Board);
             this.GameStateService = new GameStateService(data.State);
+            for (var index = 0; index < data.Players.Count; index++) {
+                var playerData = data.Players[index];
+                this.PlayerServices.Add(new PlayerService(playerData, index));
+            }
         }
 
         public int GetCurrentActivePlayerIndex()
@@ -20,6 +28,11 @@ namespace Tatedrez.ModelServices
             return this.data.CurrentTurn % data.Players.Count;
         }
 
-        public int CurrentTurnNumber => this.data.CurrentTurn;
+        public int GetPlayersCount => this.data.Players.Count;
+
+        public PlayerService GetPlayer(int index)
+        {
+            return this.PlayerServices[index];
+        }
     }
 }
