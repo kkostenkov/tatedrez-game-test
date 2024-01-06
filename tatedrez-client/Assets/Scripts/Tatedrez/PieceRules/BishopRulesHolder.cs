@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 
-namespace Tatedrez
+namespace Tatedrez.Rules
 {
     public class BishopRulesHolder : IPieceRulesHolder
     {

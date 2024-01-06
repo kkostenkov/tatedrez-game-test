@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 
-namespace Tatedrez
+namespace Tatedrez.Rules
 {
     public class KnightRulesHolder : IPieceRulesHolder
     {
@@ -16,12 +16,12 @@ namespace Tatedrez
             return hasTwoSquaresChange && hasOneSquareChange;
         }
 
-        public IEnumerable<BoardCoords> GetLegitMovementDestinations(BoardCoords position, IBoardInfoService board)
+        public bool HasLegitMoves(BoardCoords position, IBoardInfoService board)
         {
             throw new NotImplementedException();
         }
 
-        public bool HasLegitMoves(BoardCoords position, IBoardInfoService board)
+        public IEnumerable<BoardCoords> GetLegitMovementDestinations(BoardCoords position, IBoardInfoService board)
         {
             throw new NotImplementedException();
         }

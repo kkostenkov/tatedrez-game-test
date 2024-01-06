@@ -11,5 +11,6 @@ namespace Tatedrez.ModelServices
 
         BoardCoords GetSize();
         IEnumerable<Piece> FindPieces(Func<Piece, bool> checkerFunc);
+        bool HasSquare(BoardCoords coords);
     }
 }

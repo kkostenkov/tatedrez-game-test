@@ -4,7 +4,7 @@ using System.Linq;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 
-namespace Tatedrez
+namespace Tatedrez.Rules
 {
     public class RookRulesHolder : IPieceRulesHolder
     {
@@ -48,14 +48,22 @@ namespace Tatedrez
             return true;
         }
 
-        public IEnumerable<BoardCoords> GetLegitMovementDestinations(BoardCoords position, IBoardInfoService board)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool HasLegitMoves(BoardCoords position, IBoardInfoService board)
         {
-            throw new NotImplementedException();
+            var legitMovesEnumerator = MovesGenerator.GetMoves(position, MoveTemplates, board.GetSize().X, board);
+            return legitMovesEnumerator != null;
         }
+
+        public IEnumerable<BoardCoords> GetLegitMovementDestinations(BoardCoords position, IBoardInfoService board)
+        {
+            return MovesGenerator.GetMoves(position, MoveTemplates, board.GetSize().X, board);
+        }
+
+        private static readonly BoardCoords[] MoveTemplates = {
+            new BoardCoords(1, 0),
+            new BoardCoords(0, 1),
+            new BoardCoords(-1, 0),
+            new BoardCoords(0, -1),
+        };
     }
 }

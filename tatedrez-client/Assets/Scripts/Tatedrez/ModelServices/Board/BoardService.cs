@@ -33,11 +33,18 @@ namespace Tatedrez.ModelServices
             return new BoardCoords(this.boardData.BoardSize.X, this.boardData.BoardSize.Y);
         }
 
+        public bool HasSquare(BoardCoords coords)
+        {
+            var size = this.boardData.BoardSize;
+            return coords.X >= 0 && coords.X < size.X &&
+                   coords.Y >= 0 && coords.Y < size.Y;
+        }
+
         public void PlacePiece(Piece piece, BoardCoords coords)
         {
             this.boardData.PiecesByCoordinates.Add(ToKey(coords), piece);
         }
-        
+
         public Piece DropPiece(BoardCoords coords)
         {
             var key = ToKey(coords);
