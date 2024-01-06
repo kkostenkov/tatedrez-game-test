@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using DG.DOTweenEditor;
 using UnityEditor;
 using Tatedrez.Views;
 using UnityEngine;

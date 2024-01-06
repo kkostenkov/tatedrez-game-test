@@ -39,24 +39,19 @@ namespace Tatedrez.Views
         public async Task VisualizeMove(PlacementMove move)
         {
             var playerIndex = move.PlayerIndex;
-            var pieceGraphicsTransform = playerViews[playerIndex].GetPieceGraphicsTransform(move.PieceGuid);
-            Vector3 destination = boardView.GetWorldCoords(move.To);
-            await AnimatePieceMovement(pieceGraphicsTransform, destination);
             var piece = await playerViews[playerIndex].TakePiece(move.PieceGuid);
-            await boardView.PutPiece(piece, move.To);
+            await boardView.DrawPiece(piece, move.To);
         }
 
-        public async Task VisualizeMove(MovementMove move)
+        public Task VisualizeMove(MovementMove move)
         {
-            var piece = await boardView.TakePiece(move.From);
-            await boardView.PutPiece(piece, move.To);
+            var playerIndex = move.PlayerIndex;
+            var pieceGraphicsTransform = playerViews[playerIndex].GetPieceGraphicsTransform(move.PieceGuid);
+            var alreadyMovedInStatePiece = sessionDataService.BoardService.PeekPiece(move.To);
+            var pieceType = alreadyMovedInStatePiece.PieceType;
+            return this.boardView.AnimatePieceMovement(pieceGraphicsTransform, move, pieceType);
         }
-
-        private Task AnimatePieceMovement(Transform what, Vector3 destination)
-        {
-            return Task.CompletedTask;
-        }
-
+        
         public async Task ShowTurn(int playerIndex)
         {
             await sessionInfoView.DisplayTurnNumber(sessionDataService.CurrentTurnNumber);

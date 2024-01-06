@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using DG.Tweening;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 using UnityEngine;
@@ -42,6 +43,7 @@ namespace Tatedrez.Views
                     square.AssignPiece(piece);
                 }
             }
+
             return Task.CompletedTask;
         }
 
@@ -62,23 +64,25 @@ namespace Tatedrez.Views
             if (clicksListener != null) {
                 this.clicksListener.OnSquareClicked(view);
             }
+
             if (this.squareSelectionTaskSource == null) {
                 return;
             }
+
             var coords = view.Coords;
-            var selectionSource = this.squareSelectionTaskSource; 
+            var selectionSource = this.squareSelectionTaskSource;
             this.squareSelectionTaskSource = null;
             selectionSource.SetResult(coords);
         }
 
-        public Vector3 GetWorldCoords(BoardCoords coords)
+        private Vector3 GetWorldCoords(BoardCoords coords)
         {
             var index = ToIndex(coords);
             var square = squares[index];
             return square.transform.position;
         }
 
-        public Task<Piece> TakePiece(BoardCoords from)
+        public Task<Piece> ErasePiece(BoardCoords from)
         {
             var index = ToIndex(from);
             var square = squares[index];
@@ -87,7 +91,7 @@ namespace Tatedrez.Views
             return Task.FromResult(piece);
         }
 
-        public Task PutPiece(Piece piece, BoardCoords destination)
+        public Task DrawPiece(Piece piece, BoardCoords destination)
         {
             var index = ToIndex(destination);
             var square = squares[index];
@@ -114,6 +118,28 @@ namespace Tatedrez.Views
         {
             var allSquaresFlash = this.squares.Select(s => s.FlashRedAsync());
             return Task.WhenAll(allSquaresFlash);
+        }
+
+        public Task AnimatePieceMovement(Transform pieceGraphicsTransform, MovementMove move, string pieceType)
+        {
+            Vector3 origin = GetWorldCoords(move.From);
+            Vector3 destination = GetWorldCoords(move.To);
+            var seq = DOTween.Sequence();
+            seq.OnStart(() => { });
+            var pickUpPiece = pieceGraphicsTransform.DOScale(new Vector3(1.5f, 1.5f, 1.5f), 0.1f);
+            var movePiece = pieceGraphicsTransform.DOMove(destination, 0.2f);
+            var putDownPiece = pieceGraphicsTransform.DOScale(Vector3.one, 0.1f);
+            seq.Append(pickUpPiece).Append(movePiece).Append(putDownPiece);
+            seq.OnComplete(
+                () => { pieceGraphicsTransform.position = origin; });
+
+            return Task.WhenAll(seq.AsyncWaitForCompletion(), RedrawPiece(move));
+        }
+
+        private async Task RedrawPiece(MovementMove move)
+        {
+            var piece = await ErasePiece(move.From);
+            await DrawPiece(piece, move.To);
         }
     }
 }
