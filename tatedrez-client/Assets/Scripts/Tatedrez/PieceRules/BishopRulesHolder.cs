@@ -21,15 +21,22 @@ namespace Tatedrez.Rules
             }
 
             // Does jump over other pieces?
-            var squaresCount = maxX - minX;
+            // Check path is always left to right
             var x = minX;
-            var y = minY;
-            for (int i = 0; i < squaresCount; i++, x++, y++) {
+            var y = move.From.X == minX ? move.From.Y : move.To.Y;
+
+            var leftmostCheckPathCoords = new BoardCoords(x, y);
+            var rightmostCheckPathCoords = new BoardCoords(maxX, move.From.X == maxX ? move.From.Y : move.To.Y);
+            var isMovingUp = leftmostCheckPathCoords.Y < rightmostCheckPathCoords.Y;    
+
+            for (int i = x; i <= maxX; i++) {
+                x = i;
                 var coords = new BoardCoords(x, y);
                 var piece = board.PeekPiece(coords);
                 if (piece != null && piece.Guid != move.PieceGuid) {
                     return false;
                 }
+                y = isMovingUp ? y + 1 : y - 1;
             }
 
             return true;
