@@ -142,33 +142,33 @@ namespace Tatedrez
                     },
                     PiecesByCoordinates = new() {
                         {
-                            0, new Piece(1) {
-                                PieceType = Constants.Knight,
+                            0, new Piece(0) {
+                                PieceType = Constants.Bishop,
                             }
                         }, {
-                            1, new Piece(0) {
-                                PieceType = Constants.Rook,
-                            }
-                        }, {
-                            2, new Piece(1) {
+                            2, new Piece(0) {
                                 PieceType = Constants.Rook,
                             }
                         }, {
                             3, new Piece(0) {
-                                PieceType = Constants.Bishop,
+                                PieceType = Constants.Knight,
+                            }
+                        }, {
+                            5, new Piece(1) {
+                                PieceType = Constants.Rook,
                             }
                         }, {
                             6, new Piece(1) {
                                 PieceType = Constants.Bishop,
                             }
                         }, {
-                            8, new Piece(0) {
+                            8, new Piece(1) {
                                 PieceType = Constants.Knight,
                             }
                         },
                     },
                 },
-                CurrentTurn = 1,
+                CurrentTurn = 0,
                 Players = new List<Player>() {
                     new Player(),
                     new Player()

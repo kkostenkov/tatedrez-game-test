@@ -389,7 +389,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -610,6 +610,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7765207391145131573, guid: d64ee03b26d784ee597579baacbb72e4, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8445392400148031227, guid: d64ee03b26d784ee597579baacbb72e4, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8445392400148031227, guid: d64ee03b26d784ee597579baacbb72e4, type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9146590994275832504, guid: d64ee03b26d784ee597579baacbb72e4, type: 3}

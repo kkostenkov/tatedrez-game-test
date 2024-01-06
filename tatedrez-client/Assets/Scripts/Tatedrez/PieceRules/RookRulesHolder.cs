@@ -20,11 +20,13 @@ namespace Tatedrez.Rules
 
             // Does jump over pieces?
             if (isTheSameRow) {
-                var min = Math.Min(from.X, to.X);
-                var max = Math.Max(from.X, to.X);
-                var range = Enumerable.Range(min, max);
+                var y = from.Y;
+                var minX = Math.Min(from.X, to.X);
+                var maxX = Math.Max(from.X, to.X);
+                
+                var range = Enumerable.Range(minX, maxX);
                 foreach (var number in range) {
-                    var coords = new BoardCoords(number, from.X);
+                    var coords = new BoardCoords(number, y);
                     var piece = board.PeekPiece(coords);
                     if (piece != null && piece.Guid != move.PieceGuid) {
                         return false;
@@ -32,11 +34,12 @@ namespace Tatedrez.Rules
                 }
             }
             else if (isTheSameColumn) {
-                var min = Math.Min(from.Y, to.Y);
-                var max = Math.Max(from.Y, to.Y);
-                var range = Enumerable.Range(min, max);
+                var x = from.X;
+                var minY = Math.Min(from.Y, to.Y);
+                var maxY = Math.Max(from.Y, to.Y);
+                var range = Enumerable.Range(minY, maxY);
                 foreach (var number in range) {
-                    var coords = new BoardCoords(from.X, number);
+                    var coords = new BoardCoords(x, number);
                     var piece = board.PeekPiece(coords);
                     if (piece != null && piece.Guid != move.PieceGuid) {
                         return false;
