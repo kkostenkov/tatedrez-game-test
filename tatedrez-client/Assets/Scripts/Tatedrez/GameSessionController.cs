@@ -104,6 +104,7 @@ namespace Tatedrez
             await this.gameSessionView.ShowTurn(playerIndex);
             playerIndexListener.SetActivePlayer(playerIndex);
             if (!PlayerHasMoves()) {
+                await this.gameSessionView.VisualizeHasNoMoves(playerIndex);
                 this.sessionData.CurrentTurn++;
                 return;
             }

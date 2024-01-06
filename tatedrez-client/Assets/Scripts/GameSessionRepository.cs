@@ -115,7 +115,7 @@ namespace Tatedrez
                                 PieceType = Constants.Knight,
                             }
                         }, {
-                            3, new Piece(0) {
+                            3, new Piece(1) {
                                 PieceType = Constants.Knight,
                             }
                         },

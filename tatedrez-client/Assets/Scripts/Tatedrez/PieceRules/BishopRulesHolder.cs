@@ -1,13 +1,12 @@
 using System;
-using System.Collections.Generic;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 
 namespace Tatedrez.Rules
 {
-    public class BishopRulesHolder : IPieceRulesHolder
+    public class BishopRulesHolder : BasePieceRulesHolder, IPieceRulesHolder
     {
-        public bool ValidateMove(MovementMove move, IBoardInfoService board)
+        public override bool ValidateMove(MovementMove move, IBoardInfoService board)
         {
             var from = move.From;
             var to = move.To;
@@ -36,14 +35,19 @@ namespace Tatedrez.Rules
             return true;
         }
 
-        public IEnumerable<BoardCoords> GetLegitMovementDestinations(BoardCoords position, IBoardInfoService board)
-        {
-            throw new NotImplementedException();
-        }
+        protected override BoardCoords[] MoveTemplates => this.BishopMoveTemplates;
 
+        protected readonly BoardCoords[] BishopMoveTemplates = new[] {
+            new BoardCoords(1, 1),
+            new BoardCoords(-1, 1),
+            new BoardCoords(1, -1),
+            new BoardCoords(-1, -1),
+        };
+        
         public bool HasLegitMoves(BoardCoords position, IBoardInfoService board)
         {
-            throw new NotImplementedException();
+            var maxTemplateMovementRange = board.GetSize().X;
+            return base.HasLegitMoves(position, maxTemplateMovementRange, board);
         }
     }
 }

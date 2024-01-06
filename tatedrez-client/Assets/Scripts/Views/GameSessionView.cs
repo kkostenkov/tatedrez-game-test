@@ -73,6 +73,11 @@ namespace Tatedrez.Views
             throw new System.NotImplementedException();
         }
 
+        public Task VisualizeHasNoMoves(int playerIndex)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void BindLocalInputForPlayer(int playerIndex, IInputSourceCollector inputCollector)
         {
             inputCollector.AddInputSource(this.localInputManagers[playerIndex], playerIndex);

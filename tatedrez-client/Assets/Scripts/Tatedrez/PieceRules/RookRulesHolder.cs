@@ -1,14 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 
 namespace Tatedrez.Rules
 {
-    public class RookRulesHolder : IPieceRulesHolder
+    public class RookRulesHolder : BasePieceRulesHolder, IPieceRulesHolder
     {
-        public bool ValidateMove(MovementMove move, IBoardInfoService board)
+        public override bool ValidateMove(MovementMove move, IBoardInfoService board)
         {
             var from = move.From;
             var to = move.To;
@@ -47,28 +46,20 @@ namespace Tatedrez.Rules
 
             return true;
         }
+        
+        protected override BoardCoords[] MoveTemplates => this.RookMoveTemplates;
 
-        public bool HasLegitMoves(BoardCoords position, IBoardInfoService board)
-        {
-            var boardMovesEnumerator = AnonymousMovesGenerator.GetBoardMoves(position, MoveTemplates, board.GetSize().X, board);
-            foreach (var moveCoords in boardMovesEnumerator) {
-                if (ValidateMove(new MovementMove() { From = position, To = moveCoords }, board)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public IEnumerable<BoardCoords> GetLegitMovementDestinations(BoardCoords position, IBoardInfoService board)
-        {
-            return AnonymousMovesGenerator.GetBoardMoves(position, MoveTemplates, board.GetSize().X, board);
-        }
-
-        private static readonly BoardCoords[] MoveTemplates = {
+        protected readonly BoardCoords[] RookMoveTemplates = new[] {
             new BoardCoords(1, 0),
             new BoardCoords(0, 1),
             new BoardCoords(-1, 0),
             new BoardCoords(0, -1),
         };
+
+        public bool HasLegitMoves(BoardCoords position, IBoardInfoService board)
+        {
+            var maxTemplateMovementRange = board.GetSize().X;
+            return base.HasLegitMoves(position, maxTemplateMovementRange, board);
+        }
     }
 }
