@@ -23,8 +23,10 @@ namespace Tatedrez
                     return ValidateRook(board, move);
                 case Constants.Bishop:
                     return ValidateBishop(board, move);
+                case Constants.Knight:
+                    return ValidateKnight(board, move);
                 default:
-                    throw new System.ArgumentException(movingPiece.PieceType);
+                    throw new ArgumentException(movingPiece.PieceType);
             }
         }
 
@@ -95,6 +97,15 @@ namespace Tatedrez
             }
 
             return true;
+        }
+
+        private bool ValidateKnight(IBoardInfoService board, MovementMove move)
+        {
+            var horizontalMoveLength = Math.Abs(move.From.X - move.To.X);
+            var verticalMoveLength = Math.Abs(move.From.Y - move.To.Y);
+            var hasTwoSquaresChange = horizontalMoveLength == 2 || verticalMoveLength == 2;
+            var hasOneSquareChange = horizontalMoveLength == 1 || verticalMoveLength == 1;
+            return hasTwoSquaresChange && hasOneSquareChange;
         }
     }
 }
