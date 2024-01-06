@@ -75,7 +75,7 @@ namespace Tatedrez.Views
 
         public Task VisualizeHasNoMoves(int playerIndex)
         {
-            throw new System.NotImplementedException();
+            return this.boardView.FlashRed();
         }
 
         public void BindLocalInputForPlayer(int playerIndex, IInputSourceCollector inputCollector)

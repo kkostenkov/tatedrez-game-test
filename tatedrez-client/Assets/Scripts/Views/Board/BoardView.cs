@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
@@ -107,6 +108,12 @@ namespace Tatedrez.Views
         public Task FlashRed(BoardCoords coords)
         {
             return this.squares[ToIndex(coords)].FlashRedAsync();
+        }
+
+        public Task FlashRed()
+        {
+            var allSquaresFlash = this.squares.Select(s => s.FlashRedAsync());
+            return Task.WhenAll(allSquaresFlash);
         }
     }
 }
