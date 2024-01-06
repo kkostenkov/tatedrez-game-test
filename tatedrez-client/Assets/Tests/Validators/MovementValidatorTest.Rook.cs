@@ -3,20 +3,13 @@ using NUnit.Framework;
 using Tatedrez;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
+using Tatedrez.Tests;
 
 namespace MovementValidatorTests
 {
     public class MovementValidatorTest_Rook
     {
-        private static IEnumerable<TestCaseData> RookValidMoves {
-            get {
-                yield return new TestCaseData(new BoardCoords(1, 1), new BoardCoords(1, 0)).SetName("1:1 -> 1:0");
-                yield return new TestCaseData(new BoardCoords(1, 1), new BoardCoords(1, 2)).SetName("1:1 -> 1:2");
-                yield return new TestCaseData(new BoardCoords(1, 1), new BoardCoords(0, 1)).SetName("1:1 -> 0:1");
-                yield return new TestCaseData(new BoardCoords(1, 1), new BoardCoords(2, 1)).SetName("1:1 -> 2:1");
-                yield return new TestCaseData(new BoardCoords(2, 0), new BoardCoords(2, 2)).SetName("2:0 -> 2:2");
-            }
-        }
+        private static IEnumerable<TestCaseData> RookValidMoves => MovesCollection.StraightLineMoves;
 
         [TestCaseSource(nameof(RookValidMoves))]
         public void Should_AllowMovingRookInAStraightLine_When_FieldIsEmpty(BoardCoords rookCoords,
@@ -37,14 +30,7 @@ namespace MovementValidatorTests
             Assert.AreEqual(true, result);
         }
 
-        private static IEnumerable<TestCaseData> RookInvalidMoves {
-            get {
-                yield return new TestCaseData(new BoardCoords(1, 1), new BoardCoords(2, 2)).SetName("1:1 -> 2:2");
-                yield return new TestCaseData(new BoardCoords(0, 0), new BoardCoords(1, 2)).SetName("0:0 -> 1:2");
-                yield return new TestCaseData(new BoardCoords(1, 1), new BoardCoords(2, 2)).SetName("1:1 -> 2:2");
-                yield return new TestCaseData(new BoardCoords(2, 2), new BoardCoords(0, 1)).SetName("2:2 -> 0:1");
-            }
-        }
+        private static IEnumerable<TestCaseData> RookInvalidMoves => MovesCollection.DiagonalMoves;
 
         [TestCaseSource(nameof(RookInvalidMoves))]
         public void Should_ProhibitMovingRookNotInAStraightLine_When_FieldIsEmpty(BoardCoords rookCoords,
