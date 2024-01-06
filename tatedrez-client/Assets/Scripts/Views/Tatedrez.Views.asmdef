@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "TatedrezCore",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "DOTween.Modules"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
