@@ -29,9 +29,6 @@ namespace Tatedrez.Views
                 await playerViews[i].Initialize(player);
                 localInputManagers[i].Bind(player, playerViews[i], this.boardView);
             }
-
-            // game stage
-            return;
         }
 
         public Task ShowGameOverScreen()
@@ -72,6 +69,11 @@ namespace Tatedrez.Views
         }
 
         public Task VisualizeInvalidMove(MovementMove move)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task VisualizeHasNoMoves(int playerIndex)
         {
             throw new System.NotImplementedException();
         }

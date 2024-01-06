@@ -102,9 +102,12 @@ namespace Tatedrez
         private async Task MovePieceByPlayer(int playerIndex)  
         {
             await this.gameSessionView.ShowTurn(playerIndex);
-            // validate if there are available moves
-            
             playerIndexListener.SetActivePlayer(playerIndex);
+            if (!PlayerHasMoves()) {
+                await this.gameSessionView.VisualizeHasNoMoves(playerIndex);
+                this.sessionData.CurrentTurn++;
+                return;
+            }
             var move = await input.GetMovePieceMovement();
             if (IsInvalidMove(move)) {
                 await this.gameSessionView.VisualizeInvalidMove(move);
@@ -133,6 +136,12 @@ namespace Tatedrez
             }
             
             return false;
+        }
+
+        private bool PlayerHasMoves()
+        {
+            var activePlayerIndex = this.sessionDataService.GetCurrentActivePlayerIndex();
+            return this.boardService.PlayerHasMoves(activePlayerIndex);
         }
 
         private bool IsMoveOfCurrentPlayer(Move move)
