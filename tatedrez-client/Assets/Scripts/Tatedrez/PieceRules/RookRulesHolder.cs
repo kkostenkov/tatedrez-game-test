@@ -24,11 +24,14 @@ namespace Tatedrez.Rules
                 var minX = Math.Min(from.X, to.X);
                 var maxX = Math.Max(from.X, to.X);
                 
-                var range = Enumerable.Range(minX, maxX);
+                var range = Enumerable.Range(minX, maxX - minX + 1);
                 foreach (var number in range) {
                     var coords = new BoardCoords(number, y);
+                    if (coords == move.From) {
+                        continue;
+                    }
                     var piece = board.PeekPiece(coords);
-                    if (piece != null && piece.Guid != move.PieceGuid) {
+                    if (piece != null) {
                         return false;
                     }
                 }
@@ -37,11 +40,14 @@ namespace Tatedrez.Rules
                 var x = from.X;
                 var minY = Math.Min(from.Y, to.Y);
                 var maxY = Math.Max(from.Y, to.Y);
-                var range = Enumerable.Range(minY, maxY);
+                var range = Enumerable.Range(minY, maxY - minY + 1);
                 foreach (var number in range) {
                     var coords = new BoardCoords(x, number);
+                    if (coords == move.From) {
+                        continue;
+                    }
                     var piece = board.PeekPiece(coords);
-                    if (piece != null && piece.Guid != move.PieceGuid) {
+                    if (piece != null) {
                         return false;
                     }
                 }

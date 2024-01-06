@@ -32,11 +32,14 @@ namespace Tatedrez.Rules
             for (int i = x; i <= maxX; i++) {
                 x = i;
                 var coords = new BoardCoords(x, y);
+                y = isMovingUp ? y + 1 : y - 1;
+                if (coords == move.From) {
+                    continue;
+                }
                 var piece = board.PeekPiece(coords);
-                if (piece != null && piece.Guid != move.PieceGuid) {
+                if (piece != null) {
                     return false;
                 }
-                y = isMovingUp ? y + 1 : y - 1;
             }
 
             return true;
