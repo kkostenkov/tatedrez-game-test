@@ -1,4 +1,6 @@
 using System;
+using System.Threading.Tasks;
+using DG.Tweening;
 using Tatedrez.Models;
 using TMPro;
 using UnityEngine;
@@ -6,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Tatedrez.Views
 {
-    internal class SquareView : MonoBehaviour
+    public class SquareView : MonoBehaviour
     {
         [SerializeField]
         private TMP_Text label;
@@ -78,6 +80,26 @@ namespace Tatedrez.Views
         public Transform GetPieceGraphicsTransform()
         {
             return this.piecePicure.transform;
+        }
+
+        public Task FlashRedAsync()
+        {
+            var originalColor = highlight.color;
+            
+            var seq = DOTween.Sequence();
+            seq.OnStart(() => {
+                highlight.enabled = true;
+                highlight.color = Color.clear;
+            });
+            var transitionToRed = highlight.DOColor(Color.red, 0.1f);
+            var restoreColor = highlight.DOColor(Color.clear, 0.2f);
+            seq.Append(transitionToRed).Append(restoreColor);
+            seq.OnComplete(
+                () => {
+                    highlight.enabled = false;
+                    highlight.color = originalColor;
+                });
+            return seq.AsyncWaitForCompletion();
         }
     }
 }

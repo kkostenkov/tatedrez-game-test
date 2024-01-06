@@ -65,12 +65,12 @@ namespace Tatedrez.Views
 
         public Task VisualizeInvalidMove(PlacementMove move)
         {
-            throw new System.NotImplementedException();
+            return this.boardView.FlashRed(move.To);
         }
 
         public Task VisualizeInvalidMove(MovementMove move)
         {
-            throw new System.NotImplementedException();
+            return this.boardView.FlashRed(move.To);
         }
 
         public Task VisualizeHasNoMoves(int playerIndex)

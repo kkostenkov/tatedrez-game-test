@@ -103,5 +103,10 @@ namespace Tatedrez.Views
             this.clicksListener = null;
             return result;
         }
+
+        public Task FlashRed(BoardCoords coords)
+        {
+            return this.squares[ToIndex(coords)].FlashRedAsync();
+        }
     }
 }
