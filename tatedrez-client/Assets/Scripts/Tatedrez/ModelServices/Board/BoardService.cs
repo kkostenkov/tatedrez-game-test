@@ -1,16 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Tatedrez.Models;
 
 namespace Tatedrez.ModelServices
 {
-    public interface IBoardInfoService
-    {
-        bool IsOccupied(BoardCoords coords);
-        Piece PeekPiece(BoardCoords coords);
-
-        BoardCoords GetSize();
-    }
-
-    public class BoardService : IBoardInfoService
+    public class BoardService : IBoardInfoService, IBoardModifier
     {
         private readonly Board boardData;
 
@@ -54,6 +49,12 @@ namespace Tatedrez.ModelServices
         private int ToKey(BoardCoords coords)
         {
             return coords.X + coords.Y * this.boardData.BoardSize.X;
+        }
+
+        public IEnumerable<Piece> FindPieces(Func<Piece, bool> checkerFunc)
+        {
+            var foundPieces = boardData.PiecesByCoordinates.Values.Where(checkerFunc);
+            return foundPieces;
         }
     }
 }

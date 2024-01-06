@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 
@@ -13,6 +14,16 @@ namespace Tatedrez
             var hasTwoSquaresChange = horizontalMoveLength == 2 || verticalMoveLength == 2;
             var hasOneSquareChange = horizontalMoveLength == 1 || verticalMoveLength == 1;
             return hasTwoSquaresChange && hasOneSquareChange;
+        }
+
+        public IEnumerable<BoardCoords> GetLegitMovementDestinations(BoardCoords position, IBoardInfoService board)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool HasLegitMoves(BoardCoords position, IBoardInfoService board)
+        {
+            throw new NotImplementedException();
         }
     }
 }

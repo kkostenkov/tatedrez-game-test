@@ -14,6 +14,7 @@ namespace Tatedrez
         private readonly IActivePlayerIndexListener playerIndexListener;
         private readonly BoardValidator boardValidator;
         private readonly MovementValidator movementValidator;
+        private readonly PieceMovesGenerator movesGenerator;
         
         private readonly GameSessionDataService sessionDataService;
         private readonly BoardService boardService;
@@ -31,6 +32,7 @@ namespace Tatedrez
             this.playerIndexListener = playerIndexListener;
             this.boardValidator = new BoardValidator();
             this.movementValidator = new MovementValidator();
+            this.movesGenerator = new PieceMovesGenerator();
         }
 
         public Task Turn()
@@ -102,9 +104,11 @@ namespace Tatedrez
         private async Task MovePieceByPlayer(int playerIndex)  
         {
             await this.gameSessionView.ShowTurn(playerIndex);
-            // validate if there are available moves
-            
             playerIndexListener.SetActivePlayer(playerIndex);
+            if (!PlayerHasMoves()) {
+                this.sessionData.CurrentTurn++;
+                return;
+            }
             var move = await input.GetMovePieceMovement();
             if (IsInvalidMove(move)) {
                 await this.gameSessionView.VisualizeInvalidMove(move);
@@ -135,6 +139,20 @@ namespace Tatedrez
             return false;
         }
 
+        private bool PlayerHasMoves()
+        {
+            var activePlayerIndex = this.sessionDataService.GetCurrentActivePlayerIndex();
+            var playerPieces = this.boardService.FindPieces(p => p.Owner == activePlayerIndex);
+            foreach (var piece in playerPieces) {
+                var hasMoves = this.movesGenerator.HasMoves(piece);
+                if (hasMoves) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private bool IsMoveOfCurrentPlayer(Move move)
         {
             return this.sessionDataService.GetCurrentActivePlayerIndex() == move.PlayerIndex;
@@ -159,6 +177,32 @@ namespace Tatedrez
 
                 this.sessionData.State.Stage = Stage.Movement;
             }
+        }
+    }
+
+    internal class PieceMovesGenerator
+    {
+        private readonly Dictionary<string, IPieceMovesGenerator> knownPieceRules = new();
+
+        public PieceMovesGenerator()
+        {
+            AddRule(Constants.Bishop, new BishopRulesHolder());
+            AddRule(Constants.Rook, new RookRulesHolder());
+            AddRule(Constants.Knight, new KnightRulesHolder());
+        }
+
+        public void AddRule(string pieceType, IPieceMovesGenerator generator)
+        {
+            knownPieceRules.Add(pieceType, generator);
+        }
+        
+        public bool HasMoves(Piece piece)
+        {
+            if (!knownPieceRules.TryGetValue(piece.PieceType, out var pieceMovesGenerator)) {
+                throw new ArgumentException(piece.PieceType);
+            }
+
+            return pieceMovesGenerator != null;
         }
     }
 }

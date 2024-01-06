@@ -7,7 +7,7 @@ namespace Tatedrez
 {
     public class MovementValidator
     {
-        private readonly Dictionary<string, IPieceRulesHolder> knownPieceRules = new();
+        private readonly Dictionary<string, IPieceMovesValidator> knownPieceRules = new();
 
         public MovementValidator()
         {
@@ -16,7 +16,7 @@ namespace Tatedrez
             AddRule(Constants.Knight, new KnightRulesHolder());
         }
 
-        public void AddRule(string pieceType, IPieceRulesHolder rules)
+        public void AddRule(string pieceType, IPieceMovesValidator rules)
         {
             this.knownPieceRules.Add(pieceType, rules);
         }

@@ -7,7 +7,7 @@ namespace Tatedrez.Models
         public int PlayerIndex;
     }
     
-    public class PieceMove : Move //TODO: split into files
+    public class PieceMove : Move
     {
         public Guid PieceGuid;
     }

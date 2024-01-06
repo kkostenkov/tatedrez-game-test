@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
@@ -47,5 +48,14 @@ namespace Tatedrez
             return true;
         }
 
+        public IEnumerable<BoardCoords> GetLegitMovementDestinations(BoardCoords position, IBoardInfoService board)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool HasLegitMoves(BoardCoords position, IBoardInfoService board)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
