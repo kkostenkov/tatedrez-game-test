@@ -113,6 +113,9 @@ public class BoardValidatorTest
             yield return new TestCaseData(new List<BoardCoords>()
                     { new BoardCoords(0, 1), new BoardCoords(1, 2), new BoardCoords(2, 0) })
                 .SetName("Scattered");
+            yield return new TestCaseData(new List<BoardCoords>()
+                    { new BoardCoords(0, 0), new BoardCoords(0, 1), new BoardCoords(1, 1) })
+                .SetName("Lower left angle");
         }
     }
 

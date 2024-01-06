@@ -50,9 +50,10 @@ namespace Tatedrez
 
         public Task BuildBoardAsync()
         {
-            var tasks = new List<Task>();
-            tasks.Add(this.gameSessionView.Build(this.sessionDataService));
-            tasks.Add(this.gameSessionView.ShowTurn(this.sessionDataService.GetCurrentActivePlayerIndex()));
+            var tasks = new List<Task> {
+                this.gameSessionView.Build(this.sessionDataService),
+                this.gameSessionView.ShowTurn(this.sessionDataService.GetCurrentActivePlayerIndex())
+            };
             return Task.WhenAll(tasks);
         }
 
@@ -102,12 +103,25 @@ namespace Tatedrez
             
             playerIndexListener.SetActivePlayer(playerIndex);
             var move = await input.GetMovePieceMovement();
-            // validate move via validator
-            
-            // check and apply state change
-            this.sessionData.CurrentTurn++;
-            // update pieces view via board view
+            if (IsInvalidMove(move)) {
+                await this.gameSessionView.VisualizeInvalidMove(move);
+                return;
+            }
+            ApplyStateChange(move);
             await this.gameSessionView.VisualizeMove(move);
+        }
+
+        private void ApplyStateChange(MovementMove move)
+        {
+            var piece = this.boardService.DropPiece(move.From);
+            this.boardService.PlacePiece(piece, move.To);
+            this.sessionData.CurrentTurn++;
+            TryUpdateGameStage();
+        }
+
+        private bool IsInvalidMove(MovementMove move)
+        {
+            return false;
         }
 
         public Task EndGame()
@@ -128,7 +142,6 @@ namespace Tatedrez
                 }
 
                 this.sessionData.State.Stage = Stage.Movement;
-                return;
             }
         }
     }

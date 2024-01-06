@@ -11,6 +11,8 @@ namespace Tatedrez.Views
         private SquareView[] squares;
 
         private BoardCoords size = BoardCoords.Invalid;
+        private TaskCompletionSource<BoardCoords> squareSelectionTaskSource;
+        private ISquareClicksListener clicksListener;
 
         private void Awake()
         {
@@ -28,16 +30,17 @@ namespace Tatedrez.Views
 
         public Task BuildBoardAsync(BoardService boardService)
         {
-            // board size
             size = boardService.GetSize();
             for (int x = 0; x < size.X; x++) {
                 for (int y = 0; y < size.Y; y++) {
                     var coords = new BoardCoords(x, y);
                     var index = ToIndex(coords);
-                    this.squares[index].AssignCoords(coords);
+                    var square = this.squares[index];
+                    square.AssignCoords(coords);
+                    var piece = boardService.PeekPiece(coords);
+                    square.AssignPiece(piece);
                 }
             }
-            // pieces
             return Task.CompletedTask;
         }
 
@@ -53,10 +56,11 @@ namespace Tatedrez.Views
             return this.squareSelectionTaskSource.Task;
         }
 
-        private TaskCompletionSource<BoardCoords> squareSelectionTaskSource; 
-
         private void OnSquareClicked(SquareView view)
         {
+            if (clicksListener != null) {
+                this.clicksListener.OnSquareClicked(view);
+            }
             if (this.squareSelectionTaskSource == null) {
                 return;
             }
@@ -73,12 +77,31 @@ namespace Tatedrez.Views
             return square.transform.position;
         }
 
+        public Task<Piece> TakePiece(BoardCoords from)
+        {
+            var index = ToIndex(from);
+            var square = squares[index];
+            var piece = square.Piece;
+            square.AssignPiece(null);
+            return Task.FromResult(piece);
+        }
+
         public Task PutPiece(Piece piece, BoardCoords destination)
         {
             var index = ToIndex(destination);
             var square = squares[index];
             square.AssignPiece(piece);
             return Task.CompletedTask;
+        }
+
+        public async Task<MovementMove> GetMove(int playerIndex)
+        {
+            var moveCollector = new MovePartsCollector();
+            var task = moveCollector.WaitForMove(playerIndex);
+            this.clicksListener = moveCollector;
+            var result = await task;
+            this.clicksListener = null;
+            return result;
         }
     }
 }
