@@ -7,7 +7,7 @@ namespace Tatedrez
     {
         public GameSessionData Load()
         {
-            return CreateCustomStart();
+            return CreateStandardSessionStart();
         }
 
         private static GameSessionData CreateStandardSessionStart()

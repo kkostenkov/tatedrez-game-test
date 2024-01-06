@@ -31,6 +31,7 @@ namespace Tatedrez.Views
         private void Awake()
         {
             clickDetector.Clicked += OnSquareClicked;
+            this.label.enabled = false;
         }
 
         private void OnDestroy()
