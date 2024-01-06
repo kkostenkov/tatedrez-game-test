@@ -35,7 +35,17 @@ namespace Tatedrez
         {
             var from = move.From;
             var to = move.To;
-            return from.X == to.X || from.Y == to.Y;
+            var isTheSameRow = from.X == to.X;
+            var isTheSameColumn = from.Y == to.Y;
+            var isStraightLine = isTheSameRow || isTheSameColumn;
+            if (!isStraightLine) {
+                return false;
+            }
+
+            if (isTheSameRow) {
+                Enumerable.Range(1, 10);
+                board.PeekPiece()
+            }
         }
     }
 }
