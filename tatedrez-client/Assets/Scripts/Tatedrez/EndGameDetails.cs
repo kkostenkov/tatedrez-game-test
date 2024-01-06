@@ -21,7 +21,7 @@ namespace Tatedrez
         public void Clear()
         {
             this.WinnerId = -1;
-            for (var index = 0; index < 3; index++) {
+            for (var index = 0; index < MinSequenceToWinLength; index++) {
                 this.WinnerCords[index] = BoardCoords.Invalid;
             }
         }

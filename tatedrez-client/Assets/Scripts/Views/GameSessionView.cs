@@ -29,9 +29,6 @@ namespace Tatedrez.Views
                 await playerViews[i].Initialize(player);
                 localInputManagers[i].Bind(player, playerViews[i], this.boardView);
             }
-
-            // game stage
-            return;
         }
 
         public Task ShowGameOverScreen()
