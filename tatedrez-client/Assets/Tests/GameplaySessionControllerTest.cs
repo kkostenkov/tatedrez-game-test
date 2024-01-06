@@ -6,7 +6,6 @@ using NUnit.Framework;
 using Tatedrez;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
-using Tatedrez.Tests.Helpers;
 
 public class GameplaySessionControllerTest
 {
@@ -137,7 +136,7 @@ public class GameplaySessionControllerTest
     public async Task Should_ChangeStageFromPlacementToMovement_When_PlayersHaveNoPieces()
     {
         var sessionData = new GameSessionData() {
-            Board = Helpers.CreateEmptyBoard(),
+            Board = Helpers.CreateEmptyBoard3by3(),
             State = new GameState() { Stage = Stage.Placement },
         };
         // 0
