@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
+using Tatedrez.Rules;
 
 namespace Tatedrez
 {

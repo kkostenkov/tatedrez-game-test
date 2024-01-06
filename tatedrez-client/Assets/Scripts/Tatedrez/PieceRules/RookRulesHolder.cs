@@ -50,13 +50,18 @@ namespace Tatedrez.Rules
 
         public bool HasLegitMoves(BoardCoords position, IBoardInfoService board)
         {
-            var legitMovesEnumerator = MovesGenerator.GetMoves(position, MoveTemplates, board.GetSize().X, board);
-            return legitMovesEnumerator != null;
+            var boardMovesEnumerator = AnonymousMovesGenerator.GetBoardMoves(position, MoveTemplates, board.GetSize().X, board);
+            foreach (var moveCoords in boardMovesEnumerator) {
+                if (ValidateMove(new MovementMove() { From = position, To = moveCoords }, board)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public IEnumerable<BoardCoords> GetLegitMovementDestinations(BoardCoords position, IBoardInfoService board)
         {
-            return MovesGenerator.GetMoves(position, MoveTemplates, board.GetSize().X, board);
+            return AnonymousMovesGenerator.GetBoardMoves(position, MoveTemplates, board.GetSize().X, board);
         }
 
         private static readonly BoardCoords[] MoveTemplates = {

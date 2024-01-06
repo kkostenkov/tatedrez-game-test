@@ -96,5 +96,40 @@ namespace Tatedrez
                 }
             };
         }
+
+        private static GameSessionData CreateLockedRookStart()
+        {
+            return new GameSessionData() {
+                Board = new Board() {
+                    BoardSize = new BoardCoords() {
+                        X = 3,
+                        Y = 3,
+                    },
+                    PiecesByCoordinates = new() {
+                        {
+                            0, new Piece(0) {
+                                PieceType = Constants.Rook,
+                            }
+                        }, {
+                            1, new Piece(1) {
+                                PieceType = Constants.Knight,
+                            }
+                        }, {
+                            3, new Piece(0) {
+                                PieceType = Constants.Knight,
+                            }
+                        },
+                    },
+                },
+                CurrentTurn = 0,
+                Players = new List<Player>() {
+                    new Player(),
+                    new Player()
+                },
+                State = new GameState() {
+                    Stage = Stage.Movement
+                }
+            };
+        }
     }
 }

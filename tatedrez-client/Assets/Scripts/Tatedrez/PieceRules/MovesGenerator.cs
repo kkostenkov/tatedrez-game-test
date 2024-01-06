@@ -1,41 +1,33 @@
+using System;
 using System.Collections.Generic;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 
 namespace Tatedrez.Rules
 {
-    public class MovesGenerator
+    internal class MovesGenerator
     {
-        /// From  https://codereview.stackexchange.com/a/237487
-        internal static IEnumerable<BoardCoords> GetMoves(BoardCoords position, BoardCoords[] moveTemplates, int range,
-            IBoardInfoService board)
+        private readonly Dictionary<string, IPieceMovesGenerator> knownPieceRules = new();
+
+        public MovesGenerator()
         {
-            foreach (var moveTemplate in moveTemplates) {
-                foreach (var p in GetMovesForTemplate(position, range, board, moveTemplate)) {
-                    yield return p;
-                }
-            }
+            AddRule(Constants.Bishop, new BishopRulesHolder());
+            AddRule(Constants.Rook, new RookRulesHolder());
+            AddRule(Constants.Knight, new KnightRulesHolder());
         }
 
-        private static IEnumerable<BoardCoords> GetMovesForTemplate(BoardCoords position, int range, IBoardInfoService board,
-            BoardCoords moveTemplate)
+        public void AddRule(string pieceType, IPieceMovesGenerator generator)
         {
-            for (var radius = 1; radius <= range; radius++) {
-                foreach (var p in GettemplateMovesForRadius(position, board, moveTemplate, radius)) {
-                    yield return p;
-                }
-            }
+            this.knownPieceRules.Add(pieceType, generator);
         }
-
-        private static IEnumerable<BoardCoords> GettemplateMovesForRadius(BoardCoords position, IBoardInfoService board,
-            BoardCoords moveTemplate, int radius)
+        
+        public bool HasMoves(Piece piece, BoardCoords position, IBoardInfoService board)
         {
-            var deltaX = radius * moveTemplate.X;
-            var deltaY = radius * moveTemplate.Y;
-            var newCoords = new BoardCoords(position.X + deltaX, position.Y + deltaY);
-            if (board.HasSquare(newCoords)) {
-                yield return newCoords;
+            if (!this.knownPieceRules.TryGetValue(piece.PieceType, out var pieceMovesGenerator)) {
+                throw new ArgumentException(piece.PieceType);
             }
+
+            return pieceMovesGenerator.HasLegitMoves(position, board);
         }
     }
 }
