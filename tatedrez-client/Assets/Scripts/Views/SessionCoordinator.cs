@@ -6,34 +6,30 @@ namespace Tatedrez
 {
     public class SessionCoordinator : MonoBehaviour
     {
-        private GameSessionRepository sessionRepo;
-
-        private GameSessionController gameSessionController;
-
         private async void Start()
         {
-            sessionRepo = DI.Container.Resolve<GameSessionRepository>();
+            var gameSessionController = await PrepareSession();
             
-            await PrepareSession();
-            
-            while (this.gameSessionController.IsSessionRunning) {
-                await this.gameSessionController.Turn();
+            while (gameSessionController.IsSessionRunning) {
+                await gameSessionController.Turn();
             }
 
-            await this.gameSessionController.Turn();
+            await gameSessionController.Turn();
         }
 
-        private Task PrepareSession()
+        private async Task<GameSessionController> PrepareSession()
         {
-            var data = this.sessionRepo.Load();
+            var sessionRepo = DI.Container.Resolve<GameSessionRepository>();
+            var data = sessionRepo.Load();
             var inputManager = DI.Container.Resolve<PlayerInputManager>();
 
             var sessionView = DI.Container.Resolve<GameSessionView>();
             sessionView.BindLocalInputForPlayer(0, inputManager);
             sessionView.BindLocalInputForPlayer(1, inputManager);
 
-            this.gameSessionController = new GameSessionController(data, sessionView, inputManager, inputManager);
-            return this.gameSessionController.BuildBoardAsync();
+            var gameSessionController = new GameSessionController(data, sessionView, inputManager, inputManager);
+            await gameSessionController.BuildBoardAsync();
+            return gameSessionController;
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Tatedrez
         private void BootstrapDependencyInjection()
         {
             DI.CreateGameContainer();
-            
+
             DI.Container.Register<GameSessionRepository>();
             DI.Container.Register<PlayerInputManager>().AsSingleton();
             
@@ -32,7 +32,7 @@ namespace Tatedrez
             
             InstallAudio();
         }
-        
+
         private void InstallAudio()
         {
             DI.Container.Register<IPieceSoundPlayer>(soundSpeaker);
