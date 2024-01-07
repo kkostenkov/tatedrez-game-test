@@ -7,7 +7,7 @@ namespace Tatedrez.Rules
 {
     public class RookRulesHolder : BasePieceRulesHolder, IPieceRulesHolder
     {
-        public override bool ValidateMove(MovementMove move, IBoardInfoService board)
+        protected override bool ValidatePieceMove(MovementMove move, IBoardInfoService board)
         {
             var from = move.From;
             var to = move.To;
