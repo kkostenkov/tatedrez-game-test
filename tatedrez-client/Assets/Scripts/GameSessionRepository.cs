@@ -3,7 +3,7 @@ using Tatedrez.Models;
 
 namespace Tatedrez
 {
-    internal class GameSessionRepository
+    public class GameSessionRepository
     {
         public GameSessionData Load()
         {

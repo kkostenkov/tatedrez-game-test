@@ -123,6 +123,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &202983744 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8954625348524965785, guid: d64ee03b26d784ee597579baacbb72e4, type: 3}
+  m_PrefabInstance: {fileID: 5410160746488247559}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 443f5da9ad1bc4661b2527617b6bf4d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &410851770
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,6 +212,7 @@ GameObject:
   m_Component:
   - component: {fileID: 445912449}
   - component: {fileID: 445912450}
+  - component: {fileID: 445912451}
   m_Layer: 0
   m_Name: Logic
   m_TagString: Untagged
@@ -236,6 +248,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sessionView: {fileID: 1481069886}
+--- !u!114 &445912451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445912448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9312099f1a95b43c195d73d731321a51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundSpeaker: {fileID: 7989963619894418592}
+  resetButton: {fileID: 202983744}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -704,3 +730,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de55852b1c7f64428aa42ae5a06bbe63, type: 3}
+--- !u!114 &7989963619894418592 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 237230501664263364, guid: de55852b1c7f64428aa42ae5a06bbe63, type: 3}
+  m_PrefabInstance: {fileID: 7989963619894418591}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1096028563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7ce9758027614eb9985fdb4d08068b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

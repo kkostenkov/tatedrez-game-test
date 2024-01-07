@@ -21,6 +21,11 @@ namespace Tatedrez.Views
         private ISquareClicksListener clicksListener;
         private IPieceSoundPlayer pieceSoundPlayer;
 
+        public void Start()
+        {
+            this.pieceSoundPlayer = DI.Game.Resolve<IPieceSoundPlayer>();
+        }
+
         private void Awake()
         {
             foreach (var square in this.squares) {
@@ -101,7 +106,7 @@ namespace Tatedrez.Views
             var index = ToIndex(destination);
             var square = squares[index];
             square.AssignPiece(piece);
-            pieceSoundPlayer?.Play();
+            pieceSoundPlayer.Play();
             return Task.CompletedTask;
         }
 
