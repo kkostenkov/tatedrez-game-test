@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 1868995173110469323}
   - component: {fileID: 4992897629701175940}
   m_Layer: 5
-  m_Name: Square
+  m_Name: SquareView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
