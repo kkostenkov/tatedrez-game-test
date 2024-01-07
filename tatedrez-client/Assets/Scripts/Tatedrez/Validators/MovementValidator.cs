@@ -28,6 +28,10 @@ namespace Tatedrez
             if (movingPiece == null || movingPiece.Owner != move.PlayerIndex) {
                 return false;
             }
+            
+            if (board.IsOccupied(move.To)) {
+                return false;
+            }
 
             if (!knownPieceRules.TryGetValue(movingPiece.PieceType, out var movingPieceRules)) {
                 throw new ArgumentException(movingPiece.PieceType);
