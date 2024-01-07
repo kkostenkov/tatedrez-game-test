@@ -1,9 +1,10 @@
 using System.Threading.Tasks;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
+using Tatedrez.Views;
 using UnityEngine;
 
-namespace Tatedrez.Views
+namespace Tatedrez.Input
 {
     internal class LocalInputManager : MonoBehaviour, IMoveFetcher
     {
