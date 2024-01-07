@@ -1,8 +1,8 @@
 {
-    "name": "Tests",
+    "name": "Tatedrez.Tests",
     "rootNamespace": "Tatedrez",
     "references": [
-        "TatedrezCore",
+        "Tatedrez.Core",
         "TNRD.NSubstitute"
     ],
     "includePlatforms": [

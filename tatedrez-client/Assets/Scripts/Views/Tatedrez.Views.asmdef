@@ -2,7 +2,7 @@
     "name": "Tatedrez.Views",
     "rootNamespace": "",
     "references": [
-        "TatedrezCore",
+        "Tatedrez.Core",
         "Tatedrez.Game",
         "Unity.TextMeshPro",
         "DOTween.Modules",
