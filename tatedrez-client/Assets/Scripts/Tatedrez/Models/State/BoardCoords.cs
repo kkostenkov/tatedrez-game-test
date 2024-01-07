@@ -1,3 +1,5 @@
+using System;
+
 namespace Tatedrez.Models
 {
     public struct BoardCoords
@@ -5,6 +7,7 @@ namespace Tatedrez.Models
         public static BoardCoords Invalid = new BoardCoords(-1, -1);
 
         public int X;
+
         public int Y;
 
         public BoardCoords(int x, int y)
@@ -28,6 +31,21 @@ namespace Tatedrez.Models
         {
             return !(obj1.X == obj2.X
                      && obj1.Y == obj2.Y);
+        }
+
+        public bool Equals(BoardCoords other)
+        {
+            return this.X == other.X && this.Y == other.Y;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is BoardCoords other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(this.X, this.Y);
         }
     }
 }
