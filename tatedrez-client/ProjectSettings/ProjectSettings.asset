@@ -157,6 +157,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.kkostenkov.tatedrez
     Standalone: com.DefaultCompany.2DProject
+    iPhone: com.kkostenkov.tatedrez
   buildNumber:
     Standalone: 0
     iPhone: 0
