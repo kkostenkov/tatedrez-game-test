@@ -3,8 +3,10 @@
     "rootNamespace": "",
     "references": [
         "TatedrezCore",
+        "Tatedrez.Game",
         "Unity.TextMeshPro",
-        "DOTween.Modules"
+        "DOTween.Modules",
+        "TinyIoC"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

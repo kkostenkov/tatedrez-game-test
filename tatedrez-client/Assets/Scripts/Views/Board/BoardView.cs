@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using DG.Tweening;
+using Tatedrez.Audio;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 using UnityEngine;
@@ -18,6 +19,12 @@ namespace Tatedrez.Views
         private BoardCoords size = BoardCoords.Invalid;
         private TaskCompletionSource<BoardCoords> squareSelectionTaskSource;
         private ISquareClicksListener clicksListener;
+        private IPieceSoundPlayer pieceSoundPlayer;
+
+        public void Start()
+        {
+            this.pieceSoundPlayer = DI.Game.Resolve<IPieceSoundPlayer>();
+        }
 
         private void Awake()
         {
@@ -99,6 +106,7 @@ namespace Tatedrez.Views
             var index = ToIndex(destination);
             var square = squares[index];
             square.AssignPiece(piece);
+            pieceSoundPlayer.Play();
             return Task.CompletedTask;
         }
 
@@ -140,8 +148,7 @@ namespace Tatedrez.Views
             seq.OnComplete(
                 () => {
                     pieceGraphicsTransform.SetParent(originParent);
-                    pieceGraphicsTransform.position = origin; 
-                    
+                    pieceGraphicsTransform.position = origin;
                 });
             await seq.AsyncWaitForCompletion();
             var piece = await ErasePiece(move.From);

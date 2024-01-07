@@ -3,7 +3,7 @@
     "rootNamespace": "",
     "references": [
         "TatedrezCore",
-        "Tatedrez.Views"
+        "TinyIoC"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
