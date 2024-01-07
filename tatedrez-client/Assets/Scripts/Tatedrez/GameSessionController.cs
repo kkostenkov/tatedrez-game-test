@@ -79,8 +79,8 @@ namespace Tatedrez
         private void ApplyStateChange(PlacementMove move)
         {
             var playerIndex = move.PlayerIndex;
-            var player = this.sessionData.Players[playerIndex];
-            var piece = player.DropPiece(move.PieceGuid);
+            var playerService = sessionDataService.GetPlayer(playerIndex);
+            var piece = playerService.DropPiece(move.PieceGuid);
             this.boardService.PlacePiece(piece, move.To);
             this.sessionData.CurrentTurn++;
             TryUpdateGameStage();
