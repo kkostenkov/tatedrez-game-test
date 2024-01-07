@@ -18,7 +18,7 @@ namespace Tatedrez.ModelServices
 
         public string GetName()
         {
-            return $"Player {this.playerIndex}";
+            return $"Player {this.playerIndex + 1}";
         }
 
         public IEnumerable<Piece> Pieces()

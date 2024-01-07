@@ -15,7 +15,7 @@ namespace Tatedrez.Views
         {
             var sb = new StringBuilder();
             sb.Append(playerIndex == 0 ? "<-- " : string.Empty);
-            sb.Append($"Player {playerIndex}");
+            sb.Append($"Player {playerIndex + 1}");
             sb.Append(playerIndex == 1 ? " -->" : string.Empty);
             this.playerToMoveLabel.text = sb.ToString();
             return Task.CompletedTask;
