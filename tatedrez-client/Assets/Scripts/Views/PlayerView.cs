@@ -75,8 +75,8 @@ namespace Tatedrez.Views
 
         public Transform GetPieceGraphicsTransform(Guid movePieceGuid)
         {
-            var squareWithPiece = squares.FirstOrDefault(s => s.Piece?.Guid == movePieceGuid);
-            return squareWithPiece?.GetPieceGraphicsTransform();
+            var squareWithPiece = squares.First(s => s.Piece?.Guid == movePieceGuid);
+            return squareWithPiece.GetPieceGraphicsTransform();
         }
 
         public Task<Piece> TakePiece(Guid movePieceGuid)

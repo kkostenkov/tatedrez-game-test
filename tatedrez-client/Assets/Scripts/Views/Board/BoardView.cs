@@ -12,6 +12,9 @@ namespace Tatedrez.Views
         [SerializeField]
         private SquareView[] squares;
 
+        [SerializeField]
+        private Transform transitParent;
+
         private BoardCoords size = BoardCoords.Invalid;
         private TaskCompletionSource<BoardCoords> squareSelectionTaskSource;
         private ISquareClicksListener clicksListener;
@@ -120,24 +123,27 @@ namespace Tatedrez.Views
             return Task.WhenAll(allSquaresFlash);
         }
 
-        public Task AnimatePieceMovement(Transform pieceGraphicsTransform, MovementMove move, string pieceType)
+        public async Task AnimatePieceMovement(MovementMove move, string pieceType)
         {
+            var pieceGraphicsTransform = this.squares[ToIndex(move.From)].GetPieceGraphicsTransform();
+            var originParent = pieceGraphicsTransform.parent;
             Vector3 origin = GetWorldCoords(move.From);
             Vector3 destination = GetWorldCoords(move.To);
             var seq = DOTween.Sequence();
-            seq.OnStart(() => { });
+            seq.OnStart(() => {
+                pieceGraphicsTransform.SetParent(transitParent);
+            });
             var pickUpPiece = pieceGraphicsTransform.DOScale(new Vector3(1.5f, 1.5f, 1.5f), 0.1f);
             var movePiece = pieceGraphicsTransform.DOMove(destination, 0.2f);
             var putDownPiece = pieceGraphicsTransform.DOScale(Vector3.one, 0.1f);
             seq.Append(pickUpPiece).Append(movePiece).Append(putDownPiece);
             seq.OnComplete(
-                () => { pieceGraphicsTransform.position = origin; });
-
-            return Task.WhenAll(seq.AsyncWaitForCompletion(), RedrawPiece(move));
-        }
-
-        private async Task RedrawPiece(MovementMove move)
-        {
+                () => {
+                    pieceGraphicsTransform.SetParent(originParent);
+                    pieceGraphicsTransform.position = origin; 
+                    
+                });
+            await seq.AsyncWaitForCompletion();
             var piece = await ErasePiece(move.From);
             await DrawPiece(piece, move.To);
         }

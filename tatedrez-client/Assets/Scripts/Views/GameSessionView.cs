@@ -45,11 +45,9 @@ namespace Tatedrez.Views
 
         public Task VisualizeMove(MovementMove move)
         {
-            var playerIndex = move.PlayerIndex;
-            var pieceGraphicsTransform = playerViews[playerIndex].GetPieceGraphicsTransform(move.PieceGuid);
             var alreadyMovedInStatePiece = sessionDataService.BoardService.PeekPiece(move.To);
             var pieceType = alreadyMovedInStatePiece.PieceType;
-            return this.boardView.AnimatePieceMovement(pieceGraphicsTransform, move, pieceType);
+            return this.boardView.AnimatePieceMovement(move, pieceType);
         }
         
         public async Task ShowTurn(int playerIndex)
