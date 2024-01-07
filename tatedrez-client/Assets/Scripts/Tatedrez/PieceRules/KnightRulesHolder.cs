@@ -6,7 +6,7 @@ namespace Tatedrez.Rules
 {
     public class KnightRulesHolder : BasePieceRulesHolder, IPieceRulesHolder
     {
-        public override bool ValidateMove(MovementMove move, IBoardInfoService board)
+        protected override bool ValidatePieceMove(MovementMove move, IBoardInfoService board)
         {
             var horizontalMoveLength = Math.Abs(move.From.X - move.To.X);
             var verticalMoveLength = Math.Abs(move.From.Y - move.To.Y);

@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Tatedrez.Models;
 
@@ -17,6 +16,7 @@ namespace Tatedrez.Views
         private Piece selectedPiece;
         private BoardCoords originCoords = BoardCoords.Invalid;
         private BoardCoords destinationCoords = BoardCoords.Invalid;
+        private SquareView selectedOriginSquare;
 
         public Task<MovementMove> WaitForMove(int playerIndex)
         {
@@ -43,6 +43,7 @@ namespace Tatedrez.Views
                                    && this.originCoords != BoardCoords.Invalid
                                    && this.destinationCoords != BoardCoords.Invalid;
             if (isAllDataPresent) {
+                selectedOriginSquare.SetHighlightActive(false);
                 move = new MovementMove() {
                     PieceGuid = selectedPiece.Guid,
                     PlayerIndex = this.playerIndexToRecord,
@@ -66,6 +67,11 @@ namespace Tatedrez.Views
             }
 
             this.selectedPiece = piece;
+            if (selectedOriginSquare) {
+                selectedOriginSquare.SetHighlightActive(false);    
+            }
+            this.selectedOriginSquare = view;
+            selectedOriginSquare.SetHighlightActive(true);
             this.originCoords = view.Coords;
             return true;
         }

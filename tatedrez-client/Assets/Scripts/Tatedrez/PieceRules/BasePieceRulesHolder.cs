@@ -8,7 +8,16 @@ namespace Tatedrez.Rules
     {
         protected virtual BoardCoords[] MoveTemplates { get; }
 
-        public abstract bool ValidateMove(MovementMove move, IBoardInfoService board);
+        public virtual bool ValidateMove(MovementMove move, IBoardInfoService board)
+        {
+            if (board.IsOccupied(move.To)) {
+                return false;
+            }
+
+            return ValidatePieceMove(move, board);
+        }
+
+        protected abstract bool ValidatePieceMove(MovementMove move, IBoardInfoService board);
 
         protected bool HasLegitMoves(BoardCoords position, int range, IBoardInfoService board)
         {
