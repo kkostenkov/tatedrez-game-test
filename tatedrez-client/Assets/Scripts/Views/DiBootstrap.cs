@@ -1,4 +1,5 @@
 ﻿using Tatedrez.Audio;
+using Tatedrez.Views;
 using UnityEngine;
 
 namespace Tatedrez
@@ -11,6 +12,9 @@ namespace Tatedrez
         [SerializeField]
         private ResetButton resetButton;
         
+        [SerializeField]
+        private GameSessionView sessionView;
+        
         private void Awake()
         {
             BootstrapDependencyInjection();
@@ -21,9 +25,14 @@ namespace Tatedrez
         {
             DI.CreateGameContainer();
 
+            DI.Container.Register<GameSessionRepository>();
+            DI.Container.Register<PlayerInputManager>().AsSingleton();
+            
+            DI.Container.Register<GameSessionView>(sessionView);
+            
             InstallAudio();
         }
-        
+
         private void InstallAudio()
         {
             DI.Container.Register<IPieceSoundPlayer>(soundSpeaker);

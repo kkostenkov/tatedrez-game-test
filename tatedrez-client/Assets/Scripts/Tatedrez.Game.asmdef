@@ -2,7 +2,7 @@
     "name": "Tatedrez.Game",
     "rootNamespace": "",
     "references": [
-        "TatedrezCore",
+        "Tatedrez.Core",
         "TinyIoC"
     ],
     "includePlatforms": [],

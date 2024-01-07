@@ -1,33 +1,35 @@
+using System.Threading.Tasks;
 using Tatedrez.Views;
 using UnityEngine;
 
 namespace Tatedrez
 {
-   public class SessionCoordinator : MonoBehaviour
-   {
-      [SerializeField]
-      private GameSessionView sessionView;
+    public class SessionCoordinator : MonoBehaviour
+    {
+        private async void Start()
+        {
+            var gameSessionController = await PrepareSession();
+            
+            while (gameSessionController.IsSessionRunning) {
+                await gameSessionController.Turn();
+            }
 
-      private GameSessionRepository sessionRepo = new GameSessionRepository();
-      private GameSessionFlow flow;
+            await gameSessionController.Turn();
+        }
 
-      private async void Awake()
-      {
-         flow = new GameSessionFlow();
-         var data = this.sessionRepo.Load();
-         var inputManager = new PlayerInputManager();
-         this.sessionView.BindLocalInputForPlayer(0, inputManager);
-         this.sessionView.BindLocalInputForPlayer(1, inputManager);
-         
-         await flow.Prepare(data, this.sessionView, inputManager, inputManager);
-      }
+        private async Task<GameSessionController> PrepareSession()
+        {
+            var sessionRepo = DI.Container.Resolve<GameSessionRepository>();
+            var data = sessionRepo.Load();
+            var inputManager = DI.Container.Resolve<PlayerInputManager>();
 
-      private async void Start()
-      {
-         while (flow.IsRunning) {
-            await this.flow.ProcessTurn();
-         }
-         await this.flow.ProcessTurn();
-      }
-   }
+            var sessionView = DI.Container.Resolve<GameSessionView>();
+            sessionView.BindLocalInputForPlayer(0, inputManager);
+            sessionView.BindLocalInputForPlayer(1, inputManager);
+
+            var gameSessionController = new GameSessionController(data, sessionView, inputManager, inputManager);
+            await gameSessionController.BuildBoardAsync();
+            return gameSessionController;
+        }
+    }
 }

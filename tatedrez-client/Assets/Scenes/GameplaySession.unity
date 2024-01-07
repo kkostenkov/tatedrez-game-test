@@ -262,6 +262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundSpeaker: {fileID: 7989963619894418592}
   resetButton: {fileID: 202983744}
+  sessionView: {fileID: 1481069886}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
