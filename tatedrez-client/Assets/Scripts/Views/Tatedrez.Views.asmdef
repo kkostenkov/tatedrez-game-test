@@ -4,7 +4,8 @@
     "references": [
         "TatedrezCore",
         "Unity.TextMeshPro",
-        "DOTween.Modules"
+        "DOTween.Modules",
+        "TinyIoC"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
