@@ -1,6 +1,4 @@
-using System.Runtime.ConstrainedExecution;
 using System.Threading.Tasks;
-using Tatedrez.Models;
 using Tatedrez.Views;
 using UnityEngine;
 
@@ -8,30 +6,34 @@ namespace Tatedrez
 {
     public class SessionCoordinator : MonoBehaviour
     {
-        [SerializeField]
-        private GameSessionView sessionView;
+        private GameSessionRepository sessionRepo;
 
-        private GameSessionRepository sessionRepo = new GameSessionRepository();
         private GameSessionController gameSessionController;
-
-        private async void Awake()
-        {
-            var data = this.sessionRepo.Load();
-            var inputManager = new PlayerInputManager();
-            this.sessionView.BindLocalInputForPlayer(0, inputManager);
-            this.sessionView.BindLocalInputForPlayer(1, inputManager);
-
-            this.gameSessionController = new GameSessionController(data, sessionView, inputManager, inputManager);
-            await this.gameSessionController.BuildBoardAsync();
-        }
 
         private async void Start()
         {
+            sessionRepo = DI.Container.Resolve<GameSessionRepository>();
+            
+            await PrepareSession();
+            
             while (this.gameSessionController.IsSessionRunning) {
                 await this.gameSessionController.Turn();
             }
 
             await this.gameSessionController.Turn();
+        }
+
+        private Task PrepareSession()
+        {
+            var data = this.sessionRepo.Load();
+            var inputManager = DI.Container.Resolve<PlayerInputManager>();
+
+            var sessionView = DI.Container.Resolve<GameSessionView>();
+            sessionView.BindLocalInputForPlayer(0, inputManager);
+            sessionView.BindLocalInputForPlayer(1, inputManager);
+
+            this.gameSessionController = new GameSessionController(data, sessionView, inputManager, inputManager);
+            return this.gameSessionController.BuildBoardAsync();
         }
     }
 }
