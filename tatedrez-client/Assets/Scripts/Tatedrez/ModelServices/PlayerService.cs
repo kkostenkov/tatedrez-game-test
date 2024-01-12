@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Tatedrez.Models;
 
 namespace Tatedrez.ModelServices
@@ -24,6 +26,17 @@ namespace Tatedrez.ModelServices
         public IEnumerable<Piece> Pieces()
         {
             return this.playerData.UnusedPieces;
+        }
+        
+        public Piece DropPiece(Guid guidToDrop)
+        {
+            var pieceToDrop = playerData.UnusedPieces.FirstOrDefault(p => p.Guid == guidToDrop);
+            if (pieceToDrop == null) {
+                return null;
+            }
+
+            playerData.UnusedPieces.Remove(pieceToDrop);
+            return pieceToDrop;
         }
     }
 }
