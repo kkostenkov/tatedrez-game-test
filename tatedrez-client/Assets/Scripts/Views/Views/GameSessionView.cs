@@ -55,6 +55,11 @@ namespace Tatedrez.Views
         {
             await sessionInfoView.DisplayTurnNumber(sessionDataService.CurrentTurnNumber);
             await sessionInfoView.ShowPlayerToMakeMove(playerIndex);
+            foreach (var playerView in this.playerViews) {
+                await playerView.DisableTurnIndicator();
+            }
+
+            await this.playerViews[playerIndex].EnableTurnIndicator();
         }
 
         public Task VisualizeInvalidMove(PlacementMove move)

@@ -5,6 +5,7 @@ using Tatedrez.Models;
 using Tatedrez.ModelServices;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Tatedrez.Views
 {
@@ -14,6 +15,10 @@ namespace Tatedrez.Views
         private SquareView[] squares;
         [SerializeField]
         private TMP_Text playerName;
+
+        [SerializeField]
+        private Image activeTurnHighlight;
+        
 
         public Piece SelectedPiece => selectedSquare?.Piece;
         private SquareView selectedSquare;
@@ -88,6 +93,18 @@ namespace Tatedrez.Views
                 squareWithPiece.AssignPiece(null);    
             }
             return Task.FromResult(result);
+        }
+        
+        public Task EnableTurnIndicator()
+        {
+            activeTurnHighlight.enabled = true;
+            return Task.CompletedTask;
+        }
+
+        public Task DisableTurnIndicator()
+        {
+            activeTurnHighlight.enabled = false;
+            return Task.CompletedTask;
         }
     }
 }
