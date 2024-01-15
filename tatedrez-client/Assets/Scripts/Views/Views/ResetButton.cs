@@ -9,6 +9,6 @@ public class ResetButton : MonoBehaviour
     public void ResetUiButtonCallback()
     {
         Resetting?.Invoke();
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 }

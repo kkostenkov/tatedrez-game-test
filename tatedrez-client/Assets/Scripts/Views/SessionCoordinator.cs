@@ -21,9 +21,9 @@ namespace Tatedrez
         {
             var sessionRepo = DI.Container.Resolve<GameSessionRepository>();
             var data = sessionRepo.Load();
-            var inputManager = DI.Container.Resolve<PlayerInputManager>();
+            var inputManager = DI.Game.Resolve<PlayerInputManager>();
 
-            var sessionView = DI.Container.Resolve<GameSessionView>();
+            var sessionView = DI.Game.Resolve<GameSessionView>();
             sessionView.BindLocalInputForPlayer(0, inputManager);
             sessionView.BindLocalInputForPlayer(1, inputManager);
 

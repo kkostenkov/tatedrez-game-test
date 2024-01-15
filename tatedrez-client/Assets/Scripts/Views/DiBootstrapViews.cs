@@ -1,14 +1,10 @@
-﻿using Tatedrez.Audio;
-using Tatedrez.Views;
+﻿using Tatedrez.Views;
 using UnityEngine;
 
 namespace Tatedrez
 {
-    public class DiBootstrap : MonoBehaviour
+    public class DiBootstrapViews : MonoBehaviour
     {
-        [SerializeField]
-        private SoundSpeaker soundSpeaker;
-
         [SerializeField]
         private ResetButton resetButton;
         
@@ -24,18 +20,9 @@ namespace Tatedrez
         private void BootstrapDependencyInjection()
         {
             DI.CreateGameContainer();
-
-            DI.Container.Register<GameSessionRepository>();
-            DI.Container.Register<PlayerInputManager>().AsSingleton();
+            DI.Game.Register<PlayerInputManager>().AsSingleton();
             
-            DI.Container.Register<GameSessionView>(sessionView);
-            
-            InstallAudio();
-        }
-
-        private void InstallAudio()
-        {
-            DI.Container.Register<IPieceSoundPlayer>(soundSpeaker);
+            DI.Game.Register<GameSessionView>(sessionView);
         }
 
         private void OnApplicationQuit()
@@ -45,6 +32,7 @@ namespace Tatedrez
         
         private void OnResetting()
         {
+            resetButton.Resetting -= OnResetting;
             UnloadAndCleanAll();
         }
 
