@@ -23,7 +23,7 @@ namespace Tatedrez.Views
 
         public void Start()
         {
-            this.pieceSoundPlayer = DI.Game.Resolve<IPieceSoundPlayer>();
+            DI.Game.TryResolve<IPieceSoundPlayer>(out this.pieceSoundPlayer);
         }
 
         private void Awake()
@@ -106,7 +106,7 @@ namespace Tatedrez.Views
             var index = ToIndex(destination);
             var square = squares[index];
             square.AssignPiece(piece);
-            pieceSoundPlayer.Play();
+            pieceSoundPlayer?.Play();
             return Task.CompletedTask;
         }
 
