@@ -156,7 +156,7 @@ namespace Tatedrez
 
         private void TryUpdateGameStage()
         {
-            if (this.boardValidator.HasTickTackToe(boardService)) {
+            if (this.boardValidator.TryFindTickTackToe(boardService, out var endGameDetails)) {
                 this.sessionData.State.Stage = Stage.End;
             }
             if (this.sessionData.State.Stage == Stage.Placement) {

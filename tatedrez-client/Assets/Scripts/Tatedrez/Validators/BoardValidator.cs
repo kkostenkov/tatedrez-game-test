@@ -15,19 +15,19 @@ namespace Tatedrez
             new BoardCoords(0, 2), new BoardCoords(1, 1), new BoardCoords(2, 0)
         };
 
-        public bool HasTickTackToe(IBoardInfoService board)
+        public bool TryFindTickTackToe(IBoardInfoService board, out EndGameDetails endGameDetails)
         {
-            var v = HasVerticalTicTacToe(board);
-            if (v != null) {
+            endGameDetails = HasVerticalTicTacToe(board);
+            if (endGameDetails != null) {
                 return true;
             }
 
-            var h = HasHorizontalTicTacToe(board);
-            if (h != null) {
+            endGameDetails = HasHorizontalTicTacToe(board);
+            if (endGameDetails != null) {
                 return true;
             }
-            var d = HasDiagonalTicTacToe(board);
-            return d;
+            endGameDetails = HasDiagonalTicTacToe(board);
+            return endGameDetails != null;
         }
 
         private EndGameDetails HasVerticalTicTacToe(IBoardInfoService board)
@@ -97,14 +97,34 @@ namespace Tatedrez
             return details.HasWinner ? details : null;
         }
 
-        private bool HasDiagonalTicTacToe(IBoardInfoService board)
+        private EndGameDetails HasDiagonalTicTacToe(IBoardInfoService board)
         {
-            return this.diagonalOne.All(coord =>
-                       board.PeekPiece(coord) != null
-                       && (board.PeekPiece(coord).Owner == board.PeekPiece(this.diagonalOne[0]).Owner))
-                   || this.diagonalTwo.All(coord =>
-                       board.PeekPiece(coord) != null
-                       && (board.PeekPiece(coord)?.Owner == board.PeekPiece(this.diagonalTwo[0])?.Owner));
+            var firstDiagonal = this.diagonalOne.All(coord =>
+                board.PeekPiece(coord) != null
+                && (board.PeekPiece(coord).Owner == board.PeekPiece(this.diagonalOne[0]).Owner));
+            if (firstDiagonal) {
+                return CreateDiagonalWinEndGameDetails(board, this.diagonalOne);
+            }
+            var secondDiagonal = this.diagonalTwo.All(coord =>
+                board.PeekPiece(coord) != null
+                && (board.PeekPiece(coord)?.Owner == board.PeekPiece(this.diagonalTwo[0])?.Owner));
+            if (secondDiagonal) {
+                return CreateDiagonalWinEndGameDetails(board, this.diagonalTwo);
+            }
+
+            return null;
+        }
+
+        private EndGameDetails CreateDiagonalWinEndGameDetails(IBoardInfoService board, List<BoardCoords> diagonal)
+        {
+            var endGameDetails = new EndGameDetails() {
+                WinnerId = board.PeekPiece(diagonal[0]).Owner,
+            };
+            for (int i = 0; i < diagonal.Count; i++) {
+                endGameDetails.WinnerCords[i] = diagonal[i];
+            }
+
+            return endGameDetails;
         }
 
         public bool IsValidMove(IBoardInfoService board, PlacementMove move)
