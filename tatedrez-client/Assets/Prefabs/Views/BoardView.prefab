@@ -201,10 +201,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Square (4)
       objectReference: {fileID: 0}
-    - target: {fileID: 2019651499393637677, guid: 7d30510cef6f14abd9e7cc24d4daddc3, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d30510cef6f14abd9e7cc24d4daddc3, type: 3}
 --- !u!224 &1299363036786306022 stripped
@@ -564,10 +560,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Square
       objectReference: {fileID: 0}
-    - target: {fileID: 2019651499393637677, guid: 7d30510cef6f14abd9e7cc24d4daddc3, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d30510cef6f14abd9e7cc24d4daddc3, type: 3}
 --- !u!114 &2884721269988652797 stripped
@@ -681,10 +673,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Square (6)
       objectReference: {fileID: 0}
-    - target: {fileID: 2019651499393637677, guid: 7d30510cef6f14abd9e7cc24d4daddc3, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d30510cef6f14abd9e7cc24d4daddc3, type: 3}
 --- !u!114 &2500018980199600781 stripped
@@ -797,10 +785,6 @@ PrefabInstance:
     - target: {fileID: 2019651499393637677, guid: 7d30510cef6f14abd9e7cc24d4daddc3, type: 3}
       propertyPath: m_Name
       value: Square (8)
-      objectReference: {fileID: 0}
-    - target: {fileID: 2019651499393637677, guid: 7d30510cef6f14abd9e7cc24d4daddc3, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d30510cef6f14abd9e7cc24d4daddc3, type: 3}

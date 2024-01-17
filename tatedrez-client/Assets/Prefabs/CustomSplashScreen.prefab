@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 5437621949665669311}
   - component: {fileID: 5437621949665669308}
   m_Layer: 5
-  m_Name: MusicLicense
+  m_Name: License
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -182,10 +182,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: 'Music: Starling by Podington Bear is licensed under a Attribution-NonCommercial
-    3.0 International License https://creativecommons.org/licenses/by-nc/3.0/'
+    3.0 International License https://creativecommons.org/licenses/by-nc/3.0/
+
+    Sprites,
+    font by Kenney Vleugels (www.kenney.nl)  CC0 License'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1755f21b0aeb3417e94abd0f3ebfa6e3, type: 2}
+  m_sharedMaterial: {fileID: -5094738475520707888, guid: 1755f21b0aeb3417e94abd0f3ebfa6e3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -209,8 +212,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15.98
-  m_fontSizeBase: 15.98
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
