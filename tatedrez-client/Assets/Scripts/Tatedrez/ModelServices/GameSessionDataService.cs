@@ -3,25 +3,35 @@ using Tatedrez.Models;
 
 namespace Tatedrez.ModelServices
 {
-    public class GameSessionDataService
+    public class GameSessionDataService : IGameSessionDataService
     {
-        public readonly BoardService BoardService;
-        public readonly GameStateService GameStateService;
-        public readonly EndGameService EndGameService;
-        private readonly List<PlayerService> PlayerServices = new();
-        private readonly GameSessionData data;
+        public BoardService BoardService { get; }
+        public GameStateService GameStateService { get; }
+        public EndGameService EndGameService { get; }
+        private readonly List<PlayerService> playerServices = new();
+        private GameSessionData data;
 
         public int CurrentTurnNumber => this.data.CurrentTurn;
 
-        public GameSessionDataService(GameSessionData data)
+        public GameSessionDataService()
         {
-            this.data = data;
-            this.BoardService = new BoardService(data.Board);
-            this.GameStateService = new GameStateService(data.State);
-            this.EndGameService = new EndGameService(BoardService, data);
+            BoardService = new BoardService();
+            GameStateService = new GameStateService();
+            EndGameService = new EndGameService(BoardService);
+        }
+
+        public void SetData(GameSessionData sessionData)
+        {
+            this.data = sessionData;
+            BoardService.SetData(data.Board);
+            GameStateService.SetData(data.State);
+            EndGameService.SetData(data);
             for (var index = 0; index < data.Players.Count; index++) {
                 var playerData = data.Players[index];
-                this.PlayerServices.Add(new PlayerService(playerData, index));
+                if (this.playerServices.Count - 1 < index) {
+                    this.playerServices.Add(new PlayerService(index));
+                }
+                this.playerServices[index].SetData(playerData);
             }
         }
 
@@ -34,7 +44,7 @@ namespace Tatedrez.ModelServices
 
         public PlayerService GetPlayer(int index)
         {
-            return this.PlayerServices[index];
+            return this.playerServices[index];
         }
     }
 }

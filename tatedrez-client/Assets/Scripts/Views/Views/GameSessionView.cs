@@ -24,10 +24,10 @@ namespace Tatedrez.Views
         [SerializeField]
         private UILineRenderer winLine;
 
-        private GameSessionDataService sessionDataService;
+        private IGameSessionDataService sessionDataService;
         private readonly GameViewAnimator gameViewAnimator = new GameViewAnimator();
 
-        public async Task Build(GameSessionDataService sessionDataService)
+        public async Task Build(IGameSessionDataService sessionDataService)
         {
             this.sessionDataService = sessionDataService;
             var board = sessionDataService.BoardService;

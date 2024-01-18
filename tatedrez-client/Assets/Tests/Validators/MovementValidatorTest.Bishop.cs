@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Tatedrez;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
+using Tatedrez.Rules;
 using Tatedrez.Tests;
 using Tatedrez.Validators;
 
@@ -23,7 +24,8 @@ namespace MovementValidatorTests
         public void Should_AllowMovingBishopDiagonally_When_FieldIsEmpty(BoardCoords bishopCoords,
             BoardCoords destination)
         {
-            var board = new BoardService(Helpers.CreateEmptyBoard3by3());
+            var board = new BoardService();
+            board.SetData(Helpers.CreateEmptyBoard3by3());
             var bishop = new Piece(0) { PieceType = Constants.Bishop };
             board.PlacePiece(bishop, bishopCoords);
             var move = new MovementMove() {
@@ -31,7 +33,7 @@ namespace MovementValidatorTests
                 From = bishopCoords,
                 To = destination,
             };
-            var validator = new MovementValidator();
+            var validator = new MovementValidator(new PieceRulesContainer());
 
             var result = validator.IsValidMove(board, move);
 
@@ -44,7 +46,8 @@ namespace MovementValidatorTests
         public void Should_ProhibitMovingBishopNotDiagonallyLine_When_FieldIsEmpty(BoardCoords bishopCoords,
             BoardCoords destination)
         {
-            var board = new BoardService(Helpers.CreateEmptyBoard3by3());
+            var board = new BoardService();
+            board.SetData(Helpers.CreateEmptyBoard3by3());
             var bishop = new Piece(0) { PieceType = Constants.Bishop };
             board.PlacePiece(bishop, bishopCoords);
             var move = new MovementMove() {
@@ -52,7 +55,7 @@ namespace MovementValidatorTests
                 From = bishopCoords,
                 To = destination,
             };
-            var validator = new MovementValidator();
+            var validator = new MovementValidator(new PieceRulesContainer());
 
             var result = validator.IsValidMove(board, move);
 
@@ -75,7 +78,8 @@ namespace MovementValidatorTests
             BoardCoords otherPieceCoords,
             BoardCoords destination)
         {
-            var board = new BoardService(Helpers.CreateEmptyBoard3by3());
+            var board = new BoardService();
+            board.SetData(Helpers.CreateEmptyBoard3by3());
             var bishop = new Piece(0) { PieceType = Constants.Bishop };
             board.PlacePiece(bishop, bishopCoords);
             var otherPiece = new Piece(0);
@@ -85,7 +89,7 @@ namespace MovementValidatorTests
                 From = bishopCoords,
                 To = destination,
             };
-            var validator = new MovementValidator();
+            var validator = new MovementValidator(new PieceRulesContainer());
 
             var result = validator.IsValidMove(board, move);
 

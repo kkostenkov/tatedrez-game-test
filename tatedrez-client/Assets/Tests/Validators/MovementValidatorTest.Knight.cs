@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Tatedrez;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
+using Tatedrez.Rules;
 using Tatedrez.Tests;
 using Tatedrez.Validators;
 
@@ -16,7 +17,8 @@ namespace MovementValidatorTests
         public void Should_AllowMovingKnight_When_FieldIsEmpty(BoardCoords knightCoords,
             BoardCoords destination)
         {
-            var board = new BoardService(Helpers.CreateEmptyBoard3by3());
+            var board = new BoardService();
+            board.SetData(Helpers.CreateEmptyBoard3by3());
             var knight = new Piece(0) { PieceType = Constants.Knight };
             board.PlacePiece(knight, knightCoords);
             var move = new MovementMove() {
@@ -24,7 +26,7 @@ namespace MovementValidatorTests
                 From = knightCoords,
                 To = destination,
             };
-            var validator = new MovementValidator();
+            var validator = new MovementValidator(new PieceRulesContainer());
 
             var result = validator.IsValidMove(board, move);
 
@@ -45,7 +47,8 @@ namespace MovementValidatorTests
         [TestCaseSource(nameof(KnightInvalidMoves))]
         public void Should_ProhibitMakingIllegalKnightMoves_When_FieldIsEmpty(BoardCoords knightCoords, BoardCoords destination)
         {
-            var board = new BoardService(Helpers.CreateEmptyBoard3by3());
+            var board = new BoardService();
+            board.SetData(Helpers.CreateEmptyBoard3by3());
             var knight = new Piece(0) { PieceType = Constants.Knight };
             board.PlacePiece(knight, knightCoords);
             var move = new MovementMove() {
@@ -53,7 +56,7 @@ namespace MovementValidatorTests
                 From = knightCoords,
                 To = destination,
             };
-            var validator = new MovementValidator();
+            var validator = new MovementValidator(new PieceRulesContainer());
 
             var result = validator.IsValidMove(board, move);
 

@@ -6,14 +6,18 @@ namespace Tatedrez.ModelServices
     public class EndGameService
     {
         private readonly IBoardInfoService boardInfoService;
-        private readonly GameSessionData data;
+        private GameSessionData data;
 
-        public EndGameService(IBoardInfoService boardInfoService, GameSessionData data)
+        public EndGameService(IBoardInfoService boardInfoService)
         {
             this.boardInfoService = boardInfoService;
-            this.data = data;
         }
-        
+
+        public void SetData(GameSessionData gameSessionData)
+        {
+            this.data = gameSessionData;
+        }
+
         public EndGameDetails ComposeEndgameDetails(List<BoardCoords> winningCoords)
         {
             var firstPiece = boardInfoService.PeekPiece(winningCoords[0]);

@@ -7,9 +7,9 @@ namespace Tatedrez.Validators
     public class CommandValidator : ICommandValidator
     {
         private readonly BoardValidator boardValidator;
-        private readonly MovementValidator movementValidator;
+        private readonly IMovementCommandValidator movementValidator;
 
-        public CommandValidator(BoardValidator boardValidator, MovementValidator movementValidator)
+        public CommandValidator(BoardValidator boardValidator, IMovementCommandValidator movementValidator)
         {
             this.boardValidator = boardValidator;
             this.movementValidator = movementValidator;

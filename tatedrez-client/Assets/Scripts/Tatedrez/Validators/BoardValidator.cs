@@ -5,7 +5,7 @@ using Tatedrez.ModelServices;
 
 namespace Tatedrez.Validators
 {
-    public class BoardValidator
+    public class BoardValidator : IPlacementCommandValidator, ITicTacToeFinder
     {
         private delegate bool TicTacToeChecker(IBoardInfoService board, ref List<BoardCoords> winSequence);
 
@@ -138,5 +138,10 @@ namespace Tatedrez.Validators
         {
             return !board.IsOccupied(move.To);
         }
+    }
+
+    public interface ITicTacToeFinder
+    {
+        List<BoardCoords> TryFindTickTackToe(IBoardInfoService board);
     }
 }

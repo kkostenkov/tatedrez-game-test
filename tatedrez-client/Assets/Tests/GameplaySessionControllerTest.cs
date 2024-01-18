@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Tatedrez;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
+using Tatedrez.Rules;
 using Tatedrez.Validators;
 
 public class GameplaySessionControllerTest
@@ -63,7 +64,8 @@ public class GameplaySessionControllerTest
     {
         var sessionData = Helpers.CreateStandardSessionStart();
         var occupiedCoords = new BoardCoords(1, 2);
-        var boardService = new BoardService(sessionData.Board);
+        var boardService = new BoardService();
+        boardService.SetData(sessionData.Board);
         boardService.PlacePiece(new Piece(0), occupiedCoords);
         var pieceGuidToPlace = sessionData.Players[0].UnusedPieces.First.Value.Guid;
         input.GetMovePiecePlacement().Returns(new PlacementMove() { 
@@ -98,6 +100,9 @@ public class GameplaySessionControllerTest
     public async Task Should_PlacePieceOnBoard_When_PlayerMakesPlaceMove()
     {
         var sessionData = Helpers.CreateStandardSessionStart();
+        var boardService = new BoardService();
+        boardService.SetData(sessionData.Board);
+        
         var pieceToPlace = sessionData.Players[0].UnusedPieces.First.Value;
         var placementCoords = new BoardCoords { X = 1, Y = 1 };
         input.GetMovePiecePlacement().Returns(new PlacementMove() {
@@ -108,8 +113,8 @@ public class GameplaySessionControllerTest
         var controller = new GameSessionController(sessionData, view, input, indexListener, new RealCommandValidator());
         
         await controller.Turn();
-
-        var placedPiece = new BoardService(sessionData.Board).PeekPiece(placementCoords);
+        
+        var placedPiece = boardService.PeekPiece(placementCoords);
         Assert.IsNotNull(placedPiece);
         Assert.AreEqual(pieceToPlace.Guid, placedPiece.Guid);
     }
@@ -176,7 +181,8 @@ public class GameplaySessionControllerTest
     public async Task Should_EndGame_When_PlayerPlacedTicTacToe()
     {
         var sessionData = Helpers.CreateStandardSessionStart();
-        var board = new BoardService(sessionData.Board);
+        var board = new BoardService();
+        board.SetData(sessionData.Board);
         var pieceOwnerId = 0;
         board.PlacePiece(new Piece(pieceOwnerId), new BoardCoords(0, 0));
         board.PlacePiece(new Piece(pieceOwnerId), new BoardCoords(1, 0));
@@ -203,7 +209,7 @@ internal class RealCommandValidator : ICommandValidator
 
     public bool IsValidMove(IBoardInfoService board, MovementMove move)
     {
-        return new MovementValidator().IsValidMove(board, move);
+        return new MovementValidator(new PieceRulesContainer()).IsValidMove(board, move);
     }
 
     public List<BoardCoords> TryFindTickTackToe(IBoardInfoService board)

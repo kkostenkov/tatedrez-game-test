@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using NUnit.Framework;
-using Tatedrez;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 using Tatedrez.Validators;
@@ -24,7 +23,8 @@ public class BoardValidatorTest
     [TestCaseSource(nameof(HorizontalTicTacToes))]
     public void Should_DetectTicTacToe_When_HorizontalLineOccupiedByPiecesOfTheSameOwner(List<BoardCoords> coordsList)
     {
-        var board = new BoardService(Helpers.CreateEmptyBoard3by3());
+        var board = new BoardService();
+        board.SetData(Helpers.CreateEmptyBoard3by3());
         foreach (var coords in coordsList) {
             board.PlacePiece(new Piece(0), coords);
         }
@@ -34,7 +34,7 @@ public class BoardValidatorTest
         var result = boardValidator.TryFindTickTackToe(board);
         Assert.That(result, Is.EquivalentTo(coordsList));
     }
-    
+
     private static IEnumerable<TestCaseData> VerticalTicTacToes {
         get {
             yield return new TestCaseData(new List<BoardCoords>()
@@ -52,7 +52,8 @@ public class BoardValidatorTest
     [TestCaseSource(nameof(VerticalTicTacToes))]
     public void Should_DetectTicTacToe_When_VerticalLineOccupiedByPiecesOfTheSameOwner(List<BoardCoords> coordsList)
     {
-        var board = new BoardService(Helpers.CreateEmptyBoard3by3());
+        var board = new BoardService();
+        board.SetData(Helpers.CreateEmptyBoard3by3());
         foreach (var coords in coordsList) {
             board.PlacePiece(new Piece(0), coords);
         }
@@ -62,7 +63,7 @@ public class BoardValidatorTest
         var result = boardValidator.TryFindTickTackToe(board);
         Assert.That(result, Is.EquivalentTo(coordsList));
     }
-    
+
     private static IEnumerable<TestCaseData> DiagonalTicTacToes {
         get {
             yield return new TestCaseData(new List<BoardCoords>()
@@ -77,7 +78,8 @@ public class BoardValidatorTest
     [TestCaseSource(nameof(DiagonalTicTacToes))]
     public void Should_DetectTicTacToe_When_DiagonalLineOccupiedByPiecesOfTheSameOwner(List<BoardCoords> coordsList)
     {
-        var board = new BoardService(Helpers.CreateEmptyBoard3by3());
+        var board = new BoardService();
+        board.SetData(Helpers.CreateEmptyBoard3by3());
         foreach (var coords in coordsList) {
             board.PlacePiece(new Piece(0), coords);
         }
@@ -87,22 +89,23 @@ public class BoardValidatorTest
         var result = boardValidator.TryFindTickTackToe(board);
         Assert.That(result, Is.EquivalentTo(coordsList));
     }
-    
+
     [Test]
     public void Should_NotDetectTicTacToe_When_BoardIsEmpty()
     {
-        var board = new BoardService(Helpers.CreateEmptyBoard3by3());
+        var board = new BoardService();
+        board.SetData(Helpers.CreateEmptyBoard3by3());
         var boardValidator = new BoardValidator();
 
         var result = boardValidator.TryFindTickTackToe(board);
-        
+
         Assert.IsNull(result);
     }
-    
+
     private static IEnumerable<TestCaseData> NotTicTacToes {
         get {
             yield return new TestCaseData(new List<BoardCoords>()
-                    { new BoardCoords(0, 2)})
+                    { new BoardCoords(0, 2) })
                 .SetName("One piece");
             yield return new TestCaseData(new List<BoardCoords>()
                     { new BoardCoords(0, 1), new BoardCoords(0, 2) })
@@ -122,7 +125,8 @@ public class BoardValidatorTest
     [TestCaseSource(nameof(NotTicTacToes))]
     public void Should_NotDetectTicTacToe_When_BoardDoesNotContainIt(List<BoardCoords> coordsList)
     {
-        var board = new BoardService(Helpers.CreateEmptyBoard3by3());
+        var board = new BoardService();
+        board.SetData(Helpers.CreateEmptyBoard3by3());
         foreach (var coords in coordsList) {
             board.PlacePiece(new Piece(0), coords);
         }
@@ -136,26 +140,28 @@ public class BoardValidatorTest
     [Test]
     public void Should_AllowPlacingPiece_When_TargetCoordsAreEmpty()
     {
-        var board = new BoardService(Helpers.CreateEmptyBoard3by3());
+        var board = new BoardService();
+        board.SetData(Helpers.CreateEmptyBoard3by3());
         var move = new PlacementMove() { To = new BoardCoords(0, 2) };
         var validator = new BoardValidator();
 
         var result = validator.IsValidMove(board, move);
-        
+
         Assert.AreEqual(true, result);
     }
-    
+
     [Test]
     public void Should_ProhibitPlacingPiece_When_TargetCoordsAreOccupied()
     {
-        var board = new BoardService(Helpers.CreateEmptyBoard3by3());
-        var occupiedCoords = new BoardCoords(1, 1); 
+        var board = new BoardService();
+        board.SetData(Helpers.CreateEmptyBoard3by3());
+        var occupiedCoords = new BoardCoords(1, 1);
         board.PlacePiece(new Piece(0), occupiedCoords);
         var move = new PlacementMove() { To = occupiedCoords };
         var validator = new BoardValidator();
 
         var result = validator.IsValidMove(board, move);
-        
+
         Assert.AreEqual(false, result);
     }
 }

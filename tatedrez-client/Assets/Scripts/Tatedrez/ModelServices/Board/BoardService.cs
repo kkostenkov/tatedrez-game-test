@@ -2,20 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tatedrez.Models;
-using Tatedrez.Rules;
 
 namespace Tatedrez.ModelServices
 {
     public class BoardService : IBoardInfoService, IBoardModifier
     {
-        private readonly Board boardData;
-        private readonly MovesGenerator movesGenerator;
-        public List<List<BoardCoords>> Diagonals { get; }
+        private Board boardData;
 
-        public BoardService(Board boardData)
+        public List<List<BoardCoords>> Diagonals { get; private set; }
+        
+        public void SetData(Board boardData)
         {
             this.boardData = boardData;
-            this.movesGenerator = new MovesGenerator();
             Diagonals = CalculateDiagonalCoords(boardData);
         }
 
@@ -99,20 +97,6 @@ namespace Tatedrez.ModelServices
                 .Where(kvp => checkerFunc(kvp.Value))
                 .Select(kvp => ToCoords(kvp.Key));
             return foundSquares;
-        }
-
-        public bool PlayerHasMoves(int activePlayerIndex)
-        {
-            var playerSquares = FindSquares(p => p.Owner == activePlayerIndex);
-            foreach (var cords in playerSquares) {
-                var piece = PeekPiece(cords);
-                var hasMoves = this.movesGenerator.HasMoves(piece, cords, this);
-                if (hasMoves) {
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }

@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Tatedrez;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
+using Tatedrez.Rules;
 using Tatedrez.Tests;
 
 namespace MovementValidatorTests
@@ -15,7 +16,8 @@ namespace MovementValidatorTests
         public void Should_AllowMovingRookInAStraightLine_When_FieldIsEmpty(BoardCoords rookCoords,
             BoardCoords destination)
         {
-            var board = new BoardService(Helpers.CreateEmptyBoard3by3());
+            var board = new BoardService();
+            board.SetData(Helpers.CreateEmptyBoard3by3());
             var rook = new Piece(0) { PieceType = Constants.Rook };
             board.PlacePiece(rook, rookCoords);
             var move = new MovementMove() {
@@ -23,7 +25,7 @@ namespace MovementValidatorTests
                 From = rookCoords,
                 To = destination,
             };
-            var validator = new Tatedrez.Validators.MovementValidator();
+            var validator = new Tatedrez.Validators.MovementValidator(new PieceRulesContainer());
 
             var result = validator.IsValidMove(board, move);
 
@@ -36,7 +38,8 @@ namespace MovementValidatorTests
         public void Should_ProhibitMovingRookNotInAStraightLine_When_FieldIsEmpty(BoardCoords rookCoords,
             BoardCoords destination)
         {
-            var board = new BoardService(Helpers.CreateEmptyBoard3by3());
+            var board = new BoardService();
+            board.SetData(Helpers.CreateEmptyBoard3by3());
             var rook = new Piece(0) { PieceType = Constants.Rook };
             board.PlacePiece(rook, rookCoords);
             var move = new MovementMove() {
@@ -44,7 +47,7 @@ namespace MovementValidatorTests
                 From = rookCoords,
                 To = destination,
             };
-            var validator = new Tatedrez.Validators.MovementValidator();
+            var validator = new Tatedrez.Validators.MovementValidator(new PieceRulesContainer());
 
             var result = validator.IsValidMove(board, move);
 
@@ -66,7 +69,8 @@ namespace MovementValidatorTests
         public void Should_ProhibitMovingRook_When_OtherPieceIsInTheWay(BoardCoords rookCoords, BoardCoords otherPieceCoords, 
             BoardCoords destination)
         {
-            var board = new BoardService(Helpers.CreateEmptyBoard3by3());
+            var board = new BoardService();
+            board.SetData(Helpers.CreateEmptyBoard3by3());
             var rook = new Piece(0) { PieceType = Constants.Rook };
             board.PlacePiece(rook, rookCoords);
             var otherPiece = new Piece(0);
@@ -76,7 +80,7 @@ namespace MovementValidatorTests
                 From = rookCoords,
                 To = destination,
             };
-            var validator = new Tatedrez.Validators.MovementValidator();
+            var validator = new Tatedrez.Validators.MovementValidator(new PieceRulesContainer());
 
             var result = validator.IsValidMove(board, move);
 

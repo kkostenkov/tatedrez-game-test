@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
+using Tatedrez.Rules;
 using Tatedrez.Validators;
 
 namespace Tatedrez
@@ -15,8 +16,9 @@ namespace Tatedrez
         private readonly IActivePlayerIndexListener playerIndexListener;
         private readonly ICommandValidator commandValidator;
         
-        private readonly GameSessionDataService sessionDataService;
+        private readonly IGameSessionDataService sessionDataService;
         private readonly BoardService boardService;
+        private readonly MovesGenerator movesGenerator;
 
         public bool IsSessionRunning => sessionDataService.GameStateService.IsGameActive;
 
@@ -24,12 +26,16 @@ namespace Tatedrez
             IActivePlayerIndexListener playerIndexListener, ICommandValidator commandValidator)
         {
             this.sessionData = sessionData;
-            this.sessionDataService = new GameSessionDataService(sessionData);
+            var dataService = new GameSessionDataService();
+            dataService.SetData(sessionData);
+            this.sessionDataService = dataService;
+            
             this.boardService = this.sessionDataService.BoardService;
             this.gameSessionView = gameSessionView;
             this.input = input;
             this.playerIndexListener = playerIndexListener;
             this.commandValidator = commandValidator;
+            this.movesGenerator = new MovesGenerator(this.boardService, new PieceRulesContainer());
         }
 
         public Task Turn()
@@ -140,7 +146,7 @@ namespace Tatedrez
         private bool PlayerHasMoves()
         {
             var activePlayerIndex = this.sessionDataService.GetCurrentActivePlayerIndex();
-            return this.boardService.PlayerHasMoves(activePlayerIndex);
+            return this.movesGenerator.PlayerHasMoves(activePlayerIndex);
         }
 
         private bool IsMoveOfCurrentPlayer(Move move)

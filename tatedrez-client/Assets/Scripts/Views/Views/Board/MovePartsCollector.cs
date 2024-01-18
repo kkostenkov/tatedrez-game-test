@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Tatedrez.Models;
+using Tatedrez.Validators;
 
 namespace Tatedrez.Views
 {
@@ -19,6 +20,12 @@ namespace Tatedrez.Views
         private BoardCoords destinationCoords = BoardCoords.Invalid;
         private SquareView selectedOriginSquare;
         private BoardView boardView;
+        private readonly MovementValidator movesGenerator;
+
+        public MovePartsCollector()
+        {
+            this.movesGenerator = DI.Game.Resolve<MovementValidator>();
+        }
 
         public void Dispose()
         {

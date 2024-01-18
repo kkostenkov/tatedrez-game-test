@@ -30,8 +30,8 @@ namespace Tatedrez
 
         private static void RegisterValidators()
         {
-            DI.Game.Register<MovementValidator>().AsSingleton();
-            DI.Game.Register<BoardValidator>().AsSingleton();
+            DI.Game.Register<IMovementCommandValidator, MovementValidator>().AsSingleton();
+            DI.Game.Register<IPlacementCommandValidator, BoardValidator>().AsSingleton();
             DI.Game.Register<CommandValidator>().AsSingleton();
         }
 
