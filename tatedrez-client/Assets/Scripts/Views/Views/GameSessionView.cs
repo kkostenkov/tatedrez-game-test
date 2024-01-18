@@ -3,6 +3,7 @@ using Tatedrez.Input;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 using UnityEngine;
+using UnityEngine.UI.Extensions;
 
 namespace Tatedrez.Views
 {
@@ -10,21 +11,28 @@ namespace Tatedrez.Views
     {
         [SerializeField]
         private BoardView boardView;
+
         [SerializeField]
         private SessionInfoView sessionInfoView;
+
         [SerializeField]
         private PlayerView[] playerViews;
+
         [SerializeField]
         private LocalInputManager[] localInputManagers;
 
+        [SerializeField]
+        private UILineRenderer winLine;
+
         private GameSessionDataService sessionDataService;
+        private readonly GameViewAnimator gameViewAnimator = new GameViewAnimator();
 
         public async Task Build(GameSessionDataService sessionDataService)
         {
             this.sessionDataService = sessionDataService;
             var board = sessionDataService.BoardService;
             await this.boardView.BuildBoardAsync(board);
-            
+
             for (int i = 0; i < sessionDataService.GetPlayersCount; i++) {
                 var player = sessionDataService.GetPlayer(i);
                 await playerViews[i].Initialize(player);
@@ -32,9 +40,14 @@ namespace Tatedrez.Views
             }
         }
 
-        public Task ShowGameOverScreen()
+        public async Task ShowGameOverScreen()
         {
-            return sessionInfoView.DisplayGameOver();
+            var gameEndDetails = sessionDataService.EndGameService.GetEndGameDetails();
+            var winCoords = gameEndDetails.WinnerCords;
+            var lineStartCoords = this.boardView.GetCanvasCoords(winCoords[0]);
+            var lineEndCoords = this.boardView.GetCanvasCoords(winCoords[^1]);
+            await this.gameViewAnimator.AnimateWinLine(this.winLine, lineStartCoords, lineEndCoords);
+            await sessionInfoView.DisplayGameOver();
         }
 
         public async Task VisualizeMove(PlacementMove move)
@@ -50,7 +63,7 @@ namespace Tatedrez.Views
             var pieceType = alreadyMovedInStatePiece.PieceType;
             return this.boardView.AnimatePieceMovement(move, pieceType);
         }
-        
+
         public async Task ShowTurn(int playerIndex)
         {
             await sessionInfoView.DisplayTurnNumber(sessionDataService.CurrentTurnNumber);

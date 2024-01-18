@@ -10,11 +10,30 @@ namespace Tatedrez.ModelServices
     {
         private readonly Board boardData;
         private readonly MovesGenerator movesGenerator;
+        public List<List<BoardCoords>> Diagonals { get; }
 
         public BoardService(Board boardData)
         {
             this.boardData = boardData;
             this.movesGenerator = new MovesGenerator();
+            Diagonals = CalculateDiagonalCoords(boardData);
+        }
+
+        private static List<List<BoardCoords>> CalculateDiagonalCoords(Board boardData)
+        {
+            if (boardData.BoardSize.X != boardData.BoardSize.Y) {
+                return null;
+            }
+
+            var diagonalCoords = new List<List<BoardCoords>>();
+            diagonalCoords.Add(new List<BoardCoords>());
+            diagonalCoords.Add(new List<BoardCoords>());
+            for (int i = 0; i < boardData.BoardSize.X; i++) {
+                diagonalCoords[0].Add(new BoardCoords(i, i));
+                diagonalCoords[1].Add(new BoardCoords(i, boardData.BoardSize.X - 1 - i));
+            }
+
+            return diagonalCoords;
         }
 
         public bool IsOccupied(BoardCoords coords)

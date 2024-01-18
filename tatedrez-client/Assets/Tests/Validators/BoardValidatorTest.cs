@@ -30,7 +30,7 @@ public class BoardValidatorTest
 
         var boardValidator = new BoardValidator();
 
-        var result = boardValidator.HasTickTackToe(board);
+        var result = boardValidator.TryFindTickTackToe(board, out _);
         Assert.AreEqual(true, result);
     }
     
@@ -58,7 +58,7 @@ public class BoardValidatorTest
 
         var boardValidator = new BoardValidator();
 
-        var result = boardValidator.HasTickTackToe(board);
+        var result = boardValidator.TryFindTickTackToe(board, out _);
         Assert.AreEqual(true, result);
     }
     
@@ -83,7 +83,7 @@ public class BoardValidatorTest
 
         var boardValidator = new BoardValidator();
 
-        var result = boardValidator.HasTickTackToe(board);
+        var result = boardValidator.TryFindTickTackToe(board, out _);
         Assert.AreEqual(true, result);
     }
     
@@ -93,7 +93,7 @@ public class BoardValidatorTest
         var board = new BoardService(Helpers.CreateEmptyBoard3by3());
         var boardValidator = new BoardValidator();
 
-        var result = boardValidator.HasTickTackToe(board);
+        var result = boardValidator.TryFindTickTackToe(board, out _);
         
         Assert.AreEqual(false, result);
     }
@@ -128,7 +128,7 @@ public class BoardValidatorTest
 
         var boardValidator = new BoardValidator();
 
-        var result = boardValidator.HasTickTackToe(board);
+        var result = boardValidator.TryFindTickTackToe(board, out _);
         Assert.AreEqual(false, result);
     }
 

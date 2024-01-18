@@ -7,6 +7,7 @@ namespace Tatedrez.ModelServices
     {
         public readonly BoardService BoardService;
         public readonly GameStateService GameStateService;
+        public readonly EndGameService EndGameService;
         private readonly List<PlayerService> PlayerServices = new();
         private readonly GameSessionData data;
 
@@ -17,6 +18,7 @@ namespace Tatedrez.ModelServices
             this.data = data;
             this.BoardService = new BoardService(data.Board);
             this.GameStateService = new GameStateService(data.State);
+            this.EndGameService = new EndGameService(data);
             for (var index = 0; index < data.Players.Count; index++) {
                 var playerData = data.Players[index];
                 this.PlayerServices.Add(new PlayerService(playerData, index));
