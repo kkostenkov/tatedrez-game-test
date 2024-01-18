@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
+using Tatedrez.Validators;
 
 namespace Tatedrez.Rules
 {

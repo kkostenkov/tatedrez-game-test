@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Tatedrez;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
+using Tatedrez.Validators;
 
 public class BoardValidatorTest
 {
@@ -30,8 +31,8 @@ public class BoardValidatorTest
 
         var boardValidator = new BoardValidator();
 
-        var result = boardValidator.TryFindTickTackToe(board, out _);
-        Assert.AreEqual(true, result);
+        var result = boardValidator.TryFindTickTackToe(board);
+        Assert.That(result, Is.EquivalentTo(coordsList));
     }
     
     private static IEnumerable<TestCaseData> VerticalTicTacToes {
@@ -58,8 +59,8 @@ public class BoardValidatorTest
 
         var boardValidator = new BoardValidator();
 
-        var result = boardValidator.TryFindTickTackToe(board, out _);
-        Assert.AreEqual(true, result);
+        var result = boardValidator.TryFindTickTackToe(board);
+        Assert.That(result, Is.EquivalentTo(coordsList));
     }
     
     private static IEnumerable<TestCaseData> DiagonalTicTacToes {
@@ -83,8 +84,8 @@ public class BoardValidatorTest
 
         var boardValidator = new BoardValidator();
 
-        var result = boardValidator.TryFindTickTackToe(board, out _);
-        Assert.AreEqual(true, result);
+        var result = boardValidator.TryFindTickTackToe(board);
+        Assert.That(result, Is.EquivalentTo(coordsList));
     }
     
     [Test]
@@ -93,9 +94,9 @@ public class BoardValidatorTest
         var board = new BoardService(Helpers.CreateEmptyBoard3by3());
         var boardValidator = new BoardValidator();
 
-        var result = boardValidator.TryFindTickTackToe(board, out _);
+        var result = boardValidator.TryFindTickTackToe(board);
         
-        Assert.AreEqual(false, result);
+        Assert.IsNull(result);
     }
     
     private static IEnumerable<TestCaseData> NotTicTacToes {
@@ -128,8 +129,8 @@ public class BoardValidatorTest
 
         var boardValidator = new BoardValidator();
 
-        var result = boardValidator.TryFindTickTackToe(board, out _);
-        Assert.AreEqual(false, result);
+        var result = boardValidator.TryFindTickTackToe(board);
+        Assert.IsNull(result);
     }
 
     [Test]

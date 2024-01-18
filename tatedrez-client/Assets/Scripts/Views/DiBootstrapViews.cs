@@ -1,4 +1,5 @@
-﻿using Tatedrez.Views;
+﻿using Tatedrez.Validators;
+using Tatedrez.Views;
 using UnityEngine;
 
 namespace Tatedrez
@@ -20,9 +21,18 @@ namespace Tatedrez
         private void BootstrapDependencyInjection()
         {
             DI.CreateGameContainer();
+            
+            RegisterValidators();
             DI.Game.Register<PlayerInputManager>().AsSingleton();
             
             DI.Game.Register<GameSessionView>(sessionView);
+        }
+
+        private static void RegisterValidators()
+        {
+            DI.Game.Register<MovementValidator>().AsSingleton();
+            DI.Game.Register<BoardValidator>().AsSingleton();
+            DI.Game.Register<CommandValidator>().AsSingleton();
         }
 
         private void OnApplicationQuit()

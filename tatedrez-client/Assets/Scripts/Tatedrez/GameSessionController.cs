@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
+using Tatedrez.Validators;
 
 namespace Tatedrez
 {
@@ -12,8 +13,7 @@ namespace Tatedrez
         private readonly IGameSessionView gameSessionView;
         private readonly IMoveFetcher input;
         private readonly IActivePlayerIndexListener playerIndexListener;
-        private readonly BoardValidator boardValidator;
-        private readonly MovementValidator movementValidator;
+        private readonly ICommandValidator commandValidator;
         
         private readonly GameSessionDataService sessionDataService;
         private readonly BoardService boardService;
@@ -21,7 +21,7 @@ namespace Tatedrez
         public bool IsSessionRunning => sessionDataService.GameStateService.IsGameActive;
 
         public GameSessionController(GameSessionData sessionData, IGameSessionView gameSessionView, IMoveFetcher input,
-            IActivePlayerIndexListener playerIndexListener)
+            IActivePlayerIndexListener playerIndexListener, ICommandValidator commandValidator)
         {
             this.sessionData = sessionData;
             this.sessionDataService = new GameSessionDataService(sessionData);
@@ -29,8 +29,7 @@ namespace Tatedrez
             this.gameSessionView = gameSessionView;
             this.input = input;
             this.playerIndexListener = playerIndexListener;
-            this.boardValidator = new BoardValidator();
-            this.movementValidator = new MovementValidator();
+            this.commandValidator = commandValidator;
         }
 
         public Task Turn()
@@ -92,7 +91,7 @@ namespace Tatedrez
                 return true;
             }
             
-            if (!this.boardValidator.IsValidMove(this.boardService, move)) {
+            if (!this.commandValidator.IsValidMove(this.boardService, move)) {
                 return true;
             }
             
@@ -131,7 +130,7 @@ namespace Tatedrez
                 return true;
             }
             
-            if (!this.movementValidator.IsValidMove(this.boardService, move)) {
+            if (!this.commandValidator.IsValidMove(this.boardService, move)) {
                 return true;
             }
             
@@ -156,9 +155,10 @@ namespace Tatedrez
 
         private void TryUpdateGameStage()
         {
-            if (this.boardValidator.TryFindTickTackToe(boardService, out var endGameDetails)) {
+            var ticTacToe = this.commandValidator.TryFindTickTackToe(boardService);
+            if (ticTacToe != null) {
                 this.sessionData.State.Stage = Stage.End;
-                this.sessionData.EndGameDetails = endGameDetails;
+                this.sessionData.EndGameDetails = this.sessionDataService.EndGameService.ComposeEndgameDetails(ticTacToe);
             }
             if (this.sessionData.State.Stage == Stage.Placement) {
                 foreach (var player in this.sessionData.Players) {

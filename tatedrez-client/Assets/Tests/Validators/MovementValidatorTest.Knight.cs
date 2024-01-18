@@ -4,6 +4,7 @@ using Tatedrez;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 using Tatedrez.Tests;
+using Tatedrez.Validators;
 
 namespace MovementValidatorTests
 {

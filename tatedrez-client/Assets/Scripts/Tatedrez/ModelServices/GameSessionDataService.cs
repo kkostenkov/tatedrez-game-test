@@ -18,7 +18,7 @@ namespace Tatedrez.ModelServices
             this.data = data;
             this.BoardService = new BoardService(data.Board);
             this.GameStateService = new GameStateService(data.State);
-            this.EndGameService = new EndGameService(data);
+            this.EndGameService = new EndGameService(BoardService, data);
             for (var index = 0; index < data.Players.Count; index++) {
                 var playerData = data.Players[index];
                 this.PlayerServices.Add(new PlayerService(playerData, index));

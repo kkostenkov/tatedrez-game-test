@@ -4,7 +4,7 @@ using Tatedrez.Models;
 using Tatedrez.ModelServices;
 using Tatedrez.Rules;
 
-namespace Tatedrez
+namespace Tatedrez.Validators
 {
     public class MovementValidator
     {

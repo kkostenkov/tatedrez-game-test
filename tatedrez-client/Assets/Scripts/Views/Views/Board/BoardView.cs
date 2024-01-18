@@ -71,7 +71,7 @@ namespace Tatedrez.Views
         private void OnSquareClicked(SquareView view)
         {
             if (clicksListener != null) {
-                this.clicksListener.OnSquareClicked(view);
+                this.clicksListener.OnSquareClicked(view, this);
             }
 
             if (this.squareSelectionTaskSource == null) {

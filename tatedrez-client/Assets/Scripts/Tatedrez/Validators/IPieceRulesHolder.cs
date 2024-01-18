@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 
-namespace Tatedrez
+namespace Tatedrez.Validators
 {
     public interface IPieceRulesHolder : IPieceMovesGenerator, IPieceMovesValidator
     {

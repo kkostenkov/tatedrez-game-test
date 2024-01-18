@@ -28,7 +28,7 @@ namespace Tatedrez.Input
             }
 
             var selectedPiece = this.playerView.SelectedPiece;
-            Debug.Log($"Placement move done: {this.playerView.SelectedPiece.PieceType} to {toCoords}");
+            Debug.Log($"Placement move command: {this.playerView.SelectedPiece.PieceType} to {toCoords}");
             playerView.DisablePieceSelection();
 
             var move = new PlacementMove() {
@@ -42,7 +42,7 @@ namespace Tatedrez.Input
         public async Task<MovementMove> GetMovePieceMovement()
         {
             var move = await boardView.GetMove(player.Index);
-            Debug.Log($"Movemoent move done: {move.PieceGuid}" +
+            Debug.Log($"Movemoent move command: {move.PieceGuid}" +
                       $"from {move.From} to {move.To}");
             return move;
         }

@@ -23,7 +23,7 @@ namespace MovementValidatorTests
                 From = rookCoords,
                 To = destination,
             };
-            var validator = new Tatedrez.MovementValidator();
+            var validator = new Tatedrez.Validators.MovementValidator();
 
             var result = validator.IsValidMove(board, move);
 
@@ -44,7 +44,7 @@ namespace MovementValidatorTests
                 From = rookCoords,
                 To = destination,
             };
-            var validator = new Tatedrez.MovementValidator();
+            var validator = new Tatedrez.Validators.MovementValidator();
 
             var result = validator.IsValidMove(board, move);
 
@@ -76,7 +76,7 @@ namespace MovementValidatorTests
                 From = rookCoords,
                 To = destination,
             };
-            var validator = new Tatedrez.MovementValidator();
+            var validator = new Tatedrez.Validators.MovementValidator();
 
             var result = validator.IsValidMove(board, move);
 
