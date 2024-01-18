@@ -27,5 +27,25 @@ namespace Tatedrez.Views
             seq.Append(drawingSeq);
             return seq.AsyncWaitForCompletion();
         }
+
+        public static Task AnimatePieceMovement(Transform pieceGraphicsTransform, Vector3 origin, Vector3 destination,
+            Transform tempParent)
+        {
+            var originParent = pieceGraphicsTransform.parent;
+            var seq = DOTween.Sequence();
+            seq.OnStart(() => {
+                pieceGraphicsTransform.SetParent(tempParent);
+            });
+            var pickUpPiece = pieceGraphicsTransform.DOScale(new Vector3(1.5f, 1.5f, 1.5f), 0.1f);
+            var movePiece = pieceGraphicsTransform.DOMove(destination, 0.2f);
+            var putDownPiece = pieceGraphicsTransform.DOScale(Vector3.one, 0.1f);
+            seq.Append(pickUpPiece).Append(movePiece).Append(putDownPiece);
+            seq.OnComplete(
+                () => {
+                    pieceGraphicsTransform.SetParent(originParent);
+                    pieceGraphicsTransform.position = origin;
+                });
+            return seq.AsyncWaitForCompletion();
+        }
     }
 }

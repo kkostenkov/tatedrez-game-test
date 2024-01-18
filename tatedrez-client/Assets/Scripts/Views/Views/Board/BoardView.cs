@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Threading.Tasks;
-using DG.Tweening;
 using Tatedrez.Audio;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
@@ -139,23 +138,9 @@ namespace Tatedrez.Views
         public async Task AnimatePieceMovement(MovementMove move, string pieceType)
         {
             var pieceGraphicsTransform = this.squares[ToIndex(move.From)].GetPieceGraphicsTransform();
-            var originParent = pieceGraphicsTransform.parent;
             Vector3 origin = GetWorldCoords(move.From);
             Vector3 destination = GetWorldCoords(move.To);
-            var seq = DOTween.Sequence();
-            seq.OnStart(() => {
-                pieceGraphicsTransform.SetParent(transitParent);
-            });
-            var pickUpPiece = pieceGraphicsTransform.DOScale(new Vector3(1.5f, 1.5f, 1.5f), 0.1f);
-            var movePiece = pieceGraphicsTransform.DOMove(destination, 0.2f);
-            var putDownPiece = pieceGraphicsTransform.DOScale(Vector3.one, 0.1f);
-            seq.Append(pickUpPiece).Append(movePiece).Append(putDownPiece);
-            seq.OnComplete(
-                () => {
-                    pieceGraphicsTransform.SetParent(originParent);
-                    pieceGraphicsTransform.position = origin;
-                });
-            await seq.AsyncWaitForCompletion();
+            await GameViewAnimator.AnimatePieceMovement(pieceGraphicsTransform, origin, destination, this.transitParent);
             var piece = await ErasePiece(move.From);
             await DrawPiece(piece, move.To);
         }
