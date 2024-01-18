@@ -6,7 +6,8 @@
         "Tatedrez.Game",
         "Unity.TextMeshPro",
         "DOTween.Modules",
-        "TinyIoC"
+        "TinyIoC",
+        "UnityUIExtensions"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

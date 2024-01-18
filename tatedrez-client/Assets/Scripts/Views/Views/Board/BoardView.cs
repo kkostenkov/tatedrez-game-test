@@ -85,11 +85,16 @@ namespace Tatedrez.Views
             selectionSource.SetResult(coords);
         }
 
-        private Vector3 GetWorldCoords(BoardCoords coords)
+        public Vector3 GetWorldCoords(BoardCoords coords)
         {
             var index = ToIndex(coords);
             var square = squares[index];
             return square.transform.position;
+        }
+        
+        public Vector3 GetCanvasCoords(BoardCoords coords)
+        {
+            return GetWorldCoords(coords) / ScreenScaleHelper.ScreenScaleFactor;
         }
 
         public Task<Piece> ErasePiece(BoardCoords from)
