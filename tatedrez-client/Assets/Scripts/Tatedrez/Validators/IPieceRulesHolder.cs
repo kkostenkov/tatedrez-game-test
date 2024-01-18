@@ -16,6 +16,7 @@ namespace Tatedrez.Validators
     public interface IPieceMovesGenerator
     {
         IEnumerable<BoardCoords> GetLegitMovementDestinations(BoardCoords position, IBoardInfoService board);
-        bool HasLegitMoves(BoardCoords position, IBoardInfoService board);
+        IEnumerable<BoardCoords> GetPossibleMovementDestinations(BoardCoords position, IBoardInfoService board);
+        bool HasMoves(BoardCoords position, IBoardInfoService board);
     }
 }

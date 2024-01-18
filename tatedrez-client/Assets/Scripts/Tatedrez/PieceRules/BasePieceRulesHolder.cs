@@ -19,7 +19,7 @@ namespace Tatedrez.Rules
 
         protected abstract bool ValidatePieceMove(MovementMove move, IBoardInfoService board);
 
-        protected bool HasLegitMoves(BoardCoords position, int range, IBoardInfoService board)
+        protected bool HasMoves(BoardCoords position, int range, IBoardInfoService board)
         {
             var boardMovesEnumerator = AnonymousMovesGenerator.GetBoardMoves(position, MoveTemplates, range, board);
             foreach (var moveCoords in boardMovesEnumerator) {
@@ -33,6 +33,16 @@ namespace Tatedrez.Rules
         public IEnumerable<BoardCoords> GetLegitMovementDestinations(BoardCoords position, IBoardInfoService board)
         {
             return AnonymousMovesGenerator.GetBoardMoves(position, MoveTemplates, board.GetSize().X, board);
+        }
+        
+        public IEnumerable<BoardCoords> GetPossibleMovementDestinations(BoardCoords position, IBoardInfoService board)
+        {
+            var legitBoardMoves = AnonymousMovesGenerator.GetBoardMoves(position, MoveTemplates, board.GetSize().X, board);
+            foreach (var moveCoords in legitBoardMoves) {
+                if (ValidateMove(new MovementMove() { From = position, To = moveCoords }, board)) {
+                    yield return moveCoords;
+                }
+            }
         }
     }
 }

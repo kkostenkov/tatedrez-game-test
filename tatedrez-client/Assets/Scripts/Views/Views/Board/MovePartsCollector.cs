@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Tatedrez.Models;
+using Tatedrez.ModelServices;
 using Tatedrez.Validators;
 
 namespace Tatedrez.Views
@@ -20,11 +21,13 @@ namespace Tatedrez.Views
         private BoardCoords destinationCoords = BoardCoords.Invalid;
         private SquareView selectedOriginSquare;
         private BoardView boardView;
-        private readonly MovementValidator movesGenerator;
+        private readonly IMovesGenerator movesGenerator;
+        private readonly IBoardInfoService boarService;
 
         public MovePartsCollector()
         {
-            this.movesGenerator = DI.Game.Resolve<MovementValidator>();
+            this.movesGenerator = DI.Game.Resolve<IMovesGenerator>();
+            this.boarService = DI.Game.Resolve<IBoardInfoService>();
         }
 
         public void Dispose()
@@ -44,8 +47,11 @@ namespace Tatedrez.Views
 
         public void OnSquareClicked(SquareView view, BoardView boardView)
         {
+            boardView.DisableSquaresHighlight();
             if (TryRecordMovingPiece(view)) {
                 // highlight available moves
+                var coords = movesGenerator.GetPossibleMovementDestinations(view.Piece.PieceType, view.Coords, boarService);
+                boardView.SetHighlighted(coords);
             }
             else {
                 TryRecordDestinationCoords(view.Coords);
@@ -68,9 +74,6 @@ namespace Tatedrez.Views
             }
 
             this.selectedPiece = piece;
-            if (selectedOriginSquare) {
-                selectedOriginSquare.SetHighlightActive(false);    
-            }
             this.selectedOriginSquare = view;
             selectedOriginSquare.SetHighlightActive(true);
             this.originCoords = view.Coords;

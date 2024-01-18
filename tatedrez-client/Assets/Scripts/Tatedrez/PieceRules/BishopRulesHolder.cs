@@ -55,10 +55,10 @@ namespace Tatedrez.Rules
             new BoardCoords(-1, -1),
         };
         
-        public bool HasLegitMoves(BoardCoords position, IBoardInfoService board)
+        public bool HasMoves(BoardCoords position, IBoardInfoService board)
         {
             var maxTemplateMovementRange = board.GetSize().X;
-            return base.HasLegitMoves(position, maxTemplateMovementRange, board);
+            return base.HasMoves(position, maxTemplateMovementRange, board);
         }
     }
 }

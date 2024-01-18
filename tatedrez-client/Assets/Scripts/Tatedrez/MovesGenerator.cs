@@ -32,12 +32,17 @@ namespace Tatedrez
         
         public bool HasMoves(Piece piece, BoardCoords position, IBoardInfoService board)
         {
-            return this.pieceRules.GetPieceRules(piece.PieceType).HasLegitMoves(position, board);
+            return this.pieceRules.GetPieceRules(piece.PieceType).HasMoves(position, board);
         }
         
         public IEnumerable<BoardCoords> GetLegitMovementDestinations(string pieceType, BoardCoords position, IBoardInfoService board)
         {
             return this.pieceRules.GetPieceRules(pieceType).GetLegitMovementDestinations(position, board);
+        }
+        
+        public IEnumerable<BoardCoords> GetPossibleMovementDestinations(string pieceType, BoardCoords position, IBoardInfoService board)
+        {
+            return this.pieceRules.GetPieceRules(pieceType).GetPossibleMovementDestinations(position, board);
         }
     }
 }

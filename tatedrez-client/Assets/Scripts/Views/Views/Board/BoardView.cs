@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tatedrez.Audio;
@@ -133,6 +134,22 @@ namespace Tatedrez.Views
             await GameViewAnimator.AnimatePieceMovement(pieceGraphicsTransform, origin, destination, this.transitParent);
             var piece = await ErasePiece(move.From);
             await DrawPiece(piece, move.To);
+        }
+
+        public void SetHighlighted(IEnumerable<BoardCoords> coords)
+        {
+            foreach (var coord in coords) {
+                var index = ToIndex(coord);
+                var square = this.squares[index];
+                square.SetHighlightActive(true);
+            }
+        }
+
+        public void DisableSquaresHighlight()
+        {
+            foreach (var squareView in this.squares) {
+                squareView.SetHighlightActive(false);
+            }
         }
     }
 }
