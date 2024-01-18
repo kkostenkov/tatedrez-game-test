@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Tatedrez;
 using Tatedrez.Models;
+using Tatedrez.ModelServices;
 
 public static class Helpers
 {
@@ -55,4 +56,13 @@ public static class Helpers
         });
         return list;
     }
+
+    public static GameSessionDataService CreateDataService()
+    {
+        var board = new BoardService();
+        var gameState = new GameStateService();
+        var endGame = new EndGameService(board);
+        return new GameSessionDataService(board, gameState, endGame);
+    }
+    
 }

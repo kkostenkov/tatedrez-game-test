@@ -5,7 +5,7 @@ using Tatedrez.Rules;
 
 namespace Tatedrez
 {
-    public class MovesGenerator
+    public class MovesGenerator : IMovesGenerator
     {
         private readonly IBoardInfoService boardService;
         private readonly PieceRulesContainer pieceRules;

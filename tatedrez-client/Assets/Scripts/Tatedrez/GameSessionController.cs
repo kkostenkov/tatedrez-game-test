@@ -23,10 +23,10 @@ namespace Tatedrez
         public bool IsSessionRunning => sessionDataService.GameStateService.IsGameActive;
 
         public GameSessionController(GameSessionData sessionData, IGameSessionView gameSessionView, IMoveFetcher input,
-            IActivePlayerIndexListener playerIndexListener, ICommandValidator commandValidator)
+            IActivePlayerIndexListener playerIndexListener, ICommandValidator commandValidator, GameSessionDataService dataService)
         {
             this.sessionData = sessionData;
-            var dataService = new GameSessionDataService();
+            this.sessionDataService = dataService;
             dataService.SetData(sessionData);
             this.sessionDataService = dataService;
             

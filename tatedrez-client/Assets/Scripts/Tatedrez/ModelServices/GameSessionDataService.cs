@@ -13,11 +13,11 @@ namespace Tatedrez.ModelServices
 
         public int CurrentTurnNumber => this.data.CurrentTurn;
 
-        public GameSessionDataService()
+        public GameSessionDataService(BoardService boardService, GameStateService gameStateService, EndGameService endGameService)
         {
-            BoardService = new BoardService();
-            GameStateService = new GameStateService();
-            EndGameService = new EndGameService(BoardService);
+            BoardService = boardService;
+            GameStateService = gameStateService;
+            EndGameService = endGameService;
         }
 
         public void SetData(GameSessionData sessionData)

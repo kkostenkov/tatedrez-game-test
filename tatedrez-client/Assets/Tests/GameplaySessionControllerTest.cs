@@ -36,7 +36,8 @@ public class GameplaySessionControllerTest
             Players = new List<Player>() { new Player(), new Player() },
             State = new GameState() {Stage = Stage.Placement },
         };
-        var controller = new GameSessionController(sessionData, view, input, indexListener, new RealCommandValidator());
+        var controller = new GameSessionController(sessionData, view, input, indexListener, new RealCommandValidator(),
+            Helpers.CreateDataService());
 
         await controller.Turn();
         return await Task.FromResult(sessionData.CurrentTurn);
@@ -53,7 +54,8 @@ public class GameplaySessionControllerTest
             Players = new List<Player>() { new Player(), new Player() },
             State = new GameState() { Stage = Stage.Placement },
         };
-        var controller = new GameSessionController(sessionData, view, input, indexListener, new RealCommandValidator());
+        var controller = new GameSessionController(sessionData, view, input, indexListener, new RealCommandValidator(),
+            Helpers.CreateDataService());
 
         await controller.Turn();
         return await Task.FromResult(sessionData.CurrentTurn);
@@ -73,7 +75,8 @@ public class GameplaySessionControllerTest
             PlayerIndex = 0,
             To = occupiedCoords 
         });
-        var controller = new GameSessionController(sessionData, view, input, indexListener, commandValidator);
+        var controller = new GameSessionController(sessionData, view, input, indexListener, commandValidator,
+            Helpers.CreateDataService());
 
         await controller.Turn();
         
@@ -89,7 +92,8 @@ public class GameplaySessionControllerTest
         input.GetMovePiecePlacement().Returns(new PlacementMove() { 
             PlayerIndex = 0,
         });
-        var controller = new GameSessionController(sessionData, view, input, indexListener, commandValidator);
+        var controller = new GameSessionController(sessionData, view, input, indexListener, commandValidator,
+            Helpers.CreateDataService());
 
         await controller.Turn();
         
@@ -110,7 +114,8 @@ public class GameplaySessionControllerTest
             PlayerIndex = 0,
             To = placementCoords,
         });
-        var controller = new GameSessionController(sessionData, view, input, indexListener, new RealCommandValidator());
+        var controller = new GameSessionController(sessionData, view, input, indexListener, new RealCommandValidator(),
+            Helpers.CreateDataService());
         
         await controller.Turn();
         
@@ -132,7 +137,8 @@ public class GameplaySessionControllerTest
             PlayerIndex = 0,
             To = placementCoords,
         });
-        var controller = new GameSessionController(sessionData, view, input, indexListener, new RealCommandValidator());
+        var controller = new GameSessionController(sessionData, view, input, indexListener, new RealCommandValidator(),
+            Helpers.CreateDataService());
         
         await controller.Turn();
 
@@ -168,7 +174,8 @@ public class GameplaySessionControllerTest
             To = placementCoords,
         };
         input.GetMovePiecePlacement().Returns(firstPlayerMove, secondPlayerMove);
-        var controller = new GameSessionController(sessionData, view, input, indexListener, new RealCommandValidator());
+        var controller = new GameSessionController(sessionData, view, input, indexListener, new RealCommandValidator(),
+            Helpers.CreateDataService());
         
         await controller.Turn();
         await controller.Turn();
@@ -192,7 +199,8 @@ public class GameplaySessionControllerTest
             PlayerIndex = 0,
             To = new BoardCoords(2, 0),
         });
-        var controller = new GameSessionController(sessionData, view, input, indexListener, new RealCommandValidator());
+        var controller = new GameSessionController(sessionData, view, input, indexListener, new RealCommandValidator(),
+            Helpers.CreateDataService());
         
         await controller.Turn();
         
