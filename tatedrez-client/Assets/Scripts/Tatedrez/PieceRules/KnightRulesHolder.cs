@@ -1,6 +1,7 @@
 using System;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
+using Tatedrez.Validators;
 
 namespace Tatedrez.Rules
 {
@@ -28,10 +29,10 @@ namespace Tatedrez.Rules
             new BoardCoords(-1, -2),
         };
 
-        public bool HasLegitMoves(BoardCoords position, IBoardInfoService board)
+        public bool HasMoves(BoardCoords position, IBoardInfoService board)
         {
             var maxTemplateMovementRange = 1;
-            return base.HasLegitMoves(position, maxTemplateMovementRange, board);
+            return base.HasMoves(position, maxTemplateMovementRange, board);
         }
     }
 }

@@ -1,4 +1,6 @@
 using System.Threading.Tasks;
+using Tatedrez.ModelServices;
+using Tatedrez.Validators;
 using Tatedrez.Views;
 using UnityEngine;
 
@@ -26,8 +28,11 @@ namespace Tatedrez
             var sessionView = DI.Game.Resolve<GameSessionView>();
             sessionView.BindLocalInputForPlayer(0, inputManager);
             sessionView.BindLocalInputForPlayer(1, inputManager);
-
-            var gameSessionController = new GameSessionController(data, sessionView, inputManager, inputManager);
+            
+            var commandValidator = DI.Game.Resolve<CommandValidator>();
+            var sessionDataService = DI.Game.Resolve<GameSessionDataService>();
+            var gameSessionController = new GameSessionController(data, sessionView, inputManager, inputManager, 
+                commandValidator, sessionDataService);
             await gameSessionController.BuildBoardAsync();
             return gameSessionController;
         }

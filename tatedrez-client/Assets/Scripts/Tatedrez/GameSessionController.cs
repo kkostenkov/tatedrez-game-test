@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
+using Tatedrez.Rules;
+using Tatedrez.Validators;
 
 namespace Tatedrez
 {
@@ -12,25 +14,28 @@ namespace Tatedrez
         private readonly IGameSessionView gameSessionView;
         private readonly IMoveFetcher input;
         private readonly IActivePlayerIndexListener playerIndexListener;
-        private readonly BoardValidator boardValidator;
-        private readonly MovementValidator movementValidator;
+        private readonly ICommandValidator commandValidator;
         
-        private readonly GameSessionDataService sessionDataService;
+        private readonly IGameSessionDataService sessionDataService;
         private readonly BoardService boardService;
+        private readonly MovesGenerator movesGenerator;
 
         public bool IsSessionRunning => sessionDataService.GameStateService.IsGameActive;
 
         public GameSessionController(GameSessionData sessionData, IGameSessionView gameSessionView, IMoveFetcher input,
-            IActivePlayerIndexListener playerIndexListener)
+            IActivePlayerIndexListener playerIndexListener, ICommandValidator commandValidator, GameSessionDataService dataService)
         {
             this.sessionData = sessionData;
-            this.sessionDataService = new GameSessionDataService(sessionData);
+            this.sessionDataService = dataService;
+            dataService.SetData(sessionData);
+            this.sessionDataService = dataService;
+            
             this.boardService = this.sessionDataService.BoardService;
             this.gameSessionView = gameSessionView;
             this.input = input;
             this.playerIndexListener = playerIndexListener;
-            this.boardValidator = new BoardValidator();
-            this.movementValidator = new MovementValidator();
+            this.commandValidator = commandValidator;
+            this.movesGenerator = new MovesGenerator(this.boardService, new PieceRulesContainer());
         }
 
         public Task Turn()
@@ -92,7 +97,7 @@ namespace Tatedrez
                 return true;
             }
             
-            if (!this.boardValidator.IsValidMove(this.boardService, move)) {
+            if (!this.commandValidator.IsValidMove(this.boardService, move)) {
                 return true;
             }
             
@@ -131,7 +136,7 @@ namespace Tatedrez
                 return true;
             }
             
-            if (!this.movementValidator.IsValidMove(this.boardService, move)) {
+            if (!this.commandValidator.IsValidMove(this.boardService, move)) {
                 return true;
             }
             
@@ -141,7 +146,7 @@ namespace Tatedrez
         private bool PlayerHasMoves()
         {
             var activePlayerIndex = this.sessionDataService.GetCurrentActivePlayerIndex();
-            return this.boardService.PlayerHasMoves(activePlayerIndex);
+            return this.movesGenerator.PlayerHasMoves(activePlayerIndex);
         }
 
         private bool IsMoveOfCurrentPlayer(Move move)
@@ -156,9 +161,10 @@ namespace Tatedrez
 
         private void TryUpdateGameStage()
         {
-            if (this.boardValidator.TryFindTickTackToe(boardService, out var endGameDetails)) {
+            var ticTacToe = this.commandValidator.TryFindTickTackToe(boardService);
+            if (ticTacToe != null) {
                 this.sessionData.State.Stage = Stage.End;
-                this.sessionData.EndGameDetails = endGameDetails;
+                this.sessionData.EndGameDetails = this.sessionDataService.EndGameService.ComposeEndgameDetails(ticTacToe);
             }
             if (this.sessionData.State.Stage == Stage.Placement) {
                 foreach (var player in this.sessionData.Players) {

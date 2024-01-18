@@ -3,50 +3,27 @@ using System.Linq;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 
-namespace Tatedrez
+namespace Tatedrez.Validators
 {
-    public class BoardValidator
+    public class BoardValidator : IPlacementCommandValidator, ITicTacToeFinder
     {
-        private readonly List<BoardCoords> diagonalOne = new() {
-            new BoardCoords(0, 0), new BoardCoords(1, 1), new BoardCoords(2, 2)
-        };
-
-        private readonly List<BoardCoords> diagonalTwo = new() {
-            new BoardCoords(0, 2), new BoardCoords(1, 1), new BoardCoords(2, 0)
-        };
-        
         private delegate bool TicTacToeChecker(IBoardInfoService board, ref List<BoardCoords> winSequence);
-        
-        public bool TryFindTickTackToe(IBoardInfoService board, out EndGameDetails endGameDetails)
+
+        public List<BoardCoords> TryFindTickTackToe(IBoardInfoService board)
         {
             List<TicTacToeChecker> checks = new List<TicTacToeChecker>() {
                 HasVerticalTicTacToe,
                 HasHorizontalTicTacToe,
                 HasDiagonalTicTacToe
             };
-            
+
             var winningCoords = new List<BoardCoords>();
             var hasTicTacToe = checks.Any(check => check.Invoke(board, ref winningCoords));
             if (hasTicTacToe) {
-                endGameDetails = ComposeEndgameDetails(board, winningCoords);
-                return true;
+                return winningCoords;
             }
             
-            endGameDetails = null;
-            return false;
-        }
-
-        private static EndGameDetails ComposeEndgameDetails(IBoardInfoService board, List<BoardCoords> winningCoords)
-        {
-            var firstPiece = board.PeekPiece(winningCoords[0]);
-            var endGameDetails = new EndGameDetails() {
-                WinnerId = firstPiece.Owner,
-            };
-            foreach (var bc in winningCoords) {
-                endGameDetails.WinnerCords.Add(bc);
-            }
-
-            return endGameDetails;
+            return null;
         }
 
         private static bool HasVerticalTicTacToe(IBoardInfoService board, ref List<BoardCoords> winningCoords)
@@ -60,10 +37,11 @@ namespace Tatedrez
                     winningCoords.Clear();
                     continue;
                 }
+
                 var firstPieceOwner = board.PeekPiece(coords).Owner;
-                
+
                 winningCoords.Add(coords);
-                
+
                 for (int y = 1; y < size.Y; y++) {
                     coords = new BoardCoords(x, y);
                     var piece = board.PeekPiece(coords);
@@ -71,8 +49,10 @@ namespace Tatedrez
                         winningCoords.Clear();
                         break;
                     }
+
                     winningCoords.Add(coords);
                 }
+
                 if (winningCoords.Count == board.GetSize().Y) {
                     break;
                 }
@@ -93,10 +73,11 @@ namespace Tatedrez
                     winningCoords.Clear();
                     continue;
                 }
+
                 var firstPieceOwner = firstPiece.Owner;
-                
+
                 winningCoords.Add(coords);
-                
+
                 for (int x = 1; x < size.X; x++) {
                     coords = new BoardCoords(x, y);
                     var piece = board.PeekPiece(coords);
@@ -104,6 +85,7 @@ namespace Tatedrez
                         winningCoords.Clear();
                         break;
                     }
+
                     winningCoords.Add(coords);
                 }
 
@@ -118,7 +100,7 @@ namespace Tatedrez
         private bool HasDiagonalTicTacToe(IBoardInfoService board, ref List<BoardCoords> winningCoords)
         {
             winningCoords.Clear();
-            
+
             var diagonals = board.Diagonals;
             if (diagonals == null) {
                 return false;
@@ -127,19 +109,20 @@ namespace Tatedrez
             foreach (var diagonal in diagonals) {
                 if (CheckDiagonal(diagonal, board, out winningCoords)) {
                     return true;
-                }    
+                }
             }
-            
+
             return false;
         }
 
-        private bool CheckDiagonal(List<BoardCoords> diagonal, IBoardInfoService board, out List<BoardCoords> winningCoords)
+        private bool CheckDiagonal(List<BoardCoords> diagonal, IBoardInfoService board,
+            out List<BoardCoords> winningCoords)
         {
             winningCoords = null;
             if (diagonal == null || diagonal.Count == 0) {
                 return false;
             }
-            
+
             var hasTicTacToe = diagonal.All(coord =>
                 board.PeekPiece(coord) != null
                 && (board.PeekPiece(coord).Owner == board.PeekPiece(diagonal[0]).Owner));
@@ -155,5 +138,10 @@ namespace Tatedrez
         {
             return !board.IsOccupied(move.To);
         }
+    }
+
+    public interface ITicTacToeFinder
+    {
+        List<BoardCoords> TryFindTickTackToe(IBoardInfoService board);
     }
 }

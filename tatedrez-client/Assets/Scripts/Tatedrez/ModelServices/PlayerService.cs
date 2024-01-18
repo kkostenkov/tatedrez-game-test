@@ -7,15 +7,19 @@ namespace Tatedrez.ModelServices
 {
     public class PlayerService
     {
-        private readonly Player playerData;
+        private Player playerData;
         private readonly int playerIndex;
 
         public int Index => this.playerIndex;
 
-        public PlayerService(Player playerData, int playerIndex)
+        public PlayerService(int playerIndex)
+        {
+            this.playerIndex = playerIndex;
+        }
+
+        public void SetData(Player playerData)
         {
             this.playerData = playerData;
-            this.playerIndex = playerIndex;
         }
 
         public string GetName()
@@ -27,7 +31,7 @@ namespace Tatedrez.ModelServices
         {
             return this.playerData.UnusedPieces;
         }
-        
+
         public Piece DropPiece(Guid guidToDrop)
         {
             var pieceToDrop = playerData.UnusedPieces.FirstOrDefault(p => p.Guid == guidToDrop);
