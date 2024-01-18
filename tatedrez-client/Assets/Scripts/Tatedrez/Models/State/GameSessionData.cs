@@ -8,5 +8,6 @@ namespace Tatedrez.Models
         public GameState State = new();
         public List<Player> Players = new(); // color is index % 2
         public int CurrentTurn;
+        public EndGameDetails EndGameDetails = new();
     }
 }

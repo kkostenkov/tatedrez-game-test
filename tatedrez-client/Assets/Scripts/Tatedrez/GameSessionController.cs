@@ -158,6 +158,7 @@ namespace Tatedrez
         {
             if (this.boardValidator.TryFindTickTackToe(boardService, out var endGameDetails)) {
                 this.sessionData.State.Stage = Stage.End;
+                this.sessionData.EndGameDetails = endGameDetails;
             }
             if (this.sessionData.State.Stage == Stage.Placement) {
                 foreach (var player in this.sessionData.Players) {

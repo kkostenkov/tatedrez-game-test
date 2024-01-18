@@ -42,8 +42,8 @@ namespace Tatedrez
             var endGameDetails = new EndGameDetails() {
                 WinnerId = firstPiece.Owner,
             };
-            for (var index = 0; index < winningCoords.Count; index++) {
-                endGameDetails.WinnerCords[index] = winningCoords[index];
+            foreach (var bc in winningCoords) {
+                endGameDetails.WinnerCords.Add(bc);
             }
 
             return endGameDetails;
