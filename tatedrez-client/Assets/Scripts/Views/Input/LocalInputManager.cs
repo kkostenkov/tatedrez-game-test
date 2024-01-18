@@ -41,10 +41,19 @@ namespace Tatedrez.Input
 
         public async Task<MovementMove> GetMovePieceMovement()
         {
-            var move = await boardView.GetMove(player.Index);
+            var move = await GetMove(player.Index);
             Debug.Log($"Movemoent move command: {move.PieceGuid}" +
                       $"from {move.From} to {move.To}");
             return move;
+        }
+        
+        private async Task<MovementMove> GetMove(int playerIndex)
+        {
+            using MovePartsCollector moveCollector = new MovePartsCollector();
+            var task = moveCollector.WaitForMove(playerIndex, this.boardView);
+            var result = await task;
+
+            return result;
         }
     }
 }

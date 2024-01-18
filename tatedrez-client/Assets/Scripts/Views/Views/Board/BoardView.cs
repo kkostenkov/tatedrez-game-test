@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Tatedrez.Audio;
@@ -15,9 +16,10 @@ namespace Tatedrez.Views
         [SerializeField]
         private Transform transitParent;
 
+        public event Action<SquareView, BoardView> SquareClicked;
+
         private BoardCoords size = BoardCoords.Invalid;
         private TaskCompletionSource<BoardCoords> squareSelectionTaskSource;
-        private ISquareClicksListener clicksListener;
         private IPieceSoundPlayer pieceSoundPlayer;
 
         public void Start()
@@ -70,10 +72,8 @@ namespace Tatedrez.Views
 
         private void OnSquareClicked(SquareView view)
         {
-            if (clicksListener != null) {
-                this.clicksListener.OnSquareClicked(view, this);
-            }
-
+            this.SquareClicked?.Invoke(view, this);
+            
             if (this.squareSelectionTaskSource == null) {
                 return;
             }
@@ -112,16 +112,6 @@ namespace Tatedrez.Views
             square.AssignPiece(piece);
             pieceSoundPlayer?.Play();
             return Task.CompletedTask;
-        }
-
-        public async Task<MovementMove> GetMove(int playerIndex)
-        {
-            var moveCollector = new MovePartsCollector();
-            var task = moveCollector.WaitForMove(playerIndex);
-            this.clicksListener = moveCollector;
-            var result = await task;
-            this.clicksListener = null;
-            return result;
         }
 
         public Task FlashRed(BoardCoords coords)

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Tatedrez.Models;
 
@@ -8,7 +9,7 @@ namespace Tatedrez.Views
         void OnSquareClicked(SquareView view, BoardView boardView);
     }
 
-    internal class MovePartsCollector : ISquareClicksListener
+    internal class MovePartsCollector : ISquareClicksListener, IDisposable
     {
         private int playerIndexToRecord = -1;
         private TaskCompletionSource<MovementMove> completionSource;
@@ -17,9 +18,18 @@ namespace Tatedrez.Views
         private BoardCoords originCoords = BoardCoords.Invalid;
         private BoardCoords destinationCoords = BoardCoords.Invalid;
         private SquareView selectedOriginSquare;
+        private BoardView boardView;
 
-        public Task<MovementMove> WaitForMove(int playerIndex)
+        public void Dispose()
         {
+            this.boardView.SquareClicked -= OnSquareClicked;
+            this.boardView = null;
+        }
+
+        public Task<MovementMove> WaitForMove(int playerIndex, BoardView boardView)
+        {
+            this.boardView = boardView;
+            this.boardView.SquareClicked += OnSquareClicked;
             playerIndexToRecord = playerIndex;
             this.completionSource = new TaskCompletionSource<MovementMove>();
             return this.completionSource.Task;
