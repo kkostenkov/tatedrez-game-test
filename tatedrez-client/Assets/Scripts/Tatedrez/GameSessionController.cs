@@ -62,7 +62,7 @@ namespace Tatedrez
         public Task BuildBoardAsync()
         {
             var tasks = new List<Task> {
-                this.gameSessionView.Build(this.sessionDataService, this.inputManager),
+                this.gameSessionView.Build(this.sessionDataService),
                 this.gameSessionView.ShowTurn(this.sessionDataService.GetCurrentActivePlayerIndex())
             };
             return Task.WhenAll(tasks);

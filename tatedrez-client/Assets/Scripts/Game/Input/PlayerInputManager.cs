@@ -25,14 +25,19 @@ namespace Tatedrez.Input
             this.playerIndexToListenForMoves = playerIndex;
         }
    
-        public Task<PlacementMove> GetMovePiecePlacement()
+        public async Task<PlacementMove> GetMovePiecePlacement()
         {
-            return GetCurrrentInputSource().GetMovePiecePlacement();
+            var move = await GetCurrrentInputSource().GetMovePiecePlacement();
+            move.PlayerIndex = this.playerIndexToListenForMoves;
+            return move;
         }
 
-        public Task<MovementMove> GetMovePieceMovement()
+        public async Task<MovementMove> GetMovePieceMovement()
         {
-            return GetCurrrentInputSource().GetMovePieceMovement();
+            var playerIndex = this.playerIndexToListenForMoves;
+            var move = await GetCurrrentInputSource().GetMovePieceMovement();
+            move.PlayerIndex = playerIndex;
+            return move;
         }
 
         private IMoveFetcher GetCurrrentInputSource()

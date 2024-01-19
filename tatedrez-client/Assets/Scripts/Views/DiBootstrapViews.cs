@@ -16,6 +16,9 @@ namespace Tatedrez
         [SerializeField]
         private GameSessionView sessionView;
 
+        [SerializeField]
+        private AiInputManager aiInputManager;
+        
         private void Awake()
         {
             BootstrapDependencyInjection();
@@ -33,6 +36,7 @@ namespace Tatedrez
 
             RegisterValidators();
             DI.Game.Register<IInputManager, PlayerInputManager>().AsSingleton();
+            DI.Game.Register<AiInputManager>(aiInputManager);
 
             DI.Game.Register<GameSessionView>(sessionView);
         }
