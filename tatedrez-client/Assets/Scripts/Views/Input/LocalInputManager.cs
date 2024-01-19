@@ -32,6 +32,7 @@ namespace Tatedrez.Input
             playerView.DisablePieceSelection();
 
             var move = new PlacementMove() {
+                PlayerIndex = this.playerIndex,
                 PieceGuid = selectedPiece.Guid,
                 To = toCoords
             };
