@@ -46,7 +46,6 @@ namespace Tatedrez.Views
                 var player = sessionDataService.GetPlayer(i);
                 var playerView = playerViews[i]; 
                 await playerView.Initialize(player);
-                // inputCollector.GetInputSource(i).Bind(player);
             }
         }
 

@@ -9,12 +9,14 @@ namespace Tatedrez.ModelServices
     {
         private Player playerData;
         private readonly int playerIndex;
+        private string playerName;
 
         public int Index => this.playerIndex;
 
         public PlayerService(int playerIndex)
         {
             this.playerIndex = playerIndex;
+            SetName($"Player {playerIndex + 1}");
         }
 
         public void SetData(Player playerData)
@@ -22,9 +24,14 @@ namespace Tatedrez.ModelServices
             this.playerData = playerData;
         }
 
+        public void SetName(string name)
+        {
+            this.playerName = name;
+        }
+
         public string GetName()
         {
-            return $"Player {this.playerIndex + 1}";
+            return this.playerName;
         }
 
         public IEnumerable<Piece> Pieces()

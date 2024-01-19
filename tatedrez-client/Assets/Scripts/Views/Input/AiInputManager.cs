@@ -23,6 +23,7 @@ namespace Tatedrez.Input
             this.playerIndex = playerIndex;
             sessionDataService = DI.Game.Resolve<IGameSessionDataService>();
             this.playerService = this.sessionDataService.GetPlayer(this.playerIndex);
+            this.playerService.SetName("bot");
             this.boardService = this.sessionDataService.BoardService;
             this.movesGenerator = DI.Game.Resolve<IMovesGenerator>();
         }

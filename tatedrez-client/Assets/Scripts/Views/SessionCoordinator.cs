@@ -44,8 +44,8 @@ namespace Tatedrez
         private static void BindInput(GameSessionView sessionView, IInputManager inputManager)
         {
             sessionView.BindLocalInputForPlayer(0, inputManager);
-            var modeSelector = DI.Container.Resolve<IGameModeSelector>();
-            if (modeSelector.IsSinglePlayer) {
+            DI.Container.TryResolve<IGameModeSelector>(out var modeSelector);
+            if (modeSelector == null || modeSelector.IsSinglePlayer) {
                 var aiInput = DI.Game.Resolve<AiInputManager>();
                 aiInput.SetPlayerIndex(1);
                 inputManager.AddInputSource(aiInput, 1);    
