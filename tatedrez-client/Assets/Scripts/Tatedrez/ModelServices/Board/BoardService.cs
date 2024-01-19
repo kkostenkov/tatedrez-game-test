@@ -98,5 +98,19 @@ namespace Tatedrez.ModelServices
                 .Select(kvp => ToCoords(kvp.Key));
             return foundSquares;
         }
+
+        public IEnumerable<BoardCoords> GetEmptySquares()
+        {
+            var maxX = this.boardData.BoardSize.X - 1;
+            var maxY = this.boardData.BoardSize.Y - 1;
+            var maxKey = maxX + maxY * maxX;
+            for (int key = 0; key < maxKey; key++) {
+                if (this.boardData.PiecesByCoordinates.ContainsKey(key)) {
+                    continue;
+                }
+
+                yield return ToCoords(key);
+            }
+        }
     }
 }

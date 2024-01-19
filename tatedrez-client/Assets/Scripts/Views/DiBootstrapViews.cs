@@ -48,7 +48,9 @@ namespace Tatedrez
 
             DI.Game.Register<GameStateService>().AsSingleton();
             DI.Game.Register<EndGameService>().AsSingleton();
-            DI.Game.Register<IGameSessionDataService, GameSessionDataService>().AsSingleton();
+            
+            DI.Game.Register<GameSessionDataService>().AsSingleton();
+            DI.Game.Register<IGameSessionDataService>((c, p) => c.Resolve<GameSessionDataService>());
         }
 
         private static void RegisterValidators()

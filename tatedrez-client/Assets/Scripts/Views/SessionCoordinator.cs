@@ -46,6 +46,7 @@ namespace Tatedrez
             var isBotOpponent = true;
             if (isBotOpponent) {
                 var aiInput = DI.Game.Resolve<AiInputManager>();
+                aiInput.SetPlayerIndex(1);
                 inputManager.AddInputSource(aiInput, 1);    
             }
             else {
