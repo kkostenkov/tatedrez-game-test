@@ -1,14 +1,14 @@
 using System;
 using System.Threading.Tasks;
+using Tatedrez.Interfaces;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
-using Tatedrez.Validators;
 
 namespace Tatedrez.Views
 {
     internal interface ISquareClicksListener
     {
-        void OnSquareClicked(SquareView view, BoardView boardView);
+        void OnSquareClicked(ISquareView view, IBoardView boardView);
     }
 
     internal class MovePartsCollector : ISquareClicksListener, IDisposable
@@ -19,8 +19,8 @@ namespace Tatedrez.Views
         private Piece selectedPiece;
         private BoardCoords originCoords = BoardCoords.Invalid;
         private BoardCoords destinationCoords = BoardCoords.Invalid;
-        private SquareView selectedOriginSquare;
-        private BoardView boardView;
+        private ISquareView selectedOriginSquare;
+        private IBoardView boardView;
         private readonly IMovesGenerator movesGenerator;
         private readonly IBoardInfoService boarService;
 
@@ -36,7 +36,7 @@ namespace Tatedrez.Views
             this.boardView = null;
         }
 
-        public Task<MovementMove> WaitForMove(int playerIndex, BoardView boardView)
+        public Task<MovementMove> WaitForMove(int playerIndex, IBoardView boardView)
         {
             this.boardView = boardView;
             this.boardView.SquareClicked += OnSquareClicked;
@@ -45,7 +45,7 @@ namespace Tatedrez.Views
             return this.completionSource.Task;
         }
 
-        public void OnSquareClicked(SquareView view, BoardView boardView)
+        public void OnSquareClicked(ISquareView view, IBoardView boardView)
         {
             boardView.DisableSquaresHighlight();
             if (TryRecordMovingPiece(view)) {
@@ -62,7 +62,7 @@ namespace Tatedrez.Views
             }
         }
 
-        private bool TryRecordMovingPiece(SquareView view)
+        private bool TryRecordMovingPiece(ISquareView view)
         {
             if (view.Piece == null) {
                 return false;

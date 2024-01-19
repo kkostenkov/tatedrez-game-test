@@ -1,4 +1,4 @@
-namespace Tatedrez
+namespace Tatedrez.Interfaces
 {
     public interface IInputSourceCollector
     {

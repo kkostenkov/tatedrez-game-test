@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
 using Tatedrez;
+using Tatedrez.Interfaces;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 using Tatedrez.Rules;
@@ -12,16 +13,14 @@ using Tatedrez.Validators;
 public class GameplaySessionControllerTest
 {
     private IGameSessionView view;
-    private IMoveFetcher input;
-    private IActivePlayerIndexListener indexListener;
+    private IInputManager inputManager;
     private ICommandValidator commandValidator;
 
     [SetUp]
     public void Setup()
     {
         this.view = Substitute.For<IGameSessionView>();
-        this.input = Substitute.For<IMoveFetcher>();
-        this.indexListener = Substitute.For<IActivePlayerIndexListener>();
+        this.inputManager = Substitute.For<IInputManager>();
         this.commandValidator = Substitute.For<ICommandValidator>();
     }
     
@@ -36,7 +35,7 @@ public class GameplaySessionControllerTest
             Players = new List<Player>() { new Player(), new Player() },
             State = new GameState() {Stage = Stage.Placement },
         };
-        var controller = new GameSessionController(sessionData, view, input, indexListener, new RealCommandValidator(),
+        var controller = new GameSessionController(sessionData, view, inputManager, new RealCommandValidator(),
             Helpers.CreateDataService());
 
         await controller.Turn();
@@ -54,7 +53,7 @@ public class GameplaySessionControllerTest
             Players = new List<Player>() { new Player(), new Player() },
             State = new GameState() { Stage = Stage.Placement },
         };
-        var controller = new GameSessionController(sessionData, view, input, indexListener, new RealCommandValidator(),
+        var controller = new GameSessionController(sessionData, view, inputManager, new RealCommandValidator(),
             Helpers.CreateDataService());
 
         await controller.Turn();
@@ -70,12 +69,12 @@ public class GameplaySessionControllerTest
         boardService.SetData(sessionData.Board);
         boardService.PlacePiece(new Piece(0), occupiedCoords);
         var pieceGuidToPlace = sessionData.Players[0].UnusedPieces.First.Value.Guid;
-        input.GetMovePiecePlacement().Returns(new PlacementMove() { 
+        inputManager.GetMovePiecePlacement().Returns(new PlacementMove() { 
             PieceGuid = pieceGuidToPlace,
             PlayerIndex = 0,
             To = occupiedCoords 
         });
-        var controller = new GameSessionController(sessionData, view, input, indexListener, commandValidator,
+        var controller = new GameSessionController(sessionData, view, inputManager, commandValidator,
             Helpers.CreateDataService());
 
         await controller.Turn();
@@ -89,10 +88,10 @@ public class GameplaySessionControllerTest
         var sessionData = Helpers.CreateStandardSessionStart();
         var movingPlayerIndex = 1;
         sessionData.CurrentTurn = movingPlayerIndex;
-        input.GetMovePiecePlacement().Returns(new PlacementMove() { 
+        inputManager.GetMovePiecePlacement().Returns(new PlacementMove() { 
             PlayerIndex = 0,
         });
-        var controller = new GameSessionController(sessionData, view, input, indexListener, commandValidator,
+        var controller = new GameSessionController(sessionData, view, inputManager, commandValidator,
             Helpers.CreateDataService());
 
         await controller.Turn();
@@ -109,12 +108,12 @@ public class GameplaySessionControllerTest
         
         var pieceToPlace = sessionData.Players[0].UnusedPieces.First.Value;
         var placementCoords = new BoardCoords { X = 1, Y = 1 };
-        input.GetMovePiecePlacement().Returns(new PlacementMove() {
+        inputManager.GetMovePiecePlacement().Returns(new PlacementMove() {
             PieceGuid = pieceToPlace.Guid,
             PlayerIndex = 0,
             To = placementCoords,
         });
-        var controller = new GameSessionController(sessionData, view, input, indexListener, new RealCommandValidator(),
+        var controller = new GameSessionController(sessionData, view, inputManager, new RealCommandValidator(),
             Helpers.CreateDataService());
         
         await controller.Turn();
@@ -132,12 +131,12 @@ public class GameplaySessionControllerTest
         var pieceToPlace = placingPlayer.UnusedPieces.First.Value;
         var placedPieceGuid = pieceToPlace.Guid; 
         var placementCoords = new BoardCoords { X = 1, Y = 1 };
-        input.GetMovePiecePlacement().Returns(new PlacementMove() {
+        inputManager.GetMovePiecePlacement().Returns(new PlacementMove() {
             PieceGuid = pieceToPlace.Guid,
             PlayerIndex = 0,
             To = placementCoords,
         });
-        var controller = new GameSessionController(sessionData, view, input, indexListener, new RealCommandValidator(),
+        var controller = new GameSessionController(sessionData, view, inputManager, new RealCommandValidator(),
             Helpers.CreateDataService());
         
         await controller.Turn();
@@ -173,8 +172,8 @@ public class GameplaySessionControllerTest
             PlayerIndex = 1,
             To = placementCoords,
         };
-        input.GetMovePiecePlacement().Returns(firstPlayerMove, secondPlayerMove);
-        var controller = new GameSessionController(sessionData, view, input, indexListener, new RealCommandValidator(),
+        inputManager.GetMovePiecePlacement().Returns(firstPlayerMove, secondPlayerMove);
+        var controller = new GameSessionController(sessionData, view, inputManager, new RealCommandValidator(),
             Helpers.CreateDataService());
         
         await controller.Turn();
@@ -194,12 +193,12 @@ public class GameplaySessionControllerTest
         board.PlacePiece(new Piece(pieceOwnerId), new BoardCoords(0, 0));
         board.PlacePiece(new Piece(pieceOwnerId), new BoardCoords(1, 0));
         var pieceToPlaceGuid = sessionData.Players[pieceOwnerId].UnusedPieces.First.Value.Guid;
-        input.GetMovePiecePlacement().Returns(new PlacementMove() {
+        inputManager.GetMovePiecePlacement().Returns(new PlacementMove() {
             PieceGuid = pieceToPlaceGuid,
             PlayerIndex = 0,
             To = new BoardCoords(2, 0),
         });
-        var controller = new GameSessionController(sessionData, view, input, indexListener, new RealCommandValidator(),
+        var controller = new GameSessionController(sessionData, view, inputManager, new RealCommandValidator(),
             Helpers.CreateDataService());
         
         await controller.Turn();

@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Tatedrez.Input;
+using Tatedrez.Interfaces;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 using UnityEngine;
@@ -27,16 +28,25 @@ namespace Tatedrez.Views
         private IGameSessionDataService sessionDataService;
         private readonly GameViewAnimator gameViewAnimator = new GameViewAnimator();
 
+        private void Awake()
+        {
+            for (var i = 0; i < this.localInputManagers.Length; i++) {
+                var localInputManager = this.localInputManagers[i];
+                localInputManager.SetViews(this.playerViews[i], this.boardView, i);
+            }
+        }
+
         public async Task Build(IGameSessionDataService sessionDataService)
         {
             this.sessionDataService = sessionDataService;
             var board = sessionDataService.BoardService;
             await this.boardView.BuildBoardAsync(board);
-
+            
             for (int i = 0; i < sessionDataService.GetPlayersCount; i++) {
                 var player = sessionDataService.GetPlayer(i);
-                await playerViews[i].Initialize(player);
-                localInputManagers[i].Bind(player, playerViews[i], this.boardView);
+                var playerView = playerViews[i]; 
+                await playerView.Initialize(player);
+                // inputCollector.GetInputSource(i).Bind(player);
             }
         }
 

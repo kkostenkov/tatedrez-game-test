@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tatedrez.Audio;
+using Tatedrez.Interfaces;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 using UnityEngine;
 
 namespace Tatedrez.Views
 {
-    internal class BoardView : MonoBehaviour
+    public class BoardView : MonoBehaviour, IBoardView
     {
         [SerializeField]
         private SquareView[] squares;
@@ -17,7 +18,7 @@ namespace Tatedrez.Views
         [SerializeField]
         private Transform transitParent;
 
-        public event Action<SquareView, BoardView> SquareClicked;
+        public event Action<ISquareView, IBoardView> SquareClicked;
 
         private BoardCoords size = BoardCoords.Invalid;
         private TaskCompletionSource<BoardCoords> squareSelectionTaskSource;

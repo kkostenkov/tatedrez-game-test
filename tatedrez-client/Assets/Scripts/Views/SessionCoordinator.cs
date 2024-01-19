@@ -1,4 +1,6 @@
 using System.Threading.Tasks;
+using Tatedrez.Input;
+using Tatedrez.Interfaces;
 using Tatedrez.ModelServices;
 using Tatedrez.Validators;
 using Tatedrez.Views;
@@ -23,18 +25,33 @@ namespace Tatedrez
         {
             var sessionRepo = DI.Container.Resolve<GameSessionRepository>();
             var data = sessionRepo.Load();
-            var inputManager = DI.Game.Resolve<PlayerInputManager>();
-
+            var inputManager = DI.Game.Resolve<IInputManager>();
             var sessionView = DI.Game.Resolve<GameSessionView>();
-            sessionView.BindLocalInputForPlayer(0, inputManager);
-            sessionView.BindLocalInputForPlayer(1, inputManager);
-            
-            var commandValidator = DI.Game.Resolve<CommandValidator>();
             var sessionDataService = DI.Game.Resolve<GameSessionDataService>();
-            var gameSessionController = new GameSessionController(data, sessionView, inputManager, inputManager, 
+
+            var commandValidator = DI.Game.Resolve<CommandValidator>();
+            
+            var gameSessionController = new GameSessionController(data, sessionView, inputManager, 
                 commandValidator, sessionDataService);
+            
+            BindInput(sessionView, inputManager);
+            
             await gameSessionController.BuildBoardAsync();
             return gameSessionController;
+        }
+
+        private static void BindInput(GameSessionView sessionView, IInputManager inputManager)
+        {
+            sessionView.BindLocalInputForPlayer(0, inputManager);
+            var isBotOpponent = true;
+            if (isBotOpponent) {
+                var aiInput = DI.Game.Resolve<AiInputManager>();
+                aiInput.SetPlayerIndex(1);
+                inputManager.AddInputSource(aiInput, 1);    
+            }
+            else {
+                sessionView.BindLocalInputForPlayer(1, inputManager);    
+            }
         }
     }
 }

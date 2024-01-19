@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
+using Tatedrez.Interfaces;
 using Tatedrez.Models;
-using Tatedrez.ModelServices;
 using Tatedrez.Views;
 using UnityEngine;
 
@@ -8,17 +8,17 @@ namespace Tatedrez.Input
 {
     internal class LocalInputManager : MonoBehaviour, IMoveFetcher
     {
-        private PlayerView playerView;
-        private BoardView boardView;
-        private PlayerService player;
+        private IPlayerView playerView;
+        private IBoardView boardView;
+        private int playerIndex;
 
-        public void Bind(PlayerService player, PlayerView playerView, BoardView boardView)
+        public void SetViews(IPlayerView playerView, IBoardView boardView, int playerIndex)
         {
-            this.player = player;
             this.playerView = playerView;
             this.boardView = boardView;
+            this.playerIndex = playerIndex;
         }
-
+        
         public async Task<PlacementMove> GetMovePiecePlacement()
         {
             playerView.EnablePieceSelection();
@@ -32,8 +32,8 @@ namespace Tatedrez.Input
             playerView.DisablePieceSelection();
 
             var move = new PlacementMove() {
+                PlayerIndex = this.playerIndex,
                 PieceGuid = selectedPiece.Guid,
-                PlayerIndex = player.Index,
                 To = toCoords
             };
             return move;
@@ -41,16 +41,16 @@ namespace Tatedrez.Input
 
         public async Task<MovementMove> GetMovePieceMovement()
         {
-            var move = await GetMove(player.Index);
+            var move = await GetMove();
             Debug.Log($"Movemoent move command: {move.PieceGuid}" +
                       $"from {move.From} to {move.To}");
             return move;
         }
-        
-        private async Task<MovementMove> GetMove(int playerIndex)
+
+        private async Task<MovementMove> GetMove()
         {
             using MovePartsCollector moveCollector = new MovePartsCollector();
-            var task = moveCollector.WaitForMove(playerIndex, this.boardView);
+            var task = moveCollector.WaitForMove(this.playerIndex, this.boardView);
             var result = await task;
 
             return result;

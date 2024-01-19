@@ -1,4 +1,7 @@
-public interface IActivePlayerIndexListener
+namespace Tatedrez.Interfaces
 {
-    void SetActivePlayer(int playerIndex);
+    public interface IActivePlayerIndexListener
+    {
+        void SetActivePlayer(int playerIndex);
+    }
 }

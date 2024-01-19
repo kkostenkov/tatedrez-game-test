@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using DG.Tweening;
+using Tatedrez.Interfaces;
 using Tatedrez.Models;
 using TMPro;
 using UnityEngine;
@@ -8,7 +9,7 @@ using UnityEngine.UI;
 
 namespace Tatedrez.Views
 {
-    public class SquareView : MonoBehaviour
+    public class SquareView : MonoBehaviour, ISquareView
     {
         [SerializeField]
         private TMP_Text label;

@@ -1,4 +1,6 @@
-﻿using Tatedrez.ModelServices;
+﻿using Tatedrez.Input;
+using Tatedrez.Interfaces;
+using Tatedrez.ModelServices;
 using Tatedrez.Rules;
 using Tatedrez.Validators;
 using Tatedrez.Views;
@@ -14,6 +16,9 @@ namespace Tatedrez
         [SerializeField]
         private GameSessionView sessionView;
 
+        [SerializeField]
+        private AiInputManager aiInputManager;
+        
         private void Awake()
         {
             BootstrapDependencyInjection();
@@ -30,7 +35,8 @@ namespace Tatedrez
             RegisterDataServices();
 
             RegisterValidators();
-            DI.Game.Register<PlayerInputManager>().AsSingleton();
+            DI.Game.Register<IInputManager, PlayerInputManager>().AsSingleton();
+            DI.Game.Register<AiInputManager>(aiInputManager);
 
             DI.Game.Register<GameSessionView>(sessionView);
         }
@@ -42,7 +48,9 @@ namespace Tatedrez
 
             DI.Game.Register<GameStateService>().AsSingleton();
             DI.Game.Register<EndGameService>().AsSingleton();
-            DI.Game.Register<IGameSessionDataService, GameSessionDataService>().AsSingleton();
+            
+            DI.Game.Register<GameSessionDataService>().AsSingleton();
+            DI.Game.Register<IGameSessionDataService>((c, p) => c.Resolve<GameSessionDataService>());
         }
 
         private static void RegisterValidators()
