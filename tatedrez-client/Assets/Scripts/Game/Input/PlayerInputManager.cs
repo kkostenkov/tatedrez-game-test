@@ -8,14 +8,14 @@ namespace Tatedrez.Input
     public class PlayerInputManager : IInputManager
     {
         private int playerIndexToListenForMoves;
-        private Dictionary<int, IInputSource> playerInputs = new();
+        private Dictionary<int, IMoveFetcher> playerInputs = new();
 
-        public void AddInputSource(IInputSource input, int playerIndex)
+        public void AddInputSource(IMoveFetcher input, int playerIndex)
         {
             this.playerInputs.Add(playerIndex, input);
         }
 
-        public IInputSource GetInputSource(int playerIndex)
+        public IMoveFetcher GetInputSource(int playerIndex)
         {
             return this.playerInputs[playerIndex];
         }

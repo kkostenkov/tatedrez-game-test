@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Tatedrez.Input
 {
-    internal class LocalInputManager : MonoBehaviour, IInputSource
+    internal class LocalInputManager : MonoBehaviour, IMoveFetcher
     {
         private IPlayerView playerView;
         private IBoardView boardView;
