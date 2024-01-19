@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Bonsai.Core;
+using Tatedrez.Interfaces;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 using Tatedrez.Views;

@@ -1,4 +1,5 @@
 ﻿using Tatedrez.Input;
+using Tatedrez.Interfaces;
 using Tatedrez.ModelServices;
 using Tatedrez.Rules;
 using Tatedrez.Validators;

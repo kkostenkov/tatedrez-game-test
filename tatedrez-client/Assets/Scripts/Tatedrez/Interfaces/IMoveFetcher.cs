@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Tatedrez.Models;
 
-namespace Tatedrez
+namespace Tatedrez.Interfaces
 {
     public interface IMoveFetcher
     {

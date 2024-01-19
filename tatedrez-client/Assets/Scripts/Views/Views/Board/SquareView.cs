@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using DG.Tweening;
+using Tatedrez.Interfaces;
 using Tatedrez.Models;
 using TMPro;
 using UnityEngine;

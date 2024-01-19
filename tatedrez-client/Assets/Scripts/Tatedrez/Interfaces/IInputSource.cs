@@ -1,7 +1,6 @@
 using Tatedrez.ModelServices;
-using Tatedrez.Views;
 
-namespace Tatedrez.Input
+namespace Tatedrez.Interfaces
 {
     public interface IInputSource : IMoveFetcher
     {

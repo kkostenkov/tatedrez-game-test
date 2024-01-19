@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
 using Tatedrez;
-using Tatedrez.Input;
+using Tatedrez.Interfaces;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 using Tatedrez.Rules;

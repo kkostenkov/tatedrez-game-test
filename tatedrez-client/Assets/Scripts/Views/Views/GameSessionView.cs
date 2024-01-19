@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Tatedrez.Input;
+using Tatedrez.Interfaces;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 using UnityEngine;

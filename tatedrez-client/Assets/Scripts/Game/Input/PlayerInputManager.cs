@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Tatedrez.Interfaces;
 using Tatedrez.Models;
 
 namespace Tatedrez.Input

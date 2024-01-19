@@ -1,9 +1,8 @@
 using System.Threading.Tasks;
-using Tatedrez.Input;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 
-namespace Tatedrez
+namespace Tatedrez.Interfaces
 {
     public interface IGameSessionView
     {

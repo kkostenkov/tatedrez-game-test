@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tatedrez.Models;
 
-namespace Tatedrez.Views
+namespace Tatedrez.Interfaces
 {
     public interface IBoardView
     {
