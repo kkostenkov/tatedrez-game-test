@@ -7,7 +7,8 @@
         "Unity.TextMeshPro",
         "DOTween.Modules",
         "TinyIoC",
-        "UnityUIExtensions"
+        "UnityUIExtensions",
+        "BonsaiAssembly"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

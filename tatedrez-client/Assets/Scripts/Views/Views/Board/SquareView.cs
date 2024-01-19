@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Tatedrez.Views
 {
-    public class SquareView : MonoBehaviour
+    public class SquareView : MonoBehaviour, ISquareView
     {
         [SerializeField]
         private TMP_Text label;

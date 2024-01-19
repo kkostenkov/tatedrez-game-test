@@ -22,12 +22,15 @@ namespace Tatedrez.Views
         private LocalInputManager[] localInputManagers;
 
         [SerializeField]
+        private AiInputManager ai;
+
+        [SerializeField]
         private UILineRenderer winLine;
 
         private IGameSessionDataService sessionDataService;
         private readonly GameViewAnimator gameViewAnimator = new GameViewAnimator();
 
-        public async Task Build(IGameSessionDataService sessionDataService)
+        public async Task Build(IGameSessionDataService sessionDataService, IInputSourceCollector inputCollector)
         {
             this.sessionDataService = sessionDataService;
             var board = sessionDataService.BoardService;
@@ -35,8 +38,9 @@ namespace Tatedrez.Views
 
             for (int i = 0; i < sessionDataService.GetPlayersCount; i++) {
                 var player = sessionDataService.GetPlayer(i);
-                await playerViews[i].Initialize(player);
-                localInputManagers[i].Bind(player, playerViews[i], this.boardView);
+                var playerView = playerViews[i]; 
+                await playerView.Initialize(player);
+                inputCollector.GetInputSource(i).Bind(player, playerView, this.boardView);
             }
         }
 
@@ -93,6 +97,11 @@ namespace Tatedrez.Views
         public void BindLocalInputForPlayer(int playerIndex, IInputSourceCollector inputCollector)
         {
             inputCollector.AddInputSource(this.localInputManagers[playerIndex], playerIndex);
+        }
+
+        public void BindAiInputForPlayer(int playerIndex, IInputSourceCollector inputCollector)
+        {
+            inputCollector.AddInputSource(this.ai, playerIndex);
         }
     }
 }

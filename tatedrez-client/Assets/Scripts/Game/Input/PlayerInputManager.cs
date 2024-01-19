@@ -2,16 +2,21 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tatedrez.Models;
 
-namespace Tatedrez
+namespace Tatedrez.Input
 {
-    public class PlayerInputManager : IMoveFetcher, IActivePlayerIndexListener, IInputSourceCollector
+    public class PlayerInputManager : IInputManager
     {
         private int playerIndexToListenForMoves;
-        private Dictionary<int, IMoveFetcher> playerInputs = new();
+        private Dictionary<int, IInputSource> playerInputs = new();
 
-        public void AddInputSource(IMoveFetcher input, int playerIndex)
+        public void AddInputSource(IInputSource input, int playerIndex)
         {
             this.playerInputs.Add(playerIndex, input);
+        }
+
+        public IInputSource GetInputSource(int playerIndex)
+        {
+            return this.playerInputs[playerIndex];
         }
 
         public void SetActivePlayer(int playerIndex)

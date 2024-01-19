@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Tatedrez.Input;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 using Tatedrez.Rules;
@@ -12,7 +13,8 @@ namespace Tatedrez
     {
         private readonly GameSessionData sessionData;
         private readonly IGameSessionView gameSessionView;
-        private readonly IMoveFetcher input;
+        private readonly IInputManager inputManager;
+        private readonly IMoveFetcher moveFetcher;
         private readonly IActivePlayerIndexListener playerIndexListener;
         private readonly ICommandValidator commandValidator;
         
@@ -22,8 +24,8 @@ namespace Tatedrez
 
         public bool IsSessionRunning => sessionDataService.GameStateService.IsGameActive;
 
-        public GameSessionController(GameSessionData sessionData, IGameSessionView gameSessionView, IMoveFetcher input,
-            IActivePlayerIndexListener playerIndexListener, ICommandValidator commandValidator, GameSessionDataService dataService)
+        public GameSessionController(GameSessionData sessionData, IGameSessionView gameSessionView, IInputManager inputManager,
+            ICommandValidator commandValidator, GameSessionDataService dataService)
         {
             this.sessionData = sessionData;
             this.sessionDataService = dataService;
@@ -32,8 +34,9 @@ namespace Tatedrez
             
             this.boardService = this.sessionDataService.BoardService;
             this.gameSessionView = gameSessionView;
-            this.input = input;
-            this.playerIndexListener = playerIndexListener;
+            this.inputManager = inputManager;
+            this.moveFetcher = inputManager;
+            this.playerIndexListener = inputManager;
             this.commandValidator = commandValidator;
             this.movesGenerator = new MovesGenerator(this.boardService, new PieceRulesContainer());
         }
@@ -59,7 +62,7 @@ namespace Tatedrez
         public Task BuildBoardAsync()
         {
             var tasks = new List<Task> {
-                this.gameSessionView.Build(this.sessionDataService),
+                this.gameSessionView.Build(this.sessionDataService, this.inputManager),
                 this.gameSessionView.ShowTurn(this.sessionDataService.GetCurrentActivePlayerIndex())
             };
             return Task.WhenAll(tasks);
@@ -69,7 +72,7 @@ namespace Tatedrez
         {
             await this.gameSessionView.ShowTurn(playerIndex);
             playerIndexListener.SetActivePlayer(playerIndex);
-            var move = await input.GetMovePiecePlacement();
+            var move = await this.moveFetcher.GetMovePiecePlacement();
             
             if (IsInvalidMove(move)) {
                 await this.gameSessionView.VisualizeInvalidMove(move);
@@ -113,7 +116,7 @@ namespace Tatedrez
                 this.sessionData.CurrentTurn++;
                 return;
             }
-            var move = await input.GetMovePieceMovement();
+            var move = await this.moveFetcher.GetMovePieceMovement();
             if (IsInvalidMove(move)) {
                 await this.gameSessionView.VisualizeInvalidMove(move);
                 return;

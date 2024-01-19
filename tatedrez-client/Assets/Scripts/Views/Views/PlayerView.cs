@@ -9,16 +9,16 @@ using UnityEngine.UI;
 
 namespace Tatedrez.Views
 {
-    public class PlayerView : MonoBehaviour
+    public class PlayerView : MonoBehaviour, IPlayerView
     {
         [SerializeField]
         private SquareView[] squares;
+
         [SerializeField]
         private TMP_Text playerName;
 
         [SerializeField]
         private Image activeTurnHighlight;
-        
 
         public Piece SelectedPiece => selectedSquare?.Piece;
         private SquareView selectedSquare;
@@ -59,8 +59,9 @@ namespace Tatedrez.Views
         {
             IsSelectingSquare = false;
             if (selectedSquare) {
-                selectedSquare.SetHighlightActive(false);    
+                selectedSquare.SetHighlightActive(false);
             }
+
             selectedSquare = null;
         }
 
@@ -69,9 +70,11 @@ namespace Tatedrez.Views
             if (!IsSelectingSquare) {
                 return;
             }
+
             if (selectedSquare) {
-                selectedSquare.SetHighlightActive(false);    
+                selectedSquare.SetHighlightActive(false);
             }
+
             selectedSquare = view;
             if (selectedSquare.Piece != null) {
                 selectedSquare.SetHighlightActive(true);
@@ -90,11 +93,12 @@ namespace Tatedrez.Views
             var squareWithPiece = squares.FirstOrDefault(s => s.Piece?.Guid == movePieceGuid);
             if (squareWithPiece) {
                 result = squareWithPiece.Piece;
-                squareWithPiece.AssignPiece(null);    
+                squareWithPiece.AssignPiece(null);
             }
+
             return Task.FromResult(result);
         }
-        
+
         public Task EnableTurnIndicator()
         {
             activeTurnHighlight.enabled = true;

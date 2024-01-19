@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Bonsai.Core;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 using Tatedrez.Views;
@@ -6,8 +7,10 @@ using UnityEngine;
 
 namespace Tatedrez.Input
 {
-    internal class LocalInputManager : MonoBehaviour, IInputSource
+    internal class AiInputManager : MonoBehaviour, IInputSource
     {
+        [SerializeField]
+        private BehaviourTree behTree;
         private IPlayerView playerView;
         private IBoardView boardView;
         private PlayerService player;

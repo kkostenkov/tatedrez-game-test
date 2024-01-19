@@ -1,4 +1,5 @@
-﻿using Tatedrez.ModelServices;
+﻿using Tatedrez.Input;
+using Tatedrez.ModelServices;
 using Tatedrez.Rules;
 using Tatedrez.Validators;
 using Tatedrez.Views;
@@ -30,7 +31,7 @@ namespace Tatedrez
             RegisterDataServices();
 
             RegisterValidators();
-            DI.Game.Register<PlayerInputManager>().AsSingleton();
+            DI.Game.Register<IInputManager, PlayerInputManager>().AsSingleton();
 
             DI.Game.Register<GameSessionView>(sessionView);
         }
