@@ -1,12 +1,11 @@
 using System.Threading.Tasks;
 using Tatedrez.Interfaces;
 using Tatedrez.Models;
-using Tatedrez.Views;
 using UnityEngine;
 
 namespace Tatedrez.Input
 {
-    internal class LocalInputManager : MonoBehaviour, IMoveFetcher
+    public class LocalInputManager : MonoBehaviour, IMoveFetcher
     {
         private IPlayerView playerView;
         private IBoardView boardView;

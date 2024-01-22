@@ -4,14 +4,14 @@ using Tatedrez.Interfaces;
 using Tatedrez.Models;
 using Tatedrez.ModelServices;
 
-namespace Tatedrez.Views
+namespace Tatedrez.Input
 {
     internal interface ISquareClicksListener
     {
         void OnSquareClicked(ISquareView view, IBoardView boardView);
     }
 
-    internal class MovePartsCollector : ISquareClicksListener, IDisposable
+    public class MovePartsCollector : ISquareClicksListener, IDisposable
     {
         private int playerIndexToRecord = -1;
         private TaskCompletionSource<MovementMove> completionSource;

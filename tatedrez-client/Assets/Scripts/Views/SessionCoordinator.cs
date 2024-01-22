@@ -47,7 +47,7 @@ namespace Tatedrez
             DI.Container.TryResolve<IGameModeSelector>(out var modeSelector);
             if (modeSelector == null || modeSelector.IsSinglePlayer) {
                 var aiInput = DI.Game.Resolve<AiInputManager>();
-                aiInput.SetPlayerIndex(1);
+                aiInput.Initialize(1);
                 inputManager.AddInputSource(aiInput, 1);    
             }
             else {
