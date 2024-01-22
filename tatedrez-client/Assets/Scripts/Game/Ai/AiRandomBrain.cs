@@ -11,7 +11,7 @@ namespace Tatedrez.AI
     {
         private readonly Random rand = new Random();
 
-        public MovementMove GenerateMovementMove(int playerIndex, BoardService boardService, IMovesGenerator movesGenerator)
+        public MovementMove GenerateMovementMove(int playerIndex, IBoardInfoService boardService, IMovesGenerator movesGenerator)
         {
             var myPieces = boardService.FindPieces(p => p.Owner == playerIndex);
             var allMoves = GenerateAllPossibleMoves(myPieces, boardService, movesGenerator).ToList<MovementMove>();
@@ -20,7 +20,7 @@ namespace Tatedrez.AI
             return move;
         }
 
-        private IEnumerable<MovementMove> GenerateAllPossibleMoves(IEnumerable<Piece> myPieces, BoardService boardService, IMovesGenerator movesGenerator)
+        private IEnumerable<MovementMove> GenerateAllPossibleMoves(IEnumerable<Piece> myPieces, IBoardInfoService boardService, IMovesGenerator movesGenerator)
         {
             foreach (var piece in myPieces) {
                 var position = boardService.FindSquares(p => p.Guid == piece.Guid).First();
@@ -36,7 +36,7 @@ namespace Tatedrez.AI
             }
         }
 
-        public Task<PlacementMove> GeneratePlacementMove(int playerIndex, PlayerService playerService, BoardService service)
+        public Task<PlacementMove> GeneratePlacementMove(int playerIndex, PlayerService playerService, IBoardInfoService service)
         {
             var unusedPieces = playerService.Pieces().ToList();
             var selectedPiece = unusedPieces[this.rand.Next(0, unusedPieces.Count)];

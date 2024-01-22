@@ -14,5 +14,6 @@ namespace Tatedrez.ModelServices
         IEnumerable<Piece> FindPieces(Func<Piece, bool> checkerFunc);
         bool HasSquare(BoardCoords coords);
         IEnumerable<BoardCoords> FindSquares(Func<Piece, bool> checkerFunc);
+        IEnumerable<BoardCoords> GetEmptySquares();
     }
 }
