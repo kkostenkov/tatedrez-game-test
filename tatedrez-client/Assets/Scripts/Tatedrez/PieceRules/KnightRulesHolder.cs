@@ -21,12 +21,12 @@ namespace Tatedrez.Rules
         protected readonly BoardCoords[] KnightMoveTemplates = new[] {
             new BoardCoords(2, 1),
             new BoardCoords(2, -1),
-            new BoardCoords(1, -2),
-            new BoardCoords(-1, -2),
             new BoardCoords(-2, 1),
             new BoardCoords(-2, -1),
-            new BoardCoords(-1, 2),
+            new BoardCoords(1, -2),
+            new BoardCoords(1, 2),
             new BoardCoords(-1, -2),
+            new BoardCoords(-1, 2),
         };
 
         public bool HasMoves(BoardCoords position, IBoardInfoService board)
